@@ -31,7 +31,7 @@
       </div>
       <div class="user_info">
         <div class='nick_img'>
-          <img class="user_img" src='../../../static/images/end.png'/>
+          <img class="user_img" :src='item.image'/>
           <div class="nickname">{{item.nickname}}</div>
         </div>
         <div class='related'>
@@ -44,7 +44,8 @@
     <div class="pane3"  v-if="item.type == 1">
       <div class="panelTitle">{{item.article_title}}</div>
       <div class="img_con">
-        <video :src="item.video_url" class='videos' autoplay></video>
+        <!--<router-link :to="{name:'videoDetail',params:{video_url:item.video_url}}"><video :src="item.video_url" class='videos'></video></router-link>-->
+        <router-link :to="{name:'videoDetail',params:{video_url:item.video_url}}" class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></router-link>
       </div>
       <div class="user_info">
         <div class='nick_img'>
@@ -57,7 +58,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 </template>
@@ -70,7 +70,7 @@
         }
       },
       mounted(){
-      }
+      },
     }
 </script>
 
@@ -167,13 +167,25 @@
   }
   /*视频样式*/
   .pane3 .img_con{
+    position: relative;
     width: 100%;
     height: 150px;
   }
-  .pane3 .img_con video{
+  .pane3 .img_con .video_cover{
+    position: absolute;
+    left: 0;
+    top:0;
     width: 100%;
-    height: 150px;
-    object-fit: fill ;
+    height: 100%;
+  }
+  .pane3 .img_con .playBtn{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    margin-top: -25px;
   }
   .pane3 .img_con img{
     width: 32%;

@@ -1,19 +1,22 @@
 <template>
   <div class="swiper-box">
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(item, index) in list">
-          <keep-alive>
-            <component :is="item.component" :attentionArticle="attentionArticle" :msg="item.msg" :userInfo="item.userInfo" :banner="item.banner"></component>
-          </keep-alive>
+    <pull-to :top-load-method="refresh" :bottom-load-method="loadMore">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item, index) in list">
+            <keep-alive>
+              <component :is="item.component" :attentionArticle="attentionArticle" :msg="item.msg" :userInfo="item.userInfo" :banner="item.banner"></component>
+            </keep-alive>
+          </div>
         </div>
       </div>
-    </div>
+    </pull-to>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Swiper from 'swiper';
+  import PullTo from 'vue-pull-to';
   import 'swiper/dist/css/swiper.min.css';
   import 'swiper/dist/js/swiper.js';
   import one from '../../components/one/one.vue';
@@ -29,7 +32,8 @@
       two,
       three,
       four,
-      five
+      five,
+      PullTo
     },
     data() {
       return {
@@ -40,6 +44,7 @@
         navList:["关注","精选"],  //初始化的导航栏
         addNav:[],      //添加的导航栏
         keyWords:"关注",   //请求接口的关键字
+        pageNum:1,
         list: [
           {path: '/one', component: one},
           {path: '/two', component: two},
@@ -83,10 +88,21 @@
         this.$http.post('/api/index', qs.stringify({
           uid: uid,
           keywords: this.keyWords,
-          pageNum: 1,
-          pageSize: 10
+          pageNum: this.pageNum,
+          pageSize: 5
         })).then((response) => {
-          this.attentionArticle = response.data.article;   //关注部分数据
+          if(this.nowIndex==0){
+            var temp = response.data.article;
+            this.attentionArticle = this.attentionArticle.concat(temp);
+          }else if(this.nowIndex==1){
+            var temp = response.data.article;
+            this.attentionArticle = this.attentionArticle.concat(temp);
+          }else{
+            this.attentionArticle = response.data.article
+          }
+
+          //this.attentionArticle = this.attentionArticle.concat(temp);
+          // this.attentionArticle = response.data.article;   //关注部分数据
           this.userInfo = response.data.user;   //关注用户信息
           // 导航栏
           this.addNav = [];
@@ -106,21 +122,47 @@
             this.list[i].userInfo = this.userInfo;
             this.list[i].banner = this.banner;
           }
-         // console.log(this.list)
+         console.log(this.attentionArticle)
         })
       },
+      loadMore(loaded) {
+        setTimeout(() => {
+          if(this.nowIndex==0){
+            this.pageNum = this.pageNum+1;
+          }else if(this.nowIndex==1){
+            this.pageNum = this.pageNum+1;
+          }else{
+            this.pageNum = 1;
+          }
+          this.dataInit();
+          loaded('done');
+        }, 500);
+      },
+      refresh(loaded){
+        setTimeout(() => {
+          this.pageNum = 1;
+          this.dataInit();
+          loaded('done');
+        }, 500);
+      }
     },
     watch:{
       nowIndex(val, oldVal){//普通的watch监听
+        this.pageNum = 1;  //每次改变的时候初始化
         this.dataInit();
+        this.attentionArticle = [];  //每次点击或滑动的时候清空所有的数据
       },
       keyWords(val, oldVal){//普通的watch监听
+        this.pageNum = 1;  //每次改变的时候初始化
         this.dataInit();
+        this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
       },
     }
   }
 </script>
 
 <style scoped>
-
+  .swiper-container{
+    padding-top: 50px;
+  }
 </style>

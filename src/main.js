@@ -10,6 +10,8 @@ import index from '@/components/index/index'
 import active from '@/components/active/active'
 import shopCart from '@/components/shopCart/shopCart'
 import my from '@/components/my/my'
+import test from '@/components/test/test'
+import videoDetail from '@/components/videoDetail/videoDetail'
 
 import $ from 'jquery'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -25,6 +27,9 @@ import 'mint-ui/lib/index.js';
 import { Swipe, SwipeItem } from 'mint-ui';
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
+//下拉/上拉刷新，支持自定义 HTML 模板。
+import { Loadmore } from 'mint-ui';
+Vue.component(Loadmore.name, Loadmore);
 
 Vue.config.productionTip = false;
 
@@ -59,6 +64,16 @@ let router = new VueRouter({
       path: '/my',
       component: my
     },
+    {
+      path: '/test',
+      name:'test',
+      component: test
+    },
+    {
+      path: '/videoDetail',
+      name:'videoDetail',
+      component: videoDetail
+    }
   ]
 });
 

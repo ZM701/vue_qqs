@@ -90,6 +90,10 @@
 <style scoped>
 
   .nav{
+    position: fixed;
+    background: #fff;
+    width: 100%;
+    z-index: 999;
   }
   .nav-list{
     width: 100%;

@@ -5,7 +5,7 @@
         <router-view></router-view>
       </div>
       <div class="find">
-        <v-nav></v-nav>
+        <v-nav class="vNav"></v-nav>
         <v-swiper></v-swiper>
       </div>
     </div>
@@ -13,7 +13,7 @@
     <div class="footer">
       <div><router-link to="/index">发现</router-link></div>
       <div><router-link to="/active">活动</router-link></div>
-      <div><span><router-link to="/" class="add">+</router-link></span></div>
+      <div><span><router-link to="/test" class="add">+</router-link></span></div>
       <div><router-link to="/shopCart">购物车</router-link></div>
       <div><router-link to="/my">我的</router-link></div>
     </div>
@@ -21,7 +21,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // import './judge';
   import $route from 'vue-router';
   import nav from './components/nav/nav.vue';
   import swiper from './components/swiper/swiper.vue';
@@ -33,10 +32,6 @@
     components: {
       'v-nav': nav,
       'v-swiper': swiper
-    },
-    created(){
-      // console.log(this.$route.path)
-      // this.fetchDate();
     },
     methods:{
       fetchDate(){
