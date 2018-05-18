@@ -1,19 +1,13 @@
 <template xmlns:v-popover="http://www.w3.org/1999/xhtml">
   <div id="search">
-    <headerBar>
-      <div slot="search" class="search_header">
-        <!--<Icon type="ios-arrow-back" size="28" color="#fff" class="fl back" @click.native="$router.go(-1)">-->
-        <!--</Icon>-->
-        <i class="glyphicon-search" size="28" color="#fff" @click.native="$router.go(-1)"></i>
-        搜索
-      </div>
-    </headerBar>
     <div class="searchBar">
+      <!--<router-link to="/index" class="box1">返回</router-link>-->
+      <div @click="$router.go(-1)" class="box1">返回</div>
       <el-input
         v-model="input"
         placeholder="请输入内容"
         @keyup.native.enter="search(input)"
-        class="searchInput fl">
+        class="searchInput fl box2">
       </el-input>
       <el-popover
         ref="popover4"
@@ -23,19 +17,20 @@
         <ul class="searchList" v-show="test.length != 0">
           <li class="searchListItems" v-for="(item,index) in test">
 						<span @click="historySearch(item)">
-							<!--<Icon type="ios-search" size="18"></Icon>-->
-              <i class="glyphicon-search" size="18"></i>
+              <i class="glyphicon glyphicon-search" size="14" style="color: #ccc;vertical-align: middle;margin-right: 3px;"></i>
 							{{item}}
 						</span>
             <i class="el-icon-delete fr" @click.prevent="clearThisHistory(index)"></i>
+            <div style="clear:both;"></div>
           </li>
-          <div class="clearHistory" @click="clearHistory">清空历史记录</div>
+          <div class="clearHistory" @click="clearHistory" style="margin-top: 10px;">清空历史记录</div>
         </ul>
         <ul class="noHistory" v-show="test.length == 0">
           暂无历史搜索记录
         </ul>
       </el-popover>
-      <span class="toutiaoIcon" v-popover:popover4 >历史记录</span>
+      <span class="toutiaoIcon box3" v-popover:popover4 >历史记录</span>
+      <div style="clear: both;"></div>
     </div>
     <div v-show="loading" v-loading="loading" element-loading-text="拼命加载中" style="width: 100%" class="loading"></div>
     <div class="searchNews">
@@ -82,14 +77,8 @@
   </div>
 </template>
 <script>
-  // import axios from 'axios'
-  // import jsonp from 'jsonp'
-  import headerBar from '../headerBar/headerBar'
   import qs from 'qs'
   export default{
-    components:{
-      headerBar
-    },
     data(){
       return {
         loading:false,
@@ -196,26 +185,26 @@
           this.searchCon = '';
           this.con = [];
         }
-        console.log(_this.con)
+        //console.log(_this.con)
       }
     },
   }
 </script>
 <style>
+  .box1{
+    width: 14%;
+    line-height: 40px;
+    padding-left: 4%;
+  }
+  .box2{
+    margin: 0 2%;
+  }
+  .box1,.box2,.box3{
+    float: left;
+  }
   .red{
     color: red;
   }
-
-    .search_header {
-      font-size: 20px;
-      font-weight: bold;
-      color: #fff;
-    }
-      .back{
-        line-height: 1.2rem;
-        margin-left: 0.3rem;
-      }
-
     .searchBar {
       margin-top: 1.3rem;
       width: 100%;
@@ -225,10 +214,11 @@
         padding: 0 .05rem;
         font-size: 13px;
         text-align: center;
-        width: 10%;
+        width: 20%;
+        line-height: 40px;
       }
       .searchInput{
-        width: 90%;
+        width: 60%;
       }
 
     .loading{
@@ -284,12 +274,22 @@
     width: 97%;
   }
     .searchListItems{
+      height: 30px;line-height: 30px;
+      border-bottom: 1px solid #F1F1F1;
       display: block;
       position: relative;
-      height: .9rem;
-      line-height: .9rem;
-      /*.borderBottom(1px,#ccc);*/
-      font-size: 16px;}
+      font-size: 16px;
+    }
+  .searchListItems span{
+      width: 90%;
+      text-align: left;
+      padding-left: 10px;
+      float:left;
+    }
+  .searchListItems>i{
+    float: left;
+    line-height: 30px;
+  }
       i{
         padding: 0 .2rem;
         line-height: .9rem;
@@ -304,5 +304,12 @@
     .noHistory{
       font-size: 14px;
     }
-
+  /*删除对话框*/
+  .el-message-box{
+    width: 100%;
+  }
+  .el-message--success{
+    padding-left: 20%;
+    width: 100% !important;
+  }
 </style>
