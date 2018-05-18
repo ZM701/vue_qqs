@@ -12,6 +12,8 @@ import shopCart from '@/components/shopCart/shopCart'
 import my from '@/components/my/my'
 import test from '@/components/test/test'
 import videoDetail from '@/components/videoDetail/videoDetail'
+import Search from '@/components/Search/Search'
+import headerBar from '@/components/headerBar/headerBar'
 
 import $ from 'jquery'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +21,11 @@ import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 //全局变量的显示
 global.uid=8389;
+
+
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI);
 
 //引入mint-ui
 import 'mint-ui/lib/style.css';
@@ -43,25 +50,29 @@ Vue.prototype.$http= axios
 let router = new VueRouter({
   routes: [
     {path: '/', redirect: '/index'},
-    {path: '/one', component: one},
-    {path: '/two', component: two},
-    {path: '/three', component: three},
-    {path: '/four', component: four},
-    {path: '/five', component: five},
+    {path: '/one',name:'one', component: one},
+    {path: '/two',name:'two', component: two},
+    {path: '/three',name:'three', component: three},
+    {path: '/four',name:'four', component: four},
+    {path: '/five',name:'five', component: five},
     {
       path: '/index',
+      name:'index',
       component: index
     },
     {
       path: '/active',
+      name:'active',
       component: active
     },
     {
       path: '/shopCart',
+      name:'shopCart',
       component: shopCart
     },
     {
       path: '/my',
+      name:'my',
       component: my
     },
     {
@@ -73,6 +84,16 @@ let router = new VueRouter({
       path: '/videoDetail',
       name:'videoDetail',
       component: videoDetail
+    },
+    {
+      path: '/search',
+      name:'search',
+      component: Search
+    },
+    {
+      path: '/headerBar',
+      name:'headerBar',
+      component: headerBar
     }
   ]
 });

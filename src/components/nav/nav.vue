@@ -1,8 +1,19 @@
 <template>
-  <div class="nav">
+  <div>
+    <!--搜索栏-->
+    <div class="search">
+      <div>
+        <router-link to="/search">
+          <input/>
+          <i class="glyphicon glyphicon-search"></i>
+        </router-link>
+      </div>
+    </div>
+    <div class="nav">
       <ul class="nav-list" @click="tabKeywords">
-      <li class="item" v-for="(item,index) in navList" :class="{'active': nowIndex===index}" @click="tabClick(index);">{{item}}</li>
-    </ul>
+        <li class="item" v-for="(item,index) in navList" :class="{'active': nowIndex===index}" @click="tabClick(index);">{{item}}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -75,7 +86,7 @@
       tabKeywords(keyWords){
         keyWords = $("li").eq(this.nowIndex).text();
         this.$root.eventHub.$emit('changeKeywords', keyWords);
-      }
+      },
 
     },
     /*watch:{
@@ -88,12 +99,50 @@
 </script>
 
 <style scoped>
-
+  .search{
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    height: 50px;
+    left: 0;
+    top:0;
+    background: #7DBE24;
+    overflow: hidden;
+  }
+  .search>div{
+    position: relative;
+    height: 50px;
+    overflow: hidden;
+  }
+  .search>div input{
+    padding-left: 30px;
+    outline: none;
+    position: absolute;
+    width: 80%;
+    height: 30px;
+    left: 50%;
+    top:50%;
+    margin-left: -40%;
+    margin-top: -15px;
+    border: none;
+    border-radius: 4px;
+  }
+  .search>div i {
+    left: 12%;
+    top:20%;
+    position: absolute;
+    font-size: 16px;
+    color:#ccc;
+    line-height: 30px;
+  }
   .nav{
     position: fixed;
     background: #fff;
+    left: 0;
+    top:50px;
     width: 100%;
     z-index: 999;
+    margin-bottom: 30px;
   }
   .nav-list{
     width: 100%;

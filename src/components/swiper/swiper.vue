@@ -1,16 +1,19 @@
 <template>
-  <div class="swiper-box">
-    <pull-to :top-load-method="refresh" :bottom-load-method="loadMore">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(item, index) in list">
-            <keep-alive>
-              <component :is="item.component" :attentionArticle="attentionArticle" :msg="item.msg" :userInfo="item.userInfo" :banner="item.banner"></component>
-            </keep-alive>
+  <div>
+    <!--滑块区域-->
+    <div class="swiper-box">
+      <pull-to :top-load-method="refresh" :bottom-load-method="loadMore">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item, index) in list">
+              <keep-alive>
+                <component :is="item.component" :attentionArticle="attentionArticle" :msg="item.msg" :userInfo="item.userInfo" :banner="item.banner"></component>
+              </keep-alive>
+            </div>
           </div>
         </div>
-      </div>
-    </pull-to>
+      </pull-to>
+    </div>
   </div>
 </template>
 
@@ -163,6 +166,6 @@
 
 <style scoped>
   .swiper-container{
-    padding-top: 50px;
+    padding-top: 100px;
   }
 </style>
