@@ -305,11 +305,14 @@
       font-size: 14px;
     }
   /*删除对话框*/
+  .el-input {
+    width: 60% !important;
+  }
   .el-message-box{
-    width: 100%;
+    width: 100% !important;
   }
   .el-message--success{
-    padding-left: 20%;
+    padding-left: 20% !important;
     width: 100% !important;
   }
 </style>
