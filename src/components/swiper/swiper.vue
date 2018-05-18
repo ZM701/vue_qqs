@@ -122,7 +122,7 @@
             this.list[i].userInfo = this.userInfo;
             this.list[i].banner = this.banner;
           }
-         console.log(this.attentionArticle)
+         //console.log(this.attentionArticle)
         })
       },
       loadMore(loaded) {
