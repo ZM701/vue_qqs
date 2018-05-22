@@ -67,10 +67,19 @@
         status:1, // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
         loading:false,
         flag:true,
-        input:'',
         con:[],
         test:store.fetch(),
         searchCon:'',
+        input:$("el-input").val(),
+        haha:'',
+      }
+    },
+    watch: {
+      test: {
+        handler: function(val, oldVal) {
+          store.save(val);
+        },
+        deep: true
       }
     },
     components:{
@@ -104,10 +113,17 @@
         this.information();
       },
       information(){
+        // console.log(this.input);
         var _this = this;
+        if(this.input!="undefined"){
+          this.haha = this.input
+        }else{
+          this.haha = this.$route.params.keyWords
+        }
         this.$http.post('/api/search', qs.stringify({
           uid: uid,
-          keywords: this.$route.params.keyWords,
+          keywords:this.haha,
+          // keywords: this.$route.params.keyWords || this.input,
           pageNum: 1,
           pageSize: 5,
           status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
@@ -116,8 +132,22 @@
          // console.log(_this.info)
         });
       },
+      /*information2(){
+        var _this = this;
+        this.$http.post('/api/search', qs.stringify({
+          uid: uid,
+          keywords: this.input,
+          pageNum: 1,
+          pageSize: 5,
+          status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
+        })).then((response) => {
+          _this.info = response.data.search;
+          // console.log(_this.info)
+        });
+      },*/
       //回车搜索
       search(input){
+        console.log(222);
         //搜索跳转
         this.$router.push({
           path: '/searchResult',
@@ -126,7 +156,6 @@
             keyWords: this.input,
           }
         })
-        this.information();
         const _this = this;
         input = input.trim();
         if(input){
@@ -146,6 +175,8 @@
           this.searchCon = '';
           this.con = [];
         }
+        console.log(this.input)
+        this.information();
         //console.log(_this.con)
       }
     }
