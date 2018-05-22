@@ -15,6 +15,8 @@ import videoDetail from '@/components/videoDetail/videoDetail'
 import Search from '@/components/Search/Search'
 import headerBar from '@/components/headerBar/headerBar'
 import searchPage from '@/components/searchPage/searchPage'
+import searchResult from '@/components/searchResult/searchResult'
+
 
 // import store from './store/index'
 
@@ -106,7 +108,13 @@ let router = new VueRouter({
       path: '/searchPage',
       name:'searchPage',
       component: searchPage
+    },
+    {
+      path: '/searchResult',
+      name:'searchResult',
+      component: searchResult
     }
+
   ]
 });
 

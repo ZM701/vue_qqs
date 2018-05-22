@@ -139,7 +139,6 @@
             this.pageNum = 1;
           }
           this.dataInit();
-
           loaded('done');
         }, 500);
       },

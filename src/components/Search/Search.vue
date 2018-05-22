@@ -34,11 +34,7 @@
     </div>
     <div v-show="loading" v-loading="loading" element-loading-text="拼命加载中" style="width: 100%" class="loading"></div>
     <div class="searchNews">
-      <div
-        v-for="(val,index) in con"
-        :key="index"
-        class="searchNewsItem"
-      >
+      <div>
         <!--<router-link
           v-for="(val,index) in con"
           :to="{
@@ -60,45 +56,40 @@
           class="searchNewsItem"
           v-show="val.media_creator_id&&val.title"
         >-->
-        <v-searchpage></v-searchpage>
-        <h3>{{val.article_title}}</h3>
-       <!-- <p class="title" v-html="replace(val.title,input)"></p>
-        <div>
-          <img alt="加载出错" v-for="(img,index) in val.image_list" :key="index" v-lazy="img.url">
-          <div class="bottomInfo clearfix">
-            <Icon type="fireball" size="10" color="#d43d3d" v-show="val.hot===1"></Icon>
-            <span class="avIcon" v-show="val.label==='广告'">广告</span>
-            <span class="writer">{{val.media_name}}</span> &nbsp;&nbsp;
-            <span class="comment_count">评论&nbsp;{{val.comment_count}}</span>
-            <span class="datetime">{{val.datetime}}</span>
-          </div>
-        </div>-->
+        <!--<v-searchpage :input="input"></v-searchpage>-->
+        <!--<h3>{{val.article_title}}</h3>-->
+        <!-- <p class="title" v-html="replace(val.title,input)"></p>
+         <div>
+           <img alt="加载出错" v-for="(img,index) in val.image_list" :key="index" v-lazy="img.url">
+           <div class="bottomInfo clearfix">
+             <Icon type="fireball" size="10" color="#d43d3d" v-show="val.hot===1"></Icon>
+             <span class="avIcon" v-show="val.label==='广告'">广告</span>
+             <span class="writer">{{val.media_name}}</span> &nbsp;&nbsp;
+             <span class="comment_count">评论&nbsp;{{val.comment_count}}</span>
+             <span class="datetime">{{val.datetime}}</span>
+           </div>
+         </div>-->
       </div>
     </div>
   </div>
 </template>
 <script>
   import qs from 'qs';
-  import searchpage from  "../searchPage/searchPage"
   import store from '../../store.js'
   export default{
-    components:{
-      "v-searchpage":searchpage
-    },
     data(){
       return {
         loading:false,
         flag:true,
         input:'',
         con:[],
-        test:[],
+        test:store.fetch(),
         searchCon:'',
         status:0,   //  0=搜索结果  1=查看更多用户   2=查看更多文章  3=查看更多活动
-        items: store.fetch()
       }
     },
     watch: {
-      items: {
+      test: {
         handler: function(val, oldVal) {
           store.save(val);
         },
@@ -140,6 +131,8 @@
         })
           .then(() => {
             this.test = [];
+            var val = JSON.parse(JSON.stringify(this.test))
+            store.save(val);
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -157,6 +150,8 @@
         })
           .then(() => {
             this.test.splice(index,1);
+            var val = JSON.parse(JSON.stringify(this.test))
+            store.save(val);
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -168,6 +163,14 @@
       },
       //回车搜索
       search(input){
+        //搜索跳转
+        this.$router.push({
+          path: '/searchResult',
+          name: 'searchResult',
+          params: {
+            keyWords: this.input,
+          }
+        })
         const _this = this;
         input = input.trim();
         if(input){
@@ -178,30 +181,32 @@
           }
           _this.loading = true;
 
-           /*jsonp('http://www.toutiao.com/search_content/?offset=0&format=json&keyword='+input+'&autoload=true&count=20&cur_tab=1',function(err,res){
-            _this.con = res.data;
-            _this.loading = false;
-          })*/
-          this.$http.post('/api/search', qs.stringify({
+          /*jsonp('http://www.toutiao.com/search_content/?offset=0&format=json&keyword='+input+'&autoload=true&count=20&cur_tab=1',function(err,res){
+           _this.con = res.data;
+           _this.loading = false;
+         })*/
+         /* this.$http.post('/api/search', qs.stringify({
             uid: uid,
-            keywords: 'aa',
+            keywords: this.input,
             pageNum: 1,
             pageSize: 5,
             status:this.status
           })).then((response) => {
             _this.con = response.data.search.article;
             _this.loading = false;
-              console.log(_this.con)
-          });
-
+            //console.log(_this.con)
+          });*/
+          //存储数据
           this.test.unshift(input);
+          var val = JSON.parse(JSON.stringify(this.test))
+          store.save(val);
           this.searchCon = input;
           this.flag = true;
         }else{
           this.searchCon = '';
           this.con = [];
         }
-        console.log(_this.con)
+        //console.log(_this.con)
       }
     },
   }
@@ -221,105 +226,105 @@
   .red{
     color: red;
   }
-    .searchBar {
-      margin-top: 1.3rem;
-      width: 100%;
-    }
-      .toutiaoIcon{
-        display: inline-block;
-        padding: 0 .05rem;
-        font-size: 13px;
-        text-align: center;
-        width: 20%;
-        line-height: 40px;
-      }
-      .searchInput{
-        width: 60%;
-      }
+  .searchBar {
+    margin-top: 1.3rem;
+    width: 100%;
+  }
+  .toutiaoIcon{
+    display: inline-block;
+    padding: 0 .05rem;
+    font-size: 13px;
+    text-align: center;
+    width: 20%;
+    line-height: 40px;
+  }
+  .searchInput{
+    width: 60%;
+  }
 
-    .loading{
-      margin-top: 1rem;
-    }
+  .loading{
+    margin-top: 1rem;
+  }
 
-      .searchNewsItem {
-        width: 94%;
-        display: block;
-        position: relative;
-        margin: 0 auto;
-        padding-bottom: 0.15rem;
-      }
-        .title {
-          font-size: 16px;
-          font-weight: bold;
-          color: #000;
-          padding-top: 0.2rem;
-          padding-bottom: 0.15rem;
-        }
-        .searchNewsItem img {
-          width: 31.1%;
-          margin-right: 0.21rem;
-          height: 2.3rem;
-        }
-        .bottomInfo {
-          font-size: 10px;
-          margin-top: 0.15rem;
-        }
-          .writer {
-            color: #000;
-          }
-          .comment_count {
-            color: #000;
-          }
-          .datetime {
-            float: right;
-            color: #000;
-          }
-          .avIcon {
-            display: inline-block;
-            height: 0.4rem;
-            width: 0.9rem;
-            text-align: center;
-            line-height: 0.4rem;
-            border-radius: 4px;
-            border: 1px solid #39f;
-            font-size: 10px;
-            margin-right: 0.1rem;
-          }
+  .searchNewsItem {
+    width: 94%;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding-bottom: 0.15rem;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    padding-top: 0.2rem;
+    padding-bottom: 0.15rem;
+  }
+  .searchNewsItem img {
+    width: 31.1%;
+    margin-right: 0.21rem;
+    height: 2.3rem;
+  }
+  .bottomInfo {
+    font-size: 10px;
+    margin-top: 0.15rem;
+  }
+  .writer {
+    color: #000;
+  }
+  .comment_count {
+    color: #000;
+  }
+  .datetime {
+    float: right;
+    color: #000;
+  }
+  .avIcon {
+    display: inline-block;
+    height: 0.4rem;
+    width: 0.9rem;
+    text-align: center;
+    line-height: 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #39f;
+    font-size: 10px;
+    margin-right: 0.1rem;
+  }
 
   .el-popover {
     width: 97%;
   }
-    .searchListItems{
-      height: 30px;line-height: 30px;
-      border-bottom: 1px solid #F1F1F1;
-      display: block;
-      position: relative;
-      font-size: 16px;
-    }
+  .searchListItems{
+    height: 30px;line-height: 30px;
+    border-bottom: 1px solid #F1F1F1;
+    display: block;
+    position: relative;
+    font-size: 16px;
+  }
   .searchListItems span{
-      width: 90%;
-      text-align: left;
-      padding-left: 10px;
-      float:left;
-    }
+    width: 90%;
+    text-align: left;
+    padding-left: 10px;
+    float:left;
+  }
   .searchListItems>i{
     float: left;
     line-height: 30px;
   }
-      i{
-        padding: 0 .2rem;
-        line-height: .9rem;
-      }
+  i{
+    padding: 0 .2rem;
+    line-height: .9rem;
+  }
 
-    .clearHistory{
-      font-size: 14px;
-      height: .7rem;
-      line-height: 1rem;
-      text-align: center;
-    }
-    .noHistory{
-      font-size: 14px;
-    }
+  .clearHistory{
+    font-size: 14px;
+    height: .7rem;
+    line-height: 1rem;
+    text-align: center;
+  }
+  .noHistory{
+    font-size: 14px;
+  }
   /*删除对话框*/
   .el-input {
     width: 60% !important;
