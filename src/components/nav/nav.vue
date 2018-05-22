@@ -27,11 +27,14 @@
       return {
         nowIndex: 0,
         navList:["关注","精选"],  //初始化的导航栏
-        addNav:[],      //添加的导航栏
       }
     },
     created(){
-      this.dataInit("关注");
+     // this.dataInit("关注");
+      this.$root.eventHub.$on('navList', (navList) => { // 点击导航键跳转相应内容区
+        this.navList = navList
+        // console.log(this.keyWords)
+      });
     },
     mounted() {
       this.$nextTick(() => {
@@ -43,7 +46,7 @@
     },
     methods: {
       //数据初始化，ajax请求
-      dataInit(keywords){
+     /* dataInit(keywords){
         // var that = this;
         // console.log(this.keywords)
         this.$http.post('/api/index', qs.stringify({
@@ -60,7 +63,7 @@
           this.navList = this.navList.concat(this.addNav); //完善导航栏
           //console.log(response.data)
         })
-      },
+      },*/
       initPage() {
         this.nowIndex = this.$route.path === '/one' ? 0 : this.$route.path === '/two' ? 1 : this.$route.path === '/three' ? 2 : this.$route.path === '/four' ? 3 : this.$route.path === '/five' ? 4 : 0;
       },

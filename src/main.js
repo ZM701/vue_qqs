@@ -14,6 +14,9 @@ import test from '@/components/test/test'
 import videoDetail from '@/components/videoDetail/videoDetail'
 import Search from '@/components/Search/Search'
 import headerBar from '@/components/headerBar/headerBar'
+import searchPage from '@/components/searchPage/searchPage'
+
+// import store from './store/index'
 
 import $ from 'jquery'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -44,6 +47,10 @@ Vue.use(VueRouter);
 //ajax请求
 import axios from 'axios'
 Vue.prototype.$http= axios
+
+//引入vuex
+// import Vuex from 'vuex'
+// Vue.use(Vuex)
 
 // 定义路由
 // 每个路由应该映射一个组件。
@@ -94,6 +101,11 @@ let router = new VueRouter({
       path: '/headerBar',
       name:'headerBar',
       component: headerBar
+    },
+    {
+      path: '/searchPage',
+      name:'searchPage',
+      component: searchPage
     }
   ]
 });
@@ -102,6 +114,7 @@ let router = new VueRouter({
 new Vue({
   el: '#app',
   router: router,
+  // store:store,
   template: '<App/>',
   components: {App},
   data: {

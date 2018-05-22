@@ -59,6 +59,7 @@
     },
     created(){
       this.dataInit();
+
     },
     mounted() {
       //this.attentionArticle = this.attentionArticle;
@@ -125,7 +126,7 @@
             this.list[i].userInfo = this.userInfo;
             this.list[i].banner = this.banner;
           }
-         //console.log(this.attentionArticle)
+          this.$root.eventHub.$emit('navList', this.navList);
         })
       },
       loadMore(loaded) {
@@ -138,6 +139,7 @@
             this.pageNum = 1;
           }
           this.dataInit();
+
           loaded('done');
         }, 500);
       },

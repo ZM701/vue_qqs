@@ -60,6 +60,7 @@
           class="searchNewsItem"
           v-show="val.media_creator_id&&val.title"
         >-->
+        <v-searchpage></v-searchpage>
         <h3>{{val.article_title}}</h3>
        <!-- <p class="title" v-html="replace(val.title,input)"></p>
         <div>
@@ -77,8 +78,13 @@
   </div>
 </template>
 <script>
-  import qs from 'qs'
+  import qs from 'qs';
+  import searchpage from  "../searchPage/searchPage"
+  import store from '../../store.js'
   export default{
+    components:{
+      "v-searchpage":searchpage
+    },
     data(){
       return {
         loading:false,
@@ -86,7 +92,17 @@
         input:'',
         con:[],
         test:[],
-        searchCon:''
+        searchCon:'',
+        status:0,   //  0=搜索结果  1=查看更多用户   2=查看更多文章  3=查看更多活动
+        items: store.fetch()
+      }
+    },
+    watch: {
+      items: {
+        handler: function(val, oldVal) {
+          store.save(val);
+        },
+        deep: true
       }
     },
     beforeRouteLeave (to, from, next){
@@ -171,7 +187,7 @@
             keywords: 'aa',
             pageNum: 1,
             pageSize: 5,
-            status:0
+            status:this.status
           })).then((response) => {
             _this.con = response.data.search.article;
             _this.loading = false;
@@ -185,7 +201,7 @@
           this.searchCon = '';
           this.con = [];
         }
-        //console.log(_this.con)
+        console.log(_this.con)
       }
     },
   }
