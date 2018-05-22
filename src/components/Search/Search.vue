@@ -2,13 +2,16 @@
   <div id="search">
     <div class="searchBar">
       <!--<router-link to="/index" class="box1">返回</router-link>-->
-      <div @click="$router.go(-1)" class="box1">返回</div>
-      <el-input
-        v-model="input"
-        placeholder="请输入内容"
-        @keyup.native.enter="search(input)"
-        class="searchInput fl box2">
-      </el-input>
+      <div class="top">
+        <div @click="$router.go(-1)" class="box1">返回</div>
+        <el-input
+          v-model="input"
+          placeholder="请输入内容"
+          @keyup.native.enter="search(input)"
+          class="searchInput fl box2">
+        </el-input>
+        <span class="sousuo">搜索</span>
+      </div>
       <el-popover
         ref="popover4"
         placement="bottom"
@@ -71,6 +74,7 @@
          </div>-->
       </div>
     </div>
+    <div style="border:1px solid red; margin-top: 60px;">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</div>
   </div>
 </template>
 <script>
@@ -100,7 +104,7 @@
       if(to.name == 'home'){
         this.con = [];
         this.input = '';
-        document.getElementsByClassName('el-popover')[0].style.display = 'none';
+        //document.getElementsByClassName('el-popover')[0].style.display = 'none';
         next();
       }
       next();
@@ -120,7 +124,7 @@
         this.search(item);
         this.con = [];
         this.$nextTick(function(){
-          document.getElementsByClassName('el-popover')[0].style.display = 'none';
+          //document.getElementsByClassName('el-popover')[0].style.display = 'none';
         })
       },
       clearHistory() {
@@ -171,6 +175,7 @@
             keyWords: this.input,
           }
         })
+        console.log(111)
         const _this = this;
         input = input.trim();
         if(input){
@@ -213,22 +218,38 @@
 </script>
 <style>
   .box1{
-    width: 14%;
+    width: 50px;
     line-height: 40px;
-    padding-left: 4%;
   }
   .box2{
     margin: 0 2%;
+    width: 70% !important;
   }
-  .box1,.box2,.box3{
+  .box1,.box2{
     float: left;
   }
   .red{
     color: red;
   }
+  .box3{
+    margin-top: 50px;
+  }
   .searchBar {
     margin-top: 1.3rem;
     width: 100%;
+  }
+  .top{
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    z-index: 99999999;
+    top:0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    background: #fff;
+  }
+  .sousuo{
+    line-height: 40px;
   }
   .toutiaoIcon{
     display: inline-block;
@@ -292,7 +313,10 @@
   }
 
   .el-popover {
-    width: 97%;
+    display: block !important;
+    width: 100%;
+    top:100px;
+    margin-bottom: 50px;
   }
   .searchListItems{
     height: 30px;line-height: 30px;

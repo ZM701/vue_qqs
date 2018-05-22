@@ -1,6 +1,20 @@
 <template>
   <div>
-    <v-search></v-search>
+    <div id="search">
+      <div class="searchBar">
+        <div class="top">
+          <div @click="$router.go(-1)" class="box1">返回</div>
+          <el-input
+            v-model="input"
+            placeholder="请输入内容"
+            @keyup.native.enter="search(input)"
+            class="searchInput fl box2">
+          </el-input>
+          <span class="sousuo">搜索</span>
+        </div>
+      </div>
+    </div>
+
     <div class="atricle">
       <div @click="f1" :class="flage1?'active':'unacticve'">相关用户</div>
       <div @click="f2" :class="flage2?'active':'unacticve'">相关文章</div>
@@ -42,6 +56,7 @@
 <script>
   import qs from "qs";
   import search from "../Search/Search";
+  import store from '../../store.js'
   export default {
     data(){
       return{
@@ -50,6 +65,12 @@
         flage3:false,
         info:[],
         status:1, // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
+        loading:false,
+        flag:true,
+        input:'',
+        con:[],
+        test:store.fetch(),
+        searchCon:'',
       }
     },
     components:{
@@ -94,14 +115,83 @@
           _this.info = response.data.search;
          // console.log(_this.info)
         });
+      },
+      //回车搜索
+      search(input){
+        //搜索跳转
+        this.$router.push({
+          path: '/searchResult',
+          name: 'searchResult',
+          params: {
+            keyWords: this.input,
+          }
+        })
+        this.information();
+        const _this = this;
+        input = input.trim();
+        if(input){
+          if(this.searchCon == input){
+            if(this.flag){
+              return ;
+            }
+          }
+          _this.loading = true;
+          //存储数据
+          this.test.unshift(input);
+          var val = JSON.parse(JSON.stringify(this.test))
+          store.save(val);
+          this.searchCon = input;
+          this.flag = true;
+        }else{
+          this.searchCon = '';
+          this.con = [];
+        }
+        //console.log(_this.con)
       }
     }
   }
 </script>
 
 <style scoped>
+  /*搜索功能 开始*/
+  .box1{
+    width: 50px;
+    line-height: 40px;
+  }
+  .box2{
+    margin: 0 2%;
+    width: 70% !important;
+  }
+  .box1,.box2{
+    float: left;
+  }
+  .red{
+    color: red;
+  }
+  .box3{
+    margin-top: 50px;
+  }
+  .searchBar {
+    margin-top: 1.3rem;
+    width: 100%;
+  }
+  .top{
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    z-index: 99999999;
+    top:0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    background: #fff;
+  }
+  .sousuo{
+    line-height: 40px;
+  }
+  /*搜索功能 结束*/
+
   .atricle{
-    margin-top: 10px;
+    margin-top: 60px;
     margin-bottom: 5px;
     display: flex;
     flex-direction: row;
