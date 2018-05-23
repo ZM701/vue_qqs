@@ -10,7 +10,6 @@ import index from '@/components/index/index'
 import active from '@/components/active/active'
 import shopCart from '@/components/shopCart/shopCart'
 import my from '@/components/my/my'
-import test from '@/components/test/test'
 import videoDetail from '@/components/videoDetail/videoDetail'
 import Search from '@/components/Search/Search'
 import headerBar from '@/components/headerBar/headerBar'
@@ -25,7 +24,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 //全局变量的显示
-global.uid=8389;
+// global.uid=8389;
+global.uid=1;
 
 
 import ElementUI from 'element-ui'
@@ -83,11 +83,6 @@ let router = new VueRouter({
       path: '/my',
       name:'my',
       component: my
-    },
-    {
-      path: '/test',
-      name:'test',
-      component: test
     },
     {
       path: '/videoDetail',
