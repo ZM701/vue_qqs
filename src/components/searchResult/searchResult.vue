@@ -3,14 +3,15 @@
     <div id="search">
       <div class="searchBar">
         <div class="top">
-          <div @click="$router.go(-1)" class="box1">返回</div>
+          <div @click="$router.go(-1)" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
           <el-input
             v-model="input"
             placeholder="请输入内容"
+            value="input"
             @keyup.native.enter="search(input)"
             class="searchInput fl box2">
           </el-input>
-          <span class="sousuo">搜索</span>
+          <span class="sousuo" @click="search(input)">搜索</span>
         </div>
       </div>
     </div>
@@ -70,8 +71,7 @@
         con:[],
         test:store.fetch(),
         searchCon:'',
-        input:$("el-input").val(),
-        haha:'',
+        input:$("el-input").val() || this.$route.params.keyWords,
       }
     },
     watch: {
@@ -88,6 +88,7 @@
     created(){
    // console.log(this.$route.params.keyWords)
       this.information();
+      //console.log(this.input)
 
     },
     methods:{
@@ -113,17 +114,10 @@
         this.information();
       },
       information(){
-        // console.log(this.input);
         var _this = this;
-        if(this.input!="undefined"){
-          this.haha = this.input
-        }else{
-          this.haha = this.$route.params.keyWords
-        }
         this.$http.post('/api/search', qs.stringify({
           uid: uid,
-          keywords:this.haha,
-          // keywords: this.$route.params.keyWords || this.input,
+          keywords: this.input,
           pageNum: 1,
           pageSize: 5,
           status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
@@ -147,7 +141,6 @@
       },*/
       //回车搜索
       search(input){
-        console.log(222);
         //搜索跳转
         this.$router.push({
           path: '/searchResult',
@@ -175,7 +168,7 @@
           this.searchCon = '';
           this.con = [];
         }
-        console.log(this.input)
+       // console.log(this.input)
         this.information();
         //console.log(_this.con)
       }
@@ -186,12 +179,14 @@
 <style scoped>
   /*搜索功能 开始*/
   .box1{
-    width: 50px;
+    width: 30px;
+    padding-right: 10px;
     line-height: 40px;
+    text-align: right;
   }
   .box2{
     margin: 0 2%;
-    width: 70% !important;
+    width: 68% !important;
   }
   .box1,.box2{
     float: left;
