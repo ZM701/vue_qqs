@@ -214,7 +214,7 @@
 
   .atricle{
     margin-top: 60px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
   }
