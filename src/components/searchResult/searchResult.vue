@@ -31,7 +31,7 @@
     <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
     <div class="mainAtricle" v-show="flage2" v-for="(item,index) in info.article">
       <div class="user"><img :src="item.image">{{item.nickname}}</div>
-      <div class="time">{{item.article_sendtime}}</div>
+      <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
       <div class="articleContant">
         <img :src="item.article_cover">
         <div class="description">
@@ -47,7 +47,7 @@
         <img :src="item.goods_banner">
         <div class="description">
           <span>{{item.title}}</span>
-          <span>参与人数{{item.count}}</span>
+          <span>参与人数:{{item.count}}</span>
         </div>
       </div>
     </div>
@@ -58,6 +58,7 @@
   import qs from "qs";
   import search from "../Search/Search";
   import store from '../../store.js'
+  import {formatDate} from '../../../static/js/common.js';
   export default {
     data(){
       return{
@@ -126,19 +127,6 @@
          // console.log(_this.info)
         });
       },
-      /*information2(){
-        var _this = this;
-        this.$http.post('/api/search', qs.stringify({
-          uid: uid,
-          keywords: this.input,
-          pageNum: 1,
-          pageSize: 5,
-          status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
-        })).then((response) => {
-          _this.info = response.data.search;
-          // console.log(_this.info)
-        });
-      },*/
       //回车搜索
       search(input){
         //搜索跳转
@@ -171,6 +159,14 @@
        // console.log(this.input)
         this.information();
         //console.log(_this.con)
+      },
+  },
+    filters: {
+      //时间戳的转换
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd');
+        // return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
     }
   }
