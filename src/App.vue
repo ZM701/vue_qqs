@@ -14,8 +14,8 @@
       <div><router-link to="/index">发现</router-link></div>
       <div><router-link to="/active">活动</router-link></div>
       <!--<div><span><router-link to="/test" class="add">+</router-link></span></div>-->
-      <div><router-link to="/shopCart">购物车</router-link></div>
-      <div><router-link to="/my">我的</router-link></div>
+      <div><router-link to="/task">任务</router-link></div>
+      <!--<div><router-link to="/my">我的</router-link></div>-->
     </div>
   </div>
 </template>
@@ -104,5 +104,12 @@
   }
   .router-link-active{
     color: green;
+  }
+  .content1 img{
+    width: 100% !important;
+  }
+  .content1 span{
+    text-align: left !important;
+    display: inline;
   }
 </style>

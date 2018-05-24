@@ -2,7 +2,7 @@
   <div id="search">
     <div class="searchBar" >
       <div class="top">
-        <div @click="$router.go(-1)" class="box1"><i class="glyphicon glyphicon-chevron-left"></i></div>
+        <div @click="goback" class="box1"><i class="glyphicon glyphicon-chevron-left"></i></div>
         <el-input
           v-model="input"
           placeholder="请输入内容"
@@ -87,6 +87,13 @@
       next();
     },
     methods:{
+      //返回
+      goback(){
+        this.$router.push({
+          path: '/index',
+          name: 'index',
+        })
+      },
       //热门搜索
       hotSearch(index){
         this.input =  $(".hotSearch li").eq(index).text();

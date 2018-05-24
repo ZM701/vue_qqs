@@ -2,11 +2,14 @@
   <div>
     <!--搜索栏-->
     <div class="search">
-      <div>
+      <div class="find">
         <router-link to="/search">
           <input/>
           <i class="glyphicon glyphicon-search"></i>
         </router-link>
+      </div>
+      <div class="my">
+        <router-link to="/my">我的</router-link>
       </div>
     </div>
     <div class="nav">
@@ -111,28 +114,38 @@
     top:0;
     background: #7DBE24;
     overflow: hidden;
+    line-height: 50px;
+    padding-left: 20%;
   }
-  .search>div{
-    position: relative;
+  .search .find,.search .my{
+    float: left;
+  }
+
+  .search .my{
     height: 50px;
-    overflow: hidden;
+    width: 40px;
   }
-  .search>div input{
+  .search .my a{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .search .find{
+    position: relative;
+    width: 80%;
+    margin-right: 4%;
+  }
+  .search .find input{
     padding-left: 30px;
     outline: none;
-    position: absolute;
-    width: 80%;
+    width: 100%;
     height: 30px;
-    left: 50%;
-    top:50%;
-    margin-left: -40%;
-    margin-top: -15px;
     border: none;
     border-radius: 4px;
   }
-  .search>div i {
-    left: 12%;
-    top:20%;
+  .search .find i {
+    left: 1%;
+    top:22%;
     position: absolute;
     font-size: 16px;
     color:#ccc;

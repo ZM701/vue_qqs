@@ -8,13 +8,15 @@ import four from './components/four/four.vue';
 import five from './components/five/five.vue';
 import index from '@/components/index/index'
 import active from '@/components/active/active'
-import shopCart from '@/components/shopCart/shopCart'
+import task from '@/components/task/task'
 import my from '@/components/my/my'
 import videoDetail from '@/components/videoDetail/videoDetail'
 import Search from '@/components/Search/Search'
 import headerBar from '@/components/headerBar/headerBar'
 import searchPage from '@/components/searchPage/searchPage'
 import searchResult from '@/components/searchResult/searchResult'
+import attention from '@/components/attention/attention'
+import articleDescription from '@/components/articleDescription/articleDescription'
 
 
 // import store from './store/index'
@@ -24,8 +26,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 //全局变量的显示
-// global.uid=8389;
-global.uid=1;
+global.uid=8389;
+// global.uid=1;
 
 
 import ElementUI from 'element-ui'
@@ -75,9 +77,9 @@ let router = new VueRouter({
       component: active
     },
     {
-      path: '/shopCart',
-      name:'shopCart',
-      component: shopCart
+      path: '/task',
+      name:'task',
+      component: task
     },
     {
       path: '/my',
@@ -108,7 +110,18 @@ let router = new VueRouter({
       path: '/searchResult',
       name:'searchResult',
       component: searchResult
+    },
+    {
+      path: '/attention',
+      name:'attention',
+      component: attention
+    },
+    {
+      path: '/articleDescription',
+      name:'articleDescription',
+      component: articleDescription
     }
+
 
   ]
 });

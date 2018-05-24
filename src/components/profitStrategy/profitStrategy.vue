@@ -1,10 +1,10 @@
 <template>
-    <div>购物车</div>
+    <div>赚钱攻略</div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
     export default {
-        name: "shop-cart"
+        name: "profit-strategy"
     }
 </script>
 

@@ -2,7 +2,7 @@
 <div>
   <div v-for="(item,index) in msg">
     <!--item.type == 0代表的是文章  1代表的是视频-->
-    <div class="panel" v-if="item.type == 0 && item.imgSrc.length>1">
+    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format}}">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -20,9 +20,9 @@
             <div class=""> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
           </div>
         </div>
-    </div>
+    </router-link>
 
-    <div class='pane2' v-if="item.type == 0 && item.imgSrc.length==0">
+    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length==0" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
@@ -39,7 +39,7 @@
           <div> <span class='iconfont icon-turn lightGrey '></span>转发 {{item.article_transpondnum}}</div>
         </div>
       </div>
-    </div>
+    </router-link>
 
     <div class="pane3"  v-if="item.type == 1">
       <div class="panelTitle">{{item.article_title}}</div>
@@ -69,13 +69,20 @@
           type:Array
         }
       },
-      mounted(){
+      data(){
+        return{
+
+        }
       },
+      methods:{
+
+      }
     }
 </script>
 
 <style scoped>
   .panel,.pane2,.pane3{
+    /*border: 10px solid red;*/
     padding: 5px;
     margin-bottom: 20px;
     background-color: #fff;
@@ -91,6 +98,7 @@
     word-wrap:break-word;
     word-break:break-all;
     margin-bottom: 5px;
+   text-align: left;
   }
   .panel .img_con{
     overflow: hidden;
@@ -150,6 +158,7 @@
     float: left;
   }
   .pane2_box .panelTitle{
+    text-align: left;
     width: 65%;
     margin-right: 5px;
   }

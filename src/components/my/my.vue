@@ -1,15 +1,19 @@
 <template>
     <div>
+      <div class="navMy">
+        <span @click="$router.go(-1)"><i class="	glyphicon glyphicon-chevron-left"></i></span>
+        <span>我的</span>
+      </div>
       <div class="userInfo">
         <div class="userImage"><img :src="infoUser.image"></div>
         <div class="userName">{{infoUser.nickname}}</div>
         <ul>
-          <li><span>{{infoUser.followNum}}</span><span>关注</span></li>
+          <li @click="attention"><span>{{infoUser.followNum}}</span><span>关注</span></li>
           <li><span>{{infoUser.fansNum}}</span><span>粉丝</span></li>
           <li><span>{{infoUser.collectionNum}}</span><span>收藏</span></li>
         </ul>
       </div>
-      <div class="myOrder">
+      <!--<div class="myOrder">
         <div>我的订单</div>
         <ul>
           <li>待付款</li>
@@ -17,17 +21,19 @@
           <li>待收货</li>
           <li>已完成</li>
         </ul>
-      </div>
+      </div>-->
       <div class="contentTitle">
         <ul>
-          <li @click="f1" :class="flage1?'active':'unacticve'">全部文章</li>
-          <li @click="f2" :class="flage2?'active':'unacticve'">参与活动</li>
+          <li>金币攻略</li>
+          <li><span>金币收益</span><span>778</span></li>
+          <li><span>我的文章</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></li>
+          <li><span>参与活动</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></li>
         </ul>
       </div>
       <!--全部文章------------------------------------------------>
-      <div class="totalArticle" v-show="flage1" v-for="(item,index) in info.article">
+     <!-- <div class="totalArticle" v-show="flage1" v-for="(item,index) in info.article">
         <div class="edit">
-          <!--article_status  0=草稿          article_authority  0=公开-->
+          &lt;!&ndash;article_status  0=草稿          article_authority  0=公开&ndash;&gt;
           <span v-show="item.article_status==0">草稿</span>
           <span v-show="item.article_status==1">公开</span>
           <span>{{item.article_sendtime}}分钟前&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
@@ -55,13 +61,13 @@
           <span><img :src="item.image"/>{{item.nickname}}</span>
           <span>评论{{item.article_agreenum}}</span>
           <span>转发{{item.article_agreenum}}</span>
-          <!--<span>赏金7869</span>-->
+          &lt;!&ndash;<span>赏金7869</span>&ndash;&gt;
         </div>
-      </div>
+      </div>-->
       <!--参与活动-------------------------------------------------------------->
-      <div class="joinActivities" v-show="flage2" v-for="(item,index) in info.activity">
+     <!-- <div class="joinActivities" v-show="flage2" v-for="(item,index) in info.activity">
         <div class="myJoin">
-          <!--activity  我投票的活动          myActivity  我参与的-->
+          &lt;!&ndash;activity  我投票的活动          myActivity  我参与的&ndash;&gt;
           <div>
             <p>我参与的</p>
             <div class="imgs"><img src="../../../static/images/play.png"/></div>
@@ -75,7 +81,7 @@
             <div class="time">12:20 &nbsp;参与人数778</div>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
 </template>
@@ -94,7 +100,16 @@
           }
         },
       methods:{
-        f1(){
+          attention(){
+            this.$router.push({
+              path: '/attention',
+              name: 'attention',
+              params: {
+                // keyWords: this.input,
+              }
+            })
+          },
+        /*f1(){
           this.flage1 = true;
           this.flage2 = false;
           this.status = 0;
@@ -108,7 +123,7 @@
         },
         f3(){
           this.flage3 = !this.flage3;
-        },
+        },*/
         information(){
           var _this = this;
           this.$http.post('/api/mine', qs.stringify({
@@ -130,6 +145,17 @@
 </script>
 
 <style scoped>
+  .navMy{
+    width: 100%;
+    overflow: hidden;
+    margin: 10px;
+  }
+  .navMy span{
+    text-align: left;
+    width: auto;
+    float: left;
+    margin-right: 4px;
+  }
   .userInfo{
     text-align: center;
     border-bottom: 1px solid #e4e7ed;
@@ -156,32 +182,19 @@
     width: 33%;
     text-align: center;
   }
-  .myOrder ul{
-    display: flex;
-    flex-direction: row;
-    margin-top:8px;
-    padding-bottom: 10px;
+  .contentTitle ul li{
+    list-style: none;
+    padding: 0 20px;
+    height: 50px;
+    line-height: 50px;
     border-bottom: 1px solid #e4e7ed;
   }
-  .myOrder div{
-    padding-left: 5px;
-    font-weight: bold;
-  }
-  .myOrder ul li{
-    text-align: center;
-    list-style: none;
-    width: 100%;
-  }
-  .contentTitle ul{
-    overflow: hidden;
-  }
-  .contentTitle ul li{
-    padding-bottom: 3px;
-    text-align: center;
-    margin-right: 20px;
-    width: 20%;
-    list-style: none;
+  .contentTitle ul li span{
+    width: auto;
     float: left;
+  }
+  .contentTitle ul li span:last-of-type{
+    float: right;
   }
   .active{
     color: #66B672;
