@@ -11,9 +11,9 @@
     </div>
 
     <div class="footer" v-show="this.$route.path=='/index'||this.$route.path=='/active'||this.$route.path=='/task'||this.$route.path=='/index/one'||this.$route.path=='/index/two'||this.$route.path=='/index/three'||this.$route.path=='/index/four'||this.$route.path=='/index/five'">
-      <div><router-link to="/index">发现</router-link></div>
-      <div><router-link to="/active">活动</router-link></div>
-      <div><router-link to="/task">任务</router-link></div>
+      <div><router-link to="/index"><span><i class="	glyphicon glyphicon-search"></i></span><span>发现</span></router-link></div>
+      <div><router-link to="/active"><span><i class="glyphicon glyphicon-fullscreen"></i></span><span>活动</span></router-link></div>
+      <div><router-link to="/task"><span><i class="glyphicon glyphicon-folder-open"></i></span><span>任务</span></router-link></div>
     </div>
   </div>
 </template>
@@ -49,12 +49,17 @@
     display: flex;
     flex-direction: row;
     z-index: 9999;
+    padding-top: 5px;
+    height: 40px;
   }
   .footer>div{
-    height: 40px;
-    line-height: 40px;
+    height: 50px;
     width: 100%;
     text-align: center;
+  }
+  .footer>div span{
+    height: 15px;
+    font-size: 1rem;
   }
   a,span{
     display: block;
@@ -82,7 +87,7 @@
     line-height: 32px;
     margin: 5px auto;
   }
-  .router-link-active{
+  .router-link-active span{
     color: green;
   }
   .content1 img{

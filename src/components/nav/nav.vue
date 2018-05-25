@@ -9,7 +9,7 @@
         </router-link>
       </div>
       <div class="my">
-        <router-link to="/my">我的</router-link>
+        <router-link to="/my"> <span class="glyphicon glyphicon-user"></span></router-link>
       </div>
     </div>
     <div class="nav">
@@ -115,10 +115,14 @@
     background: #7DBE24;
     overflow: hidden;
     line-height: 50px;
-    padding-left: 20%;
+    padding-left: 10%;
   }
   .search .find,.search .my{
     float: left;
+  }
+  .search .my span{
+    font-size: 16px;
+    color: #fff;
   }
 
   .search .my{
