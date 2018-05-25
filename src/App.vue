@@ -10,12 +10,10 @@
       </div>
     </div>
 
-    <div class="footer">
+    <div class="footer" v-show="this.$route.path=='/index'||this.$route.path=='/active'||this.$route.path=='/task'">
       <div><router-link to="/index">发现</router-link></div>
       <div><router-link to="/active">活动</router-link></div>
-      <!--<div><span><router-link to="/test" class="add">+</router-link></span></div>-->
       <div><router-link to="/task">任务</router-link></div>
-      <!--<div><router-link to="/my">我的</router-link></div>-->
     </div>
   </div>
 </template>
@@ -33,6 +31,9 @@
       'v-nav': nav,
       'v-swiper': swiper
     },
+    created(){
+
+    },
     methods:{
       fetchDate(){
         if(this.$route.path.indexOf('index')==-1){
@@ -47,7 +48,7 @@
     watch: {
       // 监听路由的变化 如果路由有变化，会再次执行该方法
       '$route' (to,from) {
-       // console.log("当前路由路径",this.$route.path);
+        console.log("当前路由路径",this.$route.path);
         this.fetchDate();
       }
     }

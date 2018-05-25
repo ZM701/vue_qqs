@@ -4,7 +4,7 @@
         <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
         <span>关注</span>
       </div>
-      <div v-if="imgSrc.length==0" style="padding-bottom: 100px;">
+      <div style="padding-bottom: 100px;">
         <div class="user">
           <div><img :src="userImage"/></div>
           <div><span>{{nickName}}</span><span>粉丝789</span></div>
@@ -13,29 +13,15 @@
         <div class="content">
           <div>{{article_title}}</div>
           <div>{{article_sendtime}} &nbsp;&nbsp;来自oopo</div>
-          <div><img :src="userImage"/></div>
-          <!--<div v-html="article_content" class="imgs"></div>-->
-          <!-- https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name= -->
-          <!--article_format   0是富文本格式的   1是json格式的-->
-          <div v-if="article_format == 1 ">{{article_content}}
-            <!--<img :src="article_content.img"/>-->
-            <span style="border: 1px solid red; height: 30px;">{{article_content.text}}</span>
+          <div v-if="article_format==1">
+            <div v-for="(item,idex) in article_content" class="content1">
+              <span><img :src="'https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name='+item.img"/></span>
+              <span>{{item.text}}</span>
+            </div>
           </div>
-        </div>
-      </div>
-      <div v-if="imgSrc.length>1">
-        <div class="user">
-          <div><img :src="userImage"/></div>
-          <div><span>{{nickName}}</span><span>粉丝789</span></div>
-          <div>关注</div>
-        </div>
-        <div class="content1">
-          <div>{{article_title}}</div>
-          <div>{{article_sendtime}} &nbsp;&nbsp;来自oopo</div>
-          <!--<div v-for="(item,index) in imgSrc" class="imgs">
-            <img :src="item"/>
-          </div>-->
-          <div v-html="article_content" class="imgs"></div>
+          <div v-if="article_format==0" class="content1">
+            <div v-html="article_content" class="imgs"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -55,12 +41,17 @@
         }
       },
       created(){
-        this.article_content = JSON.parse(this.article_content);
-        //转义&lt;&gt;
-        var str = this.$route.params.article_content
-          .replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">")
-        this.article_content = str;
+        var str = this.$route.params.article_content;
+        if(this.article_format==1){
+          this.article_content = "["+str+"]";
+          this.article_content = JSON.parse(this.article_content);
+        }
+        if(this.article_format==0){
+          //转义&lt;&gt;
+          var strs = str.replace(/&lt;/g, "<")
+                      .replace(/&gt;/g, ">");
+          this.article_content = strs;
+        }
       },
       methods:{
         goback(){
@@ -126,7 +117,6 @@
   .content1{
     width: 100%;
     padding: 5px;
-    padding-bottom: 50px;
   }
   .content1>div{
     margin: 5px 0px;

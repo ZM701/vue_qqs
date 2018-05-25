@@ -67,7 +67,7 @@
       <!--参与活动-------------------------------------------------------------->
      <!-- <div class="joinActivities" v-show="flage2" v-for="(item,index) in info.activity">
         <div class="myJoin">
-          &lt;!&ndash;activity  我投票的活动          myActivity  我参与的&ndash;&gt;
+          &lt;!&ndash;    activity  我投票的活动          myActivity  我参与的&ndash;&gt;
           <div>
             <p>我参与的</p>
             <div class="imgs"><img src="../../../static/images/play.png"/></div>
