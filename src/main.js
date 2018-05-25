@@ -17,6 +17,11 @@ import searchPage from '@/components/searchPage/searchPage'
 import searchResult from '@/components/searchResult/searchResult'
 import attention from '@/components/attention/attention'
 import articleDescription from '@/components/articleDescription/articleDescription'
+import myActives from '@/components/myActives/myActives'
+import myArticle from '@/components/myArticle/myArticle'
+import goldIncome from '@/components/goldIncome/goldIncome'
+
+
 
 
 // import store from './store/index'
@@ -27,6 +32,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 //全局变量的显示
 global.uid=8389;
+// global.uid=5190;
 // global.uid=1;
 
 
@@ -61,15 +67,22 @@ Vue.prototype.$http= axios
 let router = new VueRouter({
   routes: [
     {path: '/', redirect: '/index'},
-    {path: '/one',name:'one', component: one},
+   /* {path: '/one',name:'one', component: one},
     {path: '/two',name:'two', component: two},
     {path: '/three',name:'three', component: three},
     {path: '/four',name:'four', component: four},
-    {path: '/five',name:'five', component: five},
+    {path: '/five',name:'five', component: five},*/
     {
       path: '/index',
       name:'index',
-      component: index
+      component: index,
+      children:[
+        { path: '/index/one', name:'one', component: one},
+        { path: '/index/two', name:'two', component: two},
+        { path: '/index/three', name:'three', component: three},
+        { path: '/index/four', name:'four', component: four},
+        { path: '/index/five', name:'five', component: five}
+      ]
     },
     {
       path: '/active',
@@ -120,7 +133,23 @@ let router = new VueRouter({
       path: '/articleDescription',
       name:'articleDescription',
       component: articleDescription
+    },
+    {
+      path: '/myActives',
+      name:'myActives',
+      component: myActives
+    },
+    {
+      path: '/myArticle',
+      name:'myArticle',
+      component: myArticle
+    },
+    {
+      path: '/goldIncome',
+      name:'goldIncome',
+      component: goldIncome
     }
+
 
 
   ]

@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <div>
-      <div class="display" v-show="false">
+      <div class="display" v-show="this.$route.path.indexOf('index')==-1">
         <router-view></router-view>
       </div>
-      <div class="find">
+      <div class="find" v-show="this.$route.path.indexOf('index')==1">
         <v-nav class="vNav"></v-nav>
         <v-swiper></v-swiper>
       </div>
     </div>
 
-    <div class="footer" v-show="this.$route.path=='/index'||this.$route.path=='/active'||this.$route.path=='/task'">
+    <div class="footer" v-show="this.$route.path=='/index'||this.$route.path=='/active'||this.$route.path=='/task'||this.$route.path=='/index/one'||this.$route.path=='/index/two'||this.$route.path=='/index/three'||this.$route.path=='/index/four'||this.$route.path=='/index/five'">
       <div><router-link to="/index">发现</router-link></div>
       <div><router-link to="/active">活动</router-link></div>
       <div><router-link to="/task">任务</router-link></div>
@@ -30,27 +30,6 @@
     components: {
       'v-nav': nav,
       'v-swiper': swiper
-    },
-    created(){
-
-    },
-    methods:{
-      fetchDate(){
-        if(this.$route.path.indexOf('index')==-1){
-          $(".find").hide();
-          $(".display").show();
-        }else{
-          $(".display").hide();
-          $(".find").show();
-        }
-      }
-    },
-    watch: {
-      // 监听路由的变化 如果路由有变化，会再次执行该方法
-      '$route' (to,from) {
-        console.log("当前路由路径",this.$route.path);
-        this.fetchDate();
-      }
     }
 
   }

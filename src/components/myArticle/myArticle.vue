@@ -1,13 +1,183 @@
 <template>
-    <div>我的文章</div>
+  <div>
+    <div class="navMy">
+      <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
+      <span>我的文章</span>
+    </div>
+    <!--全部文章------------------------------------------------>
+     <div class="totalArticle"  v-for="(item,index) in info.article">
+       <div class="edit">
+         <!--article_status  0=草稿          article_authority  0=公开-->
+         <span v-show="item.article_status==0">草稿</span>
+         <span v-show="item.article_status==1">公开</span>
+         <span>{{item.article_sendtime}}分钟前&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
+         <span @click="f3"><i class="glyphicon glyphicon-tasks"></i></span>
+         <div style="clear:both;"></div>
+         <div class="reEdit" v-show="flage3">
+           <ul>
+             <li>删除</li>
+             <li>再次编辑</li>
+           </ul>
+         </div>
+       </div>
+       <div class="articleContent">
+         <div class="articleTitle">
+           {{item.article_title}}
+         </div>
+         <div class="articleImages" v-show="item.imgSrc.length==0">
+           <div><img :src="item.article_cover"/></div>
+         </div>
+         <div class="articleImages" v-for="(imgs,index) in item.imgSrc">
+           <div><img :src="imgs"/></div>
+         </div>
+       </div>
+       <div class="articleDescription">
+         <span><img :src="item.image"/>{{item.nickname}}</span>
+         <span>评论{{item.article_agreenum}}</span>
+         <span>转发{{item.article_agreenum}}</span>
+         <!--<span>赏金7869</span>-->
+       </div>
+     </div>
+  </div>
 </template>
 
-<script>
-    export default {
-        name: "my-article"
+<script type="text/ecmascript-6">
+  import qs from 'qs';
+  export default {
+    data(){
+      return{
+        status:0,   // 0文章  1活动
+        info:{},  //数据渲染
+        flage3:false,   // 删除或再次编辑
+      }
+    },
+    created(){
+      this.information();
+    },
+    methods:{
+      goback() {
+        this.$router.push({
+          path: '/my',
+          name: 'my',
+        })
+      },
+      information(){
+        var _this = this;
+        this.$http.post('/api/mine', qs.stringify({
+          uid: uid,
+          pageNum: 1,
+          pageSize: 5,
+          status:this.status   // 0文章  1活动
+        })).then((response) => {
+          _this.info = response.data;
+          console.log(response.data)
+        });
+      },
+      //删除编辑的显示隐藏
+      f3(){
+        this.flage3 = !this.flage3;
+      }
     }
+  }
 </script>
 
 <style scoped>
-
+  .navMy{
+    width: 100%;
+    overflow: hidden;
+    margin: 10px;
+  }
+  .navMy span{
+    text-align: left;
+    width: auto;
+    float: left;
+    margin-right: 4px;
+  }
+  /*全部文章*/
+  .totalArticle{
+    padding: 0px 5px;
+    margin-bottom: 50px;
+  }
+  .totalArticle .edit{
+    /*overflow: hidden;*/
+    position: relative;
+  }
+  .totalArticle .edit span{
+    width: auto;
+    margin-right: 5px;
+    float: left;
+    color: #666;
+  }
+  .totalArticle .edit span:first-of-type{
+    padding:0 5px;
+    border:1px solid #e4e7ed;
+    border-radius: 5px;
+  }
+  .totalArticle .edit span:nth-of-type(2){
+    padding:0 5px;
+    border:1px solid #e4e7ed;
+    border-radius: 5px;
+  }
+  .totalArticle .edit span:last-of-type{
+    float: right;
+    font-size: 12px;
+  }
+  .totalArticle .edit .reEdit{
+    background: #fff;
+    position: absolute;
+    right: 2px;
+    top:20px;
+    z-index: 99;
+    width: 50%;
+    border-radius: 2px;
+    box-shadow: 0px 0px 8px #ccc;
+    border-right: 1px solid #e4e7ed;
+  }
+  .totalArticle .edit .reEdit ul{
+    margin: 0;
+    padding: 0;
+  }
+  .totalArticle .edit .reEdit li{
+    padding-left: 8px;
+    list-style: none;
+    line-height: 30px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+  .articleContent .articleTitle,.titles{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    word-wrap:break-word;
+    word-break:break-all;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .articleContent .articleImages{
+    display: flex;
+    flex-direction: row;
+    margin: 10px auto;
+  }
+  .articleImages>div{
+    width: 100%;
+    margin-right: 5px;
+  }
+  .articleImages>div img{
+    width: 100%;
+    height: 100%;
+  }
+  .articleDescription{
+    overflow: hidden;
+  }
+  .articleDescription span{
+    width: auto;
+    float: left;
+    line-height: 25px;
+    margin-right: 10px;
+  }
+  .articleDescription img{
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
 </style>

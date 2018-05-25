@@ -68,7 +68,7 @@
         })
       },*/
       initPage() {
-        this.nowIndex = this.$route.path === '/one' ? 0 : this.$route.path === '/two' ? 1 : this.$route.path === '/three' ? 2 : this.$route.path === '/four' ? 3 : this.$route.path === '/five' ? 4 : 0;
+        this.nowIndex = this.$route.path === '/index/one' ? 0 : this.$route.path === '/index/two' ? 1 : this.$route.path === '/index/three' ? 2 : this.$route.path === '/index/four' ? 3 : this.$route.path === '/index/five' ? 4 : 0;
       },
       tabClick(index) {
         this.nowIndex = index;
@@ -84,7 +84,7 @@
         //this.dataInit($("li").eq(index).text());
         //console.log($("li").eq(index).text());
         let router = new VueRouter();
-        let href = index === 0 ? '/one' : index === 1 ? '/two' : index === 2 ? '/three' : index === 3 ? '/four' : index === 4 ? '/five' : '/one';
+        let href = index === 0 ? '/index/one' : index === 1 ? '/index/two' : index === 2 ? '/index/three' : index === 3 ? '/index/four' : index === 4 ? '/index/five' : '/index/one';
         // 利用路由的push方法更新路径地址
         router.push(href);
       },

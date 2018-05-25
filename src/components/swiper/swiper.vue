@@ -49,11 +49,11 @@
         keyWords:"关注",   //请求接口的关键字
         pageNum:1,
         list: [
-          {path: '/one', component: one},
-          {path: '/two', component: two},
-          {path: '/three', component: three},
-          {path: '/four', component: four},
-          {path: '/five', component: five}
+          {path: '/index/one', component: one},
+          {path: '/index/two', component: two},
+          {path: '/index/three', component: three},
+          {path: '/index/four', component: four},
+          {path: '/index/five', component: five}
         ]
       }
     },
@@ -65,7 +65,7 @@
       //this.attentionArticle = this.attentionArticle;
       var mySwiper = new Swiper('.swiper-container', {
         // 设定初始化时slide的索引
-        initialSlide: this.$route.path === '/one' ? 0 : this.$route.path === '/two' ? 1 : this.$route.path === '/three' ? 2 : this.$route.path === '/four' ? 3 : this.$route.path === '/five' ? 4 : 0
+        initialSlide: this.$route.path === '/index/one' ? 0 : this.$route.path === '/index/two' ? 1 : this.$route.path === '/index/three' ? 2 : this.$route.path === '/index/four' ? 3 : this.$route.path === '/index/five' ? 4 : 0
       });
       mySwiper.on('slideChange', () => { // 监控滑动后当前页面的索引，将索引发射到导航组件
         // 左右滑动时将当前slide的索引发送到nav组件
