@@ -116,7 +116,7 @@
       },
       information(){
         var _this = this;
-        this.$http.post('/api/search', qs.stringify({
+        this.$http.post('/api/article/search', qs.stringify({
           uid: uid,
           keywords: this.input,
           pageNum: 1,

@@ -89,7 +89,7 @@
       dataInit() {
         // var that = this;
         // console.log(this.keywords)
-        this.$http.post('/api/index', qs.stringify({
+        this.$http.post('/api/article/index', qs.stringify({
           uid: uid,
           keywords: this.keyWords,
           pageNum: this.pageNum,

@@ -71,7 +71,7 @@
     },
     created(){
         var _this = this;
-        this.$http.post('/api/searchPage', qs.stringify({
+        this.$http.post('/api/article/searchPage', qs.stringify({
           uid: uid,
         })).then((response) => {
           this.hot = response.data.hot;

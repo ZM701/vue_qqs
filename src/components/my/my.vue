@@ -9,7 +9,7 @@
         <div class="userName">{{infoUser.nickname}}</div>
         <ul>
           <li @click="attention"><span>{{infoUser.followNum}}</span><span>关注</span></li>
-          <li><span>{{infoUser.fansNum}}</span><span>粉丝</span></li>
+          <li @click="fans"><span>{{infoUser.fansNum}}</span><span>粉丝</span></li>
           <li><span>{{infoUser.collectionNum}}</span><span>收藏</span></li>
         </ul>
       </div>
@@ -35,18 +35,32 @@
             status:0,   // 0文章  1活动
             info:{},  //数据渲染
             infoUser:{},  //用户信息
+            type:null,
           }
         },
       methods:{
+          //跳转到关注页面
           attention(){
+            this.type = 1;
             this.$router.push({
               path: '/attention',
               name: 'attention',
               params: {
-                // keyWords: this.input,
+                type:this.type,
               }
             })
           },
+        //跳转到粉丝页面
+        fans(){
+          this.type = 2;
+          this.$router.push({
+            path: '/attention',
+            name: 'attention',
+            params: {
+              type:this.type,
+            }
+          })
+        },
         //返回上一页
         goback() {
           this.$router.push({
@@ -56,7 +70,7 @@
         },
         information(){
           var _this = this;
-          this.$http.post('/api/mine', qs.stringify({
+          this.$http.post('/api/article/mine', qs.stringify({
             uid: uid,
             pageNum: 1,
             pageSize: 5,
@@ -64,9 +78,9 @@
           })).then((response) => {
             _this.info = response.data;
             this.infoUser = response.data.user;
-            console.log(response.data)
+            //console.log(response.data)
           });
-        }
+        },
       },
       created(){
         this.information();

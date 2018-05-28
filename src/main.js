@@ -20,6 +20,7 @@ import articleDescription from '@/components/articleDescription/articleDescripti
 import myActives from '@/components/myActives/myActives'
 import myArticle from '@/components/myArticle/myArticle'
 import goldIncome from '@/components/goldIncome/goldIncome'
+import attentionFans from '@/components/attentionFans/attentionFans'
 
 
 
@@ -148,8 +149,12 @@ let router = new VueRouter({
       path: '/goldIncome',
       name:'goldIncome',
       component: goldIncome
+    },
+    {
+      path: '/attentionFans',
+      name:'attentionFans',
+      component: attentionFans
     }
-
 
 
   ]

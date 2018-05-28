@@ -10,7 +10,7 @@
          <!--article_status  0=草稿          article_authority  0=公开-->
          <span v-show="item.article_status==0">草稿</span>
          <span v-show="item.article_status==1">公开</span>
-         <span>{{item.article_sendtime}}分钟前&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
+         <span>{{item.article_sendtime*1000 | formatDate}}&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
          <span @click="f3"><i class="glyphicon glyphicon-tasks"></i></span>
          <div style="clear:both;"></div>
          <div class="reEdit" v-show="flage3">
@@ -43,6 +43,7 @@
 
 <script type="text/ecmascript-6">
   import qs from 'qs';
+  import {formatDate} from '../../../static/js/common.js';
   export default {
     data(){
       return{
@@ -63,19 +64,26 @@
       },
       information(){
         var _this = this;
-        this.$http.post('/api/mine', qs.stringify({
+        this.$http.post('/api/article/mine', qs.stringify({
           uid: uid,
           pageNum: 1,
           pageSize: 5,
           status:this.status   // 0文章  1活动
         })).then((response) => {
           _this.info = response.data;
-          console.log(response.data)
+          //console.log(response.data)
         });
       },
       //删除编辑的显示隐藏
       f3(){
         this.flage3 = !this.flage3;
+      }
+    },
+    filters: {
+      formatDate(time) {
+        var date = new Date(time);
+        // return formatDate(date, 'yyyy-MM-dd hh:mm');
+        return formatDate(date, 'MM-dd hh:mm');
       }
     }
   }

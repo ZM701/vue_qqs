@@ -15,12 +15,12 @@
            <div class="change" v-show="flage1" v-for="(item,index) in info.myActivity">
              <div class="imgs"><img :src="item.goods_banner"/></div>
              <div class="titles">{{item.title}}</div>
-             <div class="time">{{item.start_time}} &nbsp;参与人数{{item.activityNum}}</div>
+             <div class="time">{{item.start_time*1000 | formatDate}} &nbsp;参与人数{{item.activityNum}}</div>
            </div>
            <div class="change" v-show="flage2" v-for="(item,index) in info.activity">
              <div class="imgs"><img :src="item.goods_banner"/></div>
              <div class="titles">{{item.title}}</div>
-             <div class="time">{{item.start_time}} &nbsp;参与人数{{item.activityNum}}</div>
+             <div class="time">{{item.start_time*1000 | formatDate}} &nbsp;参与人数{{item.activityNum}}</div>
            </div>
          </div>
        </div>
@@ -30,6 +30,7 @@
 
 <script type="text/ecmascript-6">
   import qs from "qs";
+  import {formatDate} from '../../../static/js/common.js';
     export default {
       data(){
         return{
@@ -62,19 +63,26 @@
         },
         information(){
           var _this = this;
-          this.$http.post('/api/mine', qs.stringify({
+          this.$http.post('/api/article/mine', qs.stringify({
             uid: uid,
             pageNum: 1,
             pageSize: 5,
             status:this.status,   // 1活动
           })).then((response) => {
             _this.info = response.data;
-            console.log(response.data)
+            //console.log(response.data)
           });
         },
       },
       created(){
         this.information()
+      },
+      filters: {
+        formatDate(time) {
+          var date = new Date(time);
+          // return formatDate(date, 'yyyy-MM-dd hh:mm');
+          return formatDate(date, 'MM-dd hh:mm');
+        }
       }
     }
 </script>
@@ -119,11 +127,21 @@
     margin-bottom: 10px;
   }
   .joinActivities .myJoin .change{
+    font-size: 1rem;
     float: left;
     width: 49%;
     margin-right: 5px;
-    height: 150px;
     margin-bottom: 10px;
+  }
+  .change .titles{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap:break-word;
+    word-break:break-all;
+    margin-bottom: 2px;
+    margin-top: 3px;
   }
   .joinActivities .myJoin .change:nth-of-type(2n+1){
     margin-right: 0px;
