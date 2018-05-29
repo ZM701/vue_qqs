@@ -2,7 +2,7 @@
 <div>
   <div v-for="(item,index) in msg">
     <!--item.type == 0代表的是文章  1代表的是视频-->
-    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format}}">
+    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format,uid:item.uid,relation_status:item.relation_status}}">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -22,7 +22,7 @@
         </div>
     </router-link>
 
-    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length==0" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format}}">
+    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length==0" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format,uid:item.uid,relation_status:item.relation_status}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">

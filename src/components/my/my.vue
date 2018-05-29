@@ -78,7 +78,7 @@
           })).then((response) => {
             _this.info = response.data;
             this.infoUser = response.data.user;
-            //console.log(response.data)
+            //console.log(_this.info)
           });
         },
       },

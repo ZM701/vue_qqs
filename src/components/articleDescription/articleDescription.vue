@@ -8,7 +8,9 @@
         <div class="user">
           <div><img :src="userImage"/></div>
           <div><span>{{nickName}}</span><span>粉丝789</span></div>
-          <div>关注</div>
+          <!--<div class="attention" @click="attentionClick(uid)">关注</div>-->
+          <div class="attention" v-if="relation_status == 0" @click="attentionClick(uid)" >关注</div>
+          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(uid)" >已关注</div>
         </div>
         <div class="content">
           <div>{{article_title}}</div>
@@ -28,6 +30,7 @@
 </template>
 
 <script>
+  import qs from 'qs';
     export default {
       data(){
         return{
@@ -38,6 +41,9 @@
           article_content:null, //内容
           article_sendtime:this.$route.params.article_sendtime,   //时间
           article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
+          uid: this.$route.params.uid,  //用户uid
+          relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
+          state:null,  // 0=未关注 1=关注
         }
       },
       created(){
@@ -59,6 +65,30 @@
             path: '/index',
             name: 'index',
           })
+        },
+        //点击跳转到关注
+        attentionClick(relationUid){
+          console.log(relationUid);
+          this.$http.post('/api/user/update_follow.api', qs.stringify({
+            uid:uid,
+            relation_touid:relationUid
+          })).then((response) => {
+            console.log(response.data)
+            this.state=response.data.relation_state;
+            if(this.state==1){
+              // 1  已关注
+              $(".attention").html("已关注")
+              $(".attention").removeClass("cancle")
+              $(".attention").addClass("already");
+              // this.relation_status = 1;
+            }
+            if(this.state==0){
+              $(".attention").html("关注")
+              $(".attention").removeClass("already")
+              $(".attention").addClass("cancle")
+              // this.relation_status = 0;
+            }
+          });
         }
       }
     }
@@ -127,4 +157,12 @@
   p,span{
     text-align: left !important;
   }
+  .already{
+      color: #D4D4D4;
+      border: 1px solid #D4D4D4;
+    }
+  .cancle{
+      color: #000;
+      border:1px solid red;
+    }
 </style>

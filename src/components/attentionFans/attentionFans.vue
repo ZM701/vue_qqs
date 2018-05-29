@@ -51,18 +51,13 @@
       },
       data(){
         return{
-        /*  i : -1,  //索引下标
-          j : -1,*/
-      /*    relation_state:null,  //1 关注 0未关注*/
         }
       },
       created(){
-          // console.log(this.$route.params.get_follows)
      },
       methods:{
         attentionClick(index,relationUid){
-          //console.log($(".box3").eq(index).html())
-          this.i = !this.i;
+          console.log("id:"+relationUid)
           this.$http.post('/api/user/update_follow.api', qs.stringify({
             uid:uid,
             relation_touid:relationUid
@@ -70,7 +65,6 @@
             this.relation_state=response.data.relation_state;
             if(this.relation_state==1){
               // 1  已关注
-             // console.log($(".box3").eq(index).html())
                $(".box3").eq(index).html("已关注")
                $(".box3").eq(index).removeClass("cancle")
                $(".box3").eq(index).addClass("already")
@@ -82,25 +76,6 @@
             }
           });
         },
-        /*cancleClick(index,relationUid){
-          this.j = !this.j;
-          this.$http.post('/api/user/update_follow.api', qs.stringify({
-            uid:uid,
-            relation_touid:relationUid
-          })).then((response) => {
-            this.relation_state=response.data.relation_state;
-            if(this.relation_state==1){
-               $(".box3").eq(index).html("已关注")
-               $(".box3").eq(index).removeClass("cancle")
-               $(".box3").eq(index).addClass("already")
-            }
-            if(this.relation_state==0){
-               $(".box3").eq(index).html("关注")
-               $(".box3").eq(index).removeClass("already")
-               $(".box3").eq(index).addClass("cancle")
-            }
-          });
-        }*/
       }
     }
 </script>

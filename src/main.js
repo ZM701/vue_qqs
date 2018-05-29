@@ -32,9 +32,10 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 
 //全局变量的显示
-global.uid=8389;
+// global.uid=8389;
 // global.uid=5190;
 // global.uid=1;
+global.uid=429837;
 
 
 import ElementUI from 'element-ui'

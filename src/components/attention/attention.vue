@@ -57,7 +57,7 @@
           }).then(response => {
             // this.info =  response.data;
             this.fenInfo = response.data.followers;
-            /*console.log("粉丝:")
+           /* console.log("粉丝:")
             console.log(this.fenInfo);*/
           }, response => {
             console.log("获取信息失败");
