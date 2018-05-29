@@ -72,12 +72,14 @@
               // 1  已关注
              // console.log($(".box3").eq(index).html())
                $(".box3").eq(index).html("已关注")
-              $(".box3").eq(index).addClass("already")
+               $(".box3").eq(index).removeClass("cancle")
+               $(".box3").eq(index).addClass("already")
             }
             if(this.relation_state==0){
              // console.log($(".boxn").eq(index).html())
                $(".box3").eq(index).html("关注")
-              $(".box3").eq(index).addClass("cancle")
+               $(".box3").eq(index).removeClass("already")
+               $(".box3").eq(index).addClass("cancle")
             }
              //console.log(this.relation_state)
             /*console.log("关注&取消:");
@@ -96,12 +98,14 @@
               // 1  已关注
               //console.log($(".box3").eq(index).html())
                $(".box3").eq(index).html("已关注")
-              $(".box3").eq(index).addClass("already")
+              $(".box3").eq(index).removeClass("cancle")
+               $(".box3").eq(index).addClass("already")
             }
             if(this.relation_state==0){
               // console.log($(".boxn").eq(index).html())
                $(".box3").eq(index).html("关注")
-              $(".box3").eq(index).addClass("cancle")
+               $(".box3").eq(index).removeClass("already")
+               $(".box3").eq(index).addClass("cancle")
             }
             //console.log(this.relation_state)
             /*console.log("关注&取消:");
