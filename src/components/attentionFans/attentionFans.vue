@@ -13,7 +13,7 @@
             </span>
             <!--"user_state": 1   0==没关注   1=关注-->
             <span class="box3" v-if="item.user_state == 0" @click="attentionClick(index,item.uid)" >关注</span>
-            <span class="box3 already" v-if="item.user_state == 1" @click="cancleClick(index,item.uid)" >已关注</span>
+            <span class="box3 already" v-if="item.user_state == 1" @click="attentionClick(index,item.uid)" >已关注</span>
           </li>
         </ul>
         <!--粉丝页面-->
@@ -28,7 +28,7 @@
             </span>
             <!--"user_state": 1   0==没关注   1=关注-->
             <span class="box3" v-if="item.user_state == 0" @click="attentionClick(index,item.uid)" >关注</span>
-            <span class="box3 already" v-if="item.user_state == 1" @click="cancleClick(index,item.uid)">已关注</span>
+            <span class="box3 already" v-if="item.user_state == 1" @click="attentionClick(index,item.uid)">已关注</span>
           </li>
         </ul>
       </div>
@@ -51,9 +51,9 @@
       },
       data(){
         return{
-          i : -1,  //索引下标
-          j : -1,
-          relation_state:null,  //1 关注 0未关注
+        /*  i : -1,  //索引下标
+          j : -1,*/
+      /*    relation_state:null,  //1 关注 0未关注*/
         }
       },
       created(){
@@ -76,18 +76,13 @@
                $(".box3").eq(index).addClass("already")
             }
             if(this.relation_state==0){
-             // console.log($(".boxn").eq(index).html())
                $(".box3").eq(index).html("关注")
                $(".box3").eq(index).removeClass("already")
                $(".box3").eq(index).addClass("cancle")
             }
-             //console.log(this.relation_state)
-            /*console.log("关注&取消:");
-            console.log(response.data);*/
           });
         },
-        cancleClick(index,relationUid){
-          //console.log($(".box3").eq(index).html())
+        /*cancleClick(index,relationUid){
           this.j = !this.j;
           this.$http.post('/api/user/update_follow.api', qs.stringify({
             uid:uid,
@@ -95,23 +90,17 @@
           })).then((response) => {
             this.relation_state=response.data.relation_state;
             if(this.relation_state==1){
-              // 1  已关注
-              //console.log($(".box3").eq(index).html())
                $(".box3").eq(index).html("已关注")
-              $(".box3").eq(index).removeClass("cancle")
+               $(".box3").eq(index).removeClass("cancle")
                $(".box3").eq(index).addClass("already")
             }
             if(this.relation_state==0){
-              // console.log($(".boxn").eq(index).html())
                $(".box3").eq(index).html("关注")
                $(".box3").eq(index).removeClass("already")
                $(".box3").eq(index).addClass("cancle")
             }
-            //console.log(this.relation_state)
-            /*console.log("关注&取消:");
-            console.log(response.data);*/
           });
-        }
+        }*/
       }
     }
 </script>
