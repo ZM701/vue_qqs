@@ -2,8 +2,23 @@
 <div>
   <div v-for="(item,index) in msg">
     <!--item.type == 0代表的是文章  1代表的是视频-->
-    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format,uid:item.uid,relation_status:item.relation_status}}">
-        <div class="panelTitle">{{item.article_title}}</div>
+    <!--<router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{
+      name:'articleDescription',
+      params:{
+      imgSrc:item.imgSrc,
+      userImage:item.image,
+      nickName:item.nickname,
+      article_title:item.article_title,
+      article_content:item.article_content,
+      article_sendtime:item.article_sendtime,
+      article_format:item.article_format,
+      uid:item.uid,
+      relation_status:item.relation_status,
+      article_commentnum:article_commentnum,
+      article_transpondnum:article_transpondnum
+    }}">-->
+    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
+    <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
             <img :src="imgs" class="small"/>
@@ -18,11 +33,15 @@
           <div class='related'>
             <div class=""> <span class='iconfont icon-conment lightGrey'></span>评论 {{item.article_commentnum}}</div>
             <div class=""> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
+            <!--收藏按钮-->
+            <div v-if="icon" class="collection">
+              <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
+            </div>
           </div>
         </div>
     </router-link>
 
-    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length==0" :to="{name:'articleDescription',params:{imgSrc:item.imgSrc,userImage:item.image,nickName:item.nickname,article_title:item.article_title,article_content:item.article_content,article_sendtime:item.article_sendtime,article_format:item.article_format,uid:item.uid,relation_status:item.relation_status}}">
+    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length<=1" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
@@ -37,6 +56,10 @@
         <div class='related'>
           <div> <span class='iconfont icon-conment lightGrey '></span>评论 {{item.article_commentnum}}</div>
           <div> <span class='iconfont icon-turn lightGrey '></span>转发 {{item.article_transpondnum}}</div>
+          <!--收藏按钮-->
+          <div v-if="icon" class="collection">
+            <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
+          </div>
         </div>
       </div>
     </router-link>
@@ -55,6 +78,10 @@
         <div class='related'>
           <div class=""> <span class='iconfont icon-conment lightGrey'></span>评论 {{item.article_commentnum}}</div>
           <div class=""> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
+          <!--收藏按钮-->
+          <div v-if="icon" class="collection">
+            <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -67,6 +94,9 @@
       props: {
         "msg":{
           type:Array
+        },
+        "icon":{
+          type:Boolean
         }
       },
       data(){
@@ -123,7 +153,7 @@
   .user_info .nick_img{
     overflow: hidden;
     float: left;
-    width: 60%;
+    width: 50%;
   }
   .user_info{
     overflow: hidden;
@@ -200,6 +230,13 @@
     width: 32%;
     height: 100px;
     margin-right: 5px;
+  }
+  /*收藏按钮*/
+  .collection{
+    float: right;
+    margin-left: 2rem;
+  }
+  .collection .icon{
   }
 </style>
 

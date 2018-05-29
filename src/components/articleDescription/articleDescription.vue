@@ -1,52 +1,65 @@
 <template>
     <div>
-      <div class="navMy">
+      <!--<div class="navMy">
         <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
         <span>关注</span>
-      </div>
-      <div style="padding-bottom: 100px;">
+      </div>-->
+      <div style="padding-bottom: 50px;" v-if="msgInfo!=null">
         <div class="user">
-          <div><img :src="userImage"/></div>
-          <div><span>{{nickName}}</span><span>粉丝789</span></div>
-          <!--<div class="attention" @click="attentionClick(uid)">关注</div>-->
-          <div class="attention" v-if="relation_status == 0" @click="attentionClick(uid)" >关注</div>
-          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(uid)" >已关注</div>
+          <div><img :src="msgInfo.image"/></div>
+          <div><span>{{msgInfo.nickname}}</span><span>粉丝{{fansNum}}</span></div>
+          <div class="attention">已关注</div>
+          <!--<div class="attention" v-if="relation_status == 0" @click="attentionClick(uid)" >关注</div>
+          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(uid)" >已关注</div>-->
         </div>
         <div class="content">
-          <div>{{article_title}}</div>
-          <div>{{article_sendtime}} &nbsp;&nbsp;来自oopo</div>
-          <div v-if="article_format==1">
+          <div>{{msgInfo.article_title}}</div>
+          <div>{{msgInfo.article_sendtime*1000 | formatDate}} 来自{{msgInfo.phone_type}} 浏览数{{msgInfo.article_readnum }}</div>
+          <div v-if="msgInfo.article_format==1">
             <div v-for="(item,idex) in article_content" class="content1">
               <span><img :src="'https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name='+item.img"/></span>
               <span>{{item.text}}</span>
             </div>
           </div>
-          <div v-if="article_format==0" class="content1">
+          <div v-if="msgInfo.article_format==0" class="content1">
             <div v-html="article_content" class="imgs"></div>
           </div>
         </div>
+      </div>
+      <div class="footBanner"  v-if="msgInfo!=null">
+        <div>评论{{msgInfo.article_commentnum}}</div>
+        <div>收藏</div>
+        <div>分享{{msgInfo.article_transpondnum}}</div>
       </div>
     </div>
 </template>
 
 <script>
   import qs from 'qs';
+  import {formatDate} from '../../../static/js/common.js';
     export default {
       data(){
         return{
-          userImage:this.$route.params.userImage, //用户头像
+          msgInfo:null,  //获取信息
+          article_content:null, //内容
+          article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
+          fansNum:null, //粉丝数
+          /* userImage:this.$route.params.userImage, //用户头像
           nickName:this.$route.params.nickName, //用户名称
           article_title:this.$route.params.article_title,  //文章标题
           imgSrc:this.$route.params.imgSrc,   //有几张图片
           article_content:null, //内容
           article_sendtime:this.$route.params.article_sendtime,   //时间
-          article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
+          article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的*/
           uid: this.$route.params.uid,  //用户uid
-          relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
-          state:null,  // 0=未关注 1=关注
+          article_id:this.$route.params.article_id,   //文章id
+         /* relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
+          state:null,  // 0=未关注 1=关注*/
         }
       },
       created(){
+        this.detail();
+        //console.log(this.article_format)
         var str = this.$route.params.article_content;
         if(this.article_format==1){
           this.article_content = "["+str+"]";
@@ -67,7 +80,7 @@
           })
         },
         //点击跳转到关注
-        attentionClick(relationUid){
+        /*attentionClick(relationUid){
           console.log(relationUid);
           this.$http.post('/api/user/update_follow.api', qs.stringify({
             uid:uid,
@@ -89,6 +102,31 @@
               // this.relation_status = 0;
             }
           });
+        }*/
+        detail(){
+          this.$http.get("/api/article/article_find.api", {
+            params: {
+              uid:this.uid,
+              article_id:this.article_id,
+              tran:0,  //tran 是否为转发 0不是,1是
+              article_format:1  // article_format 小程序=1 ,后台=0
+          }
+          }).then(response => {
+            this.msgInfo = response.data.article;
+            this.fansNum = response.data.fansNum;
+            //console.log(response.data)
+          }, response => {
+            console.log("获取信息失败");
+            console.log(response);
+          })
+        }
+      },
+      filters: {
+        //时间戳的转换
+        formatDate(time) {
+          var date = new Date(time);
+          return formatDate(date, 'yyyy-MM-dd');
+          // return formatDate(date, 'yyyy-MM-dd hh:mm');
         }
       }
     }
@@ -165,4 +203,19 @@
       color: #000;
       border:1px solid red;
     }
+  .footBanner{
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: #fff;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+  }
+  .footBanner div{
+    width: 100%;
+  }
 </style>

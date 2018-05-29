@@ -11,12 +11,12 @@
          <span v-show="item.article_status==0">草稿</span>
          <span v-show="item.article_status==1">公开</span>
          <span>{{item.article_sendtime*1000 | formatDate}}&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
-         <span @click="f3"><i class="glyphicon glyphicon-tasks"></i></span>
+         <span class="glyphicon glyphicon-tasks" @click="f3(index)"></span>
          <div style="clear:both;"></div>
          <div class="reEdit" v-show="flage3">
            <ul>
-             <li>删除</li>
-             <li>再次编辑</li>
+             <li @click="deleted(index,item.article_id)">删除</li>
+             <!--<li>再次编辑</li>-->
            </ul>
          </div>
        </div>
@@ -75,8 +75,47 @@
         });
       },
       //删除编辑的显示隐藏
-      f3(){
-        this.flage3 = !this.flage3;
+      f3(index){
+        //this.flage3 = !this.flage3;
+        var display = $(".reEdit").eq(index).css("display");
+       if(display=="none"){
+         $(".reEdit").eq(index).css("display","block")
+       }else{
+         $(".reEdit").eq(index).css("display","none")
+       }
+      },
+      //点击删除
+      deleted(index,article_id){
+        var _this = this;
+        this.$confirm('确认删除此篇文章?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            this.f3(index);
+            //调用删除的接口
+            this.$http.get("/api/article/article_del.api", {
+              params: {
+                uid:uid,
+                article_id:article_id,
+                deletereason:""
+              }
+            }).then(response => {
+              //提示删除成功
+              _this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              //刷新页面
+              _this.information();
+            })
+          })
+          .catch(() => {
+            this.f3(index);
+          });
+
+
       }
     },
     filters: {
@@ -148,7 +187,7 @@
   .totalArticle .edit .reEdit li{
     padding-left: 8px;
     list-style: none;
-    line-height: 30px;
+    line-height: 40px;
     border-bottom: 1px solid #e4e7ed;
   }
   .articleContent .articleTitle,.titles{
@@ -188,4 +227,5 @@
     height: 20px;
     vertical-align: middle;
   }
+
 </style>

@@ -10,7 +10,7 @@
         <ul>
           <li @click="attention"><span>{{infoUser.followNum}}</span><span>关注</span></li>
           <li @click="fans"><span>{{infoUser.fansNum}}</span><span>粉丝</span></li>
-          <li><span>{{infoUser.collectionNum}}</span><span>收藏</span></li>
+          <li @click="collection"><span>{{infoUser.collectionNum}}</span><span>收藏</span></li>
         </ul>
       </div>
       <div class="contentTitle">
@@ -59,6 +59,13 @@
             params: {
               type:this.type,
             }
+          })
+        },
+        //跳转到收藏页面
+        collection(){
+          this.$router.push({
+            path: '/collection',
+            name: 'collection',
           })
         },
         //返回上一页

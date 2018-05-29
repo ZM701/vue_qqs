@@ -10,7 +10,7 @@
            <!--state :1 我参与的      state :2   我投票的活动-->
            <div class="changeTab">
              <span @click="f1" :class="flage1?'active':'unacticve'">我参与的</span>
-             <span  @click="f2" :class="flage2?'active':'unacticve'">我投票的</span>
+             <span @click="f2" :class="flage2?'active':'unacticve'">我投票的</span>
            </div>
            <div class="change" v-show="flage1" v-for="(item,index) in info.myActivity">
              <div class="imgs"><img :src="item.goods_banner"/></div>

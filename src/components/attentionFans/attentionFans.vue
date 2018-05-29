@@ -57,7 +57,7 @@
      },
       methods:{
         attentionClick(index,relationUid){
-          console.log("id:"+relationUid)
+          //console.log("id:"+relationUid)
           this.$http.post('/api/user/update_follow.api', qs.stringify({
             uid:uid,
             relation_touid:relationUid
