@@ -17,8 +17,8 @@
       article_commentnum:article_commentnum,
       article_transpondnum:article_transpondnum
     }}">-->
-    <div v-if="item.type == 0 && item.imgSrc.length>1">
-    <router-link class="panel" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
+    <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
+    <router-link :to="{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
     <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <div  v-if="item.type == 0 && item.imgSrc.length<=1">
-    <router-link class='pane2' :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
+    <div  v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2' >
+    <router-link :to="{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
@@ -109,54 +109,16 @@
       },
       data(){
         return{
-
         }
       },
       methods:{
-        //取消收藏的显示隐藏
+        //取消收藏的显示隐藏   向collection发送事件
         f3(index){
-          //event.preventDefault();
-          //console.log(index)
-         /* var display = $(".cancleCollection").eq(index).css("display");
-          if(display=="none"){
-            $(".cancleCollection").eq(index).css("display","block")
-          }else{
-            $(".cancleCollection").eq(index).css("display","none")
-          }*/
           this.$emit('childSay',index);
         },
-        //点击取消收藏
+        //点击取消收藏    向collection发送事件
         cancleCollection(index,article_id){
           this.$emit('childCollectionSay',index,article_id);
-         // event.preventDefault();
-          /*var _this = this;
-          this.$confirm('确认取消收藏?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          })
-            .then(() => {
-             // event.preventDefault();
-              this.f3(index);
-              //调用删除的接口
-              this.$http.post("/api/article/collection", qs.stringify({
-                uid: uid,
-                article_id:article_id,
-                status:1   //0=添加 1=取消
-              })).then(response => {
-                console.log(response)
-                //提示取消成功
-                _this.$message({
-                  type: 'success',
-                  message: '取消成功!'
-                });
-                //刷新页面
-                _this.information();
-              })
-            })
-            .catch(() => {
-              this.f3(index);
-            });*/
         }
       }
     }
@@ -164,7 +126,6 @@
 
 <style scoped>
   .panel,.pane2,.pane3{
-    /*border: 10px solid red;*/
     padding: 5px;
     margin-bottom: 20px;
     background-color: #fff;

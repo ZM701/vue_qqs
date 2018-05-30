@@ -37,6 +37,7 @@
         this.information();
       },
         methods:{
+          //取消收藏的显示隐藏
           listenToF3(index){
             var display = $(".cancleCollection").eq(index).css("display");
             if(display=="none"){
@@ -45,6 +46,7 @@
               $(".cancleCollection").eq(index).css("display","none")
             }
           },
+          //点击取消收藏
           listenToCollection(index,article_id){
             var _this = this;
             this.$confirm('确认取消收藏?', '提示', {
@@ -61,7 +63,6 @@
                   article_id:article_id,
                   status:1   //0=添加 1=取消
                 })).then(response => {
-                  console.log(response)
                   //提示取消成功
                   _this.$message({
                     type: 'success',

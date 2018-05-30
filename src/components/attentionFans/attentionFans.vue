@@ -82,13 +82,13 @@
 
 <style scoped>
   .userinfo li{
-    overflow: hidden;
+    list-style: none;
+    display:flex;
     padding: 10px;
     border-bottom: 1px solid #e4e7ed;
   }
   .userinfo .box1,.userinfo .box2,.userinfo .box3{
-    width: auto;
-    float: left;
+    width: 100%;
     margin-right: 10px;
   }
   .userinfo .box1{

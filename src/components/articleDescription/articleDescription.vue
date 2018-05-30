@@ -8,9 +8,10 @@
         <div class="user">
           <div><img :src="msgInfo.image"/></div>
           <div><span>{{msgInfo.nickname}}</span><span>粉丝{{fansNum}}</span></div>
-          <div class="attention">已关注</div>
-          <!--<div class="attention" v-if="relation_status == 0" @click="attentionClick(uid)" >关注</div>
-          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(uid)" >已关注</div>-->
+          <!--<div class="attention">已关注</div>-->
+          <!--0=未关注 1=关注-->
+          <div class="attention" v-if="relation_status == 0" @click="attentionClick(msgInfo.uid)" >关注</div>
+          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(msgInfo.uid)" >已关注</div>
         </div>
         <div class="content">
           <div>{{msgInfo.article_title}}</div>
@@ -28,7 +29,7 @@
       </div>
       <div class="footBanner"  v-if="msgInfo!=null">
         <div>评论{{msgInfo.article_commentnum}}</div>
-        <div>收藏</div>
+        <div @click="collectionPage(msgInfo.article_id)">收藏</div>
         <div>分享{{msgInfo.article_transpondnum}}</div>
       </div>
     </div>
@@ -44,6 +45,7 @@
           article_content:null, //内容
           article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
           fansNum:null, //粉丝数
+          relation_status:null,   //是否关注
           /* userImage:this.$route.params.userImage, //用户头像
           nickName:this.$route.params.nickName, //用户名称
           article_title:this.$route.params.article_title,  //文章标题
@@ -51,10 +53,10 @@
           article_content:null, //内容
           article_sendtime:this.$route.params.article_sendtime,   //时间
           article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的*/
-          uid: this.$route.params.uid,  //用户uid
           article_id:this.$route.params.article_id,   //文章id
          /* relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
           state:null,  // 0=未关注 1=关注*/
+          state:null,   //0=未关注 1=关注
         }
       },
       created(){
@@ -79,14 +81,17 @@
             name: 'index',
           })
         },
+        dataInit(){
+
+        },
         //点击跳转到关注
-        /*attentionClick(relationUid){
-          console.log(relationUid);
+        attentionClick(relationUid){
+          // this.$root.eventHub.$emit('childAttention', relationUid);
           this.$http.post('/api/user/update_follow.api', qs.stringify({
             uid:uid,
             relation_touid:relationUid
           })).then((response) => {
-            console.log(response.data)
+            // console.log(response.data)
             this.state=response.data.relation_state;
             if(this.state==1){
               // 1  已关注
@@ -102,11 +107,12 @@
               // this.relation_status = 0;
             }
           });
-        }*/
+          this.dataInit();
+        },
         detail(){
           this.$http.get("/api/article/article_find.api", {
             params: {
-              uid:this.uid,
+              uid:uid,
               article_id:this.article_id,
               tran:0,  //tran 是否为转发 0不是,1是
               article_format:1  // article_format 小程序=1 ,后台=0
@@ -114,11 +120,37 @@
           }).then(response => {
             this.msgInfo = response.data.article;
             this.fansNum = response.data.fansNum;
-            //console.log(response.data)
+            this.relation_status = response.data.relation_status;
+            //console.log(response.data.relation_status);
           }, response => {
             console.log("获取信息失败");
             console.log(response);
           })
+        },
+        //点击收藏
+        collectionPage(article_id){
+          var _this = this;
+          this.$confirm('确认收藏?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              //调用添加的接口
+              this.$http.post("/api/article/collection", qs.stringify({
+                uid: uid,
+                article_id:article_id,
+                status:0   //0=添加 1=取消
+              })).then(response => {
+                //提示收藏成功
+                _this.$message({
+                  type: 'success',
+                  message: '收藏成功!'
+                });
+              })
+            })
+            .catch(() => {
+            });
         }
       },
       filters: {
@@ -195,7 +227,8 @@
   p,span{
     text-align: left !important;
   }
-  .already{
+    .already{
+      /*background: #e0e0e0;*/
       color: #D4D4D4;
       border: 1px solid #D4D4D4;
     }

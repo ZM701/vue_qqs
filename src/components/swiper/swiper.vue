@@ -59,7 +59,6 @@
     },
     created(){
       this.dataInit();
-
     },
     mounted() {
       //this.attentionArticle = this.attentionArticle;
