@@ -114,8 +114,6 @@
           .catch(() => {
             this.f3(index);
           });
-
-
       }
     },
     filters: {

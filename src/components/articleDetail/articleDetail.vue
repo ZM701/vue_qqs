@@ -17,7 +17,8 @@
       article_commentnum:article_commentnum,
       article_transpondnum:article_transpondnum
     }}">-->
-    <router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
+    <div v-if="item.type == 0 && item.imgSrc.length>1">
+    <router-link class="panel" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
     <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -25,6 +26,7 @@
           </div>
         </div>
       <div style="clear: both;"></div>
+    </router-link>
         <div class="user_info">
           <div class='nick_img'>
             <img class="user_img" :src='item.image'/>
@@ -33,21 +35,24 @@
           <div class='related'>
             <div class=""> <span class='iconfont icon-conment lightGrey'></span>评论 {{item.article_commentnum}}</div>
             <div class=""> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
-            <!--收藏按钮-->
-            <div v-if="icon" class="collection">
-              <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
-            </div>
           </div>
+          <!--收藏按钮-->
+          <div v-if="icon" class="collection" @click.stop="f3(index)">
+            <div class="icon" ><span class="glyphicon glyphicon-tasks"></span></div>
+          </div>
+          <div class="cancleCollection" @click.stop="cancleCollection(index,item.article_id)">取消收藏</div>
         </div>
-    </router-link>
+    </div>
 
-    <router-link class='pane2' v-if="item.type == 0 && item.imgSrc.length<=1" :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
+    <div  v-if="item.type == 0 && item.imgSrc.length<=1">
+    <router-link class='pane2' :to="{name:'articleDescription',params:{uid:item.uid,article_id:item.article_id,article_content:item.article_content,article_format:item.article_format}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
           <img :src="item.image" class="big"/>
         </div>
       </div>
+    </router-link>
       <div class="user_info">
         <div class='nick_img'>
           <img class="user_img" :src='item.image'/>
@@ -56,13 +61,14 @@
         <div class='related'>
           <div> <span class='iconfont icon-conment lightGrey '></span>评论 {{item.article_commentnum}}</div>
           <div> <span class='iconfont icon-turn lightGrey '></span>转发 {{item.article_transpondnum}}</div>
-          <!--收藏按钮-->
-          <div v-if="icon" class="collection">
-            <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
-          </div>
         </div>
+        <!--收藏按钮-->
+        <div v-if="icon" class="collection" @click.stop="f3(index)">
+          <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
+        </div>
+        <div class="cancleCollection" @click.stop="cancleCollection(index,item.article_id)">取消收藏</div>
       </div>
-    </router-link>
+    </div>
 
     <div class="pane3"  v-if="item.type == 1">
       <div class="panelTitle">{{item.article_title}}</div>
@@ -78,11 +84,12 @@
         <div class='related'>
           <div class=""> <span class='iconfont icon-conment lightGrey'></span>评论 {{item.article_commentnum}}</div>
           <div class=""> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
-          <!--收藏按钮-->
-          <div v-if="icon" class="collection">
-            <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
-          </div>
         </div>
+        <!--收藏按钮-->
+        <div v-if="icon" class="collection" @click.stop="f3(index)">
+          <div class="icon"><span class="glyphicon glyphicon-tasks"></span></div>
+        </div>
+        <div class="cancleCollection" @click.stop="cancleCollection(index,item.article_id)">取消收藏</div>
       </div>
     </div>
   </div>
@@ -90,6 +97,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import qs from 'qs';
     export default {
       props: {
         "msg":{
@@ -105,7 +113,51 @@
         }
       },
       methods:{
-
+        //取消收藏的显示隐藏
+        f3(index){
+          //event.preventDefault();
+          //console.log(index)
+         /* var display = $(".cancleCollection").eq(index).css("display");
+          if(display=="none"){
+            $(".cancleCollection").eq(index).css("display","block")
+          }else{
+            $(".cancleCollection").eq(index).css("display","none")
+          }*/
+          this.$emit('childSay',index);
+        },
+        //点击取消收藏
+        cancleCollection(index,article_id){
+          this.$emit('childCollectionSay',index,article_id);
+         // event.preventDefault();
+          /*var _this = this;
+          this.$confirm('确认取消收藏?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+             // event.preventDefault();
+              this.f3(index);
+              //调用删除的接口
+              this.$http.post("/api/article/collection", qs.stringify({
+                uid: uid,
+                article_id:article_id,
+                status:1   //0=添加 1=取消
+              })).then(response => {
+                console.log(response)
+                //提示取消成功
+                _this.$message({
+                  type: 'success',
+                  message: '取消成功!'
+                });
+                //刷新页面
+                _this.information();
+              })
+            })
+            .catch(() => {
+              this.f3(index);
+            });*/
+        }
       }
     }
 </script>
@@ -149,14 +201,13 @@
   }
   .user_info{
     margin-top: 10px;
+    height: 20px;
+    position: relative;
   }
   .user_info .nick_img{
     overflow: hidden;
     float: left;
     width: 50%;
-  }
-  .user_info{
-    overflow: hidden;
   }
   .user_info .related{
     float: left;
@@ -234,9 +285,21 @@
   /*收藏按钮*/
   .collection{
     float: right;
-    margin-left: 2rem;
+    margin-right: 5px;
   }
-  .collection .icon{
+  /*取消收藏*/
+  .cancleCollection{
+    text-align: center;
+    background: #fff;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    right: 5px;top:20px;
+    border-radius: 2px;
+    box-shadow: 0px 0px 8px #ccc;
+    border-right: 1px solid #e4e7ed;
+    display: none;
   }
 </style>
 

@@ -9,10 +9,10 @@
         <div @click="f2" :class="flage2?'active':''">视频</div>
       </div>
       <div v-if="flage1" >
-        <v-article :msg="msg" :icon="icon"></v-article>
+        <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
       </div>
       <div v-if="flage2" >
-        <v-article :msg="msg" :icon="icon"></v-article>
+        <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
       </div>
     </div>
 </template>
@@ -37,7 +37,45 @@
         this.information();
       },
         methods:{
-          information(){
+          listenToF3(index){
+            var display = $(".cancleCollection").eq(index).css("display");
+            if(display=="none"){
+              $(".cancleCollection").eq(index).css("display","block")
+            }else{
+              $(".cancleCollection").eq(index).css("display","none")
+            }
+          },
+          listenToCollection(index,article_id){
+            var _this = this;
+            this.$confirm('确认取消收藏?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+              .then(() => {
+                // event.preventDefault();
+                this.listenToF3(index);
+                //调用删除的接口
+                this.$http.post("/api/article/collection", qs.stringify({
+                  uid: uid,
+                  article_id:article_id,
+                  status:1   //0=添加 1=取消
+                })).then(response => {
+                  console.log(response)
+                  //提示取消成功
+                  _this.$message({
+                    type: 'success',
+                    message: '取消成功!'
+                  });
+                  //刷新页面
+                  _this.information();
+                })
+              })
+              .catch(() => {
+                this.listenToF3(index);
+              });
+          },
+          information(target){
             var _this = this;
             this.$http.post('/api/article/collection_list', qs.stringify({
               uid: uid,
@@ -49,6 +87,7 @@
               this.msg = response.data.list
               //console.log(response.data)
             });
+            // this.$root.eventHub.$emit('information', target);
           },
           goback() {
             this.$router.push({
