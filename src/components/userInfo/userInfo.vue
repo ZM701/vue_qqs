@@ -28,26 +28,31 @@
     margin-bottom: -15px;
   }
   .users>div{
-    width: 40px;
+    width: 100%;
+    text-align: center;
     height: 40px;
+    /*width: 40px;
+    height: 40px;*/
     border-radius: 50%;
-    margin-left: 3%;
+    /*margin-left: 3%;*/
   }
   .users div:last-of-type{
     margin-right: 0;
   }
   .users div img{
     border-radius: 50%;
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
   }
   span{
     display: block;
     text-align: center;
-    width: 100%;
+    width: 40px;
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
+    margin: 0 auto;
   }
 </style>

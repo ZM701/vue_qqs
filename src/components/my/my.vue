@@ -1,7 +1,7 @@
 <template>
     <div>
       <div class="navMy">
-        <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
+        <span @click="goback"><i class="glyphicon glyphicon-chevron-left"></i></span>
         <span>我的</span>
       </div>
       <div class="userInfo">

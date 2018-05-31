@@ -16,14 +16,22 @@
         <div class="content">
           <div>{{msgInfo.article_title}}</div>
           <div>{{msgInfo.article_sendtime*1000 | formatDate}} 来自{{msgInfo.phone_type}} 浏览数{{msgInfo.article_readnum }}</div>
-          <div v-if="msgInfo.article_format==1">
-            <div v-for="(item,idex) in article_content" class="content1">
-              <span><img :src="'https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name='+item.img"/></span>
-              <span>{{item.text}}</span>
+          <!--对文章的处理-->
+          <div v-if="sourceType==0">
+            <div v-if="msgInfo.article_format==1">
+              <div v-for="(item,idex) in article_content" class="content1">
+                <span><img :src="'https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name='+item.img"/></span>
+                <span>{{item.text}}</span>
+              </div>
+            </div>
+            <div v-if="msgInfo.article_format==0" class="content1">
+              <div v-html="article_content" class="imgs"></div>
             </div>
           </div>
-          <div v-if="msgInfo.article_format==0" class="content1">
-            <div v-html="article_content" class="imgs"></div>
+          <!--对视频的处理-->
+          <div v-if="sourceType==1">
+            <video :src="msgInfo.video_url" autoplay></video>
+            <span>{{msgInfo.video_desc}}</span>
           </div>
         </div>
       </div>
@@ -57,9 +65,11 @@
          /* relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
           state:null,  // 0=未关注 1=关注*/
           state:null,   //0=未关注 1=关注
+          sourceType:this.$route.params.sourceType,  //0文章  1视频
         }
       },
       created(){
+        //console.log(this.sourceType)
         this.detail();
         //console.log(this.article_format)
         var str = this.$route.params.article_content;
@@ -121,7 +131,7 @@
             this.msgInfo = response.data.article;
             this.fansNum = response.data.fansNum;
             this.relation_status = response.data.relation_status;
-            //console.log(response.data.relation_status);
+            //console.log(response.data);
           }, response => {
             console.log("获取信息失败");
             console.log(response);
@@ -250,5 +260,9 @@
   }
   .footBanner div{
     width: 100%;
+  }
+  video{
+    width: 100%;
+    object-fit: fill;
   }
 </style>
