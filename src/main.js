@@ -13,7 +13,6 @@ import my from '@/components/my/my'
 import videoDetail from '@/components/videoDetail/videoDetail'
 import Search from '@/components/Search/Search'
 import headerBar from '@/components/headerBar/headerBar'
-import searchPage from '@/components/searchPage/searchPage'
 import searchResult from '@/components/searchResult/searchResult'
 import attention from '@/components/attention/attention'
 import articleDescription from '@/components/articleDescription/articleDescription'
@@ -22,6 +21,10 @@ import myArticle from '@/components/myArticle/myArticle'
 import goldIncome from '@/components/goldIncome/goldIncome'
 import attentionFans from '@/components/attentionFans/attentionFans'
 import collection from '@/components/collection/collection'
+import exchangeGoods from '@/components/exchangeGoods/exchangeGoods'
+import profitStrategy from '@/components/profitStrategy/profitStrategy'
+
+
 
 
 
@@ -118,12 +121,7 @@ let router = new VueRouter({
       name:'headerBar',
       component: headerBar
     },
-    {
-      path: '/searchPage',
-      name:'searchPage',
-      component: searchPage
-    },
-    {
+     {
       path: '/searchResult',
       name:'searchResult',
       component: searchResult
@@ -162,6 +160,16 @@ let router = new VueRouter({
       path: '/collection',
       name:'collection',
       component: collection
+    },
+    {
+      path: '/exchangeGoods',
+      name:'exchangeGoods',
+      component: exchangeGoods
+    },
+    {
+      path: '/profitStrategy',
+      name:'profitStrategy',
+      component: profitStrategy
     }
 
 

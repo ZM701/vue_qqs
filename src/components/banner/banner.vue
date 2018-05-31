@@ -23,7 +23,7 @@
     height: 150px;
   }
   .swip-item-1{
-    background: red;
+    background: #fff;
   }
   .item img{
     width: 100%;
