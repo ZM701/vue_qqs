@@ -40,12 +40,17 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import qs from 'qs';
   export default {
     data(){
       return{
         flage1:true,
-        flage2:false
+        flage2:false,
+        info:null
       }
+    },
+    created(){
+      this.information()
     },
     methods:{
       // 返回到上一层
@@ -73,7 +78,19 @@
           params: {
           }
         })
-      }
+      },
+      information(){
+        var _this = this;
+        this.$http.post('https://nwsapi.nanniwan.com/nws_cms/article/mine', qs.stringify({
+          uid: uid,
+          pageNum: 1,
+          pageSize: 5,
+          status:this.status   // 0文章  1活动
+        })).then((response) => {
+          this.info = response.data
+          console.log(this.info)
+        });
+      },
     }
   }
 </script>

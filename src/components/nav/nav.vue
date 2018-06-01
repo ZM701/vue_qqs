@@ -106,6 +106,7 @@
 
 <style scoped>
   .search{
+    border:1px solid #7DBE24;
     position: fixed;
     z-index: 999;
     width: 100%;
@@ -114,8 +115,8 @@
     top:0;
     background: #7DBE24;
     overflow: hidden;
-    line-height: 50px;
     padding-left: 10%;
+    overflow: hidden;
   }
   .search .find,.search .my{
     float: left;
@@ -128,6 +129,7 @@
   .search .my{
     height: 50px;
     width: 40px;
+    line-height: 50px;
   }
   .search .my a{
     display: block;
@@ -138,6 +140,7 @@
     position: relative;
     width: 80%;
     margin-right: 4%;
+    margin-top: 10px;
   }
   .search .find input{
     padding-left: 30px;
@@ -149,7 +152,7 @@
   }
   .search .find i {
     left: 1%;
-    top:22%;
+    top:10%;
     position: absolute;
     font-size: 16px;
     color:#ccc;

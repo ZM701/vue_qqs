@@ -166,7 +166,13 @@
 </script>
 
 <style scoped>
+  .swiper-box{
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    bottom: 50px;
+  }
   .swiper-container{
-    padding-top: 100px;
+    /*padding-top: 100px;*/
   }
 </style>

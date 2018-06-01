@@ -65,6 +65,7 @@ Vue.use(VueRouter);
 import axios from 'axios'
 Vue.prototype.$http= axios
 
+
 //引入vuex
 // import Vuex from 'vuex'
 // Vue.use(Vuex)
