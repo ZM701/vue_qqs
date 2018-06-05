@@ -8,30 +8,39 @@
         <div @click="f1" :class="flage1?'active':''">文章</div>
         <div @click="f2" :class="flage2?'active':''">视频</div>
       </div>
+
       <div v-if="flage1" >
-        <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
+        <pull-to :bottom-load-method="loadMore">
+          <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
+        </pull-to>
       </div>
       <div v-if="flage2" >
-        <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
+        <pull-to :bottom-load-method="loadMore">
+          <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
+        </pull-to>
       </div>
+
     </div>
 </template>
 
 <script>
   import qs from 'qs';
+  import PullTo from 'vue-pull-to';
   import article from "../articleDetail/articleDetail"
     export default {
       data(){
         return{
-          msg:null,
+          msg:[],
           flage1:true,  //文章
           flage2:false,   //视频
           status:0,   // 0文章  1视频
           icon:true,  //是否存在取消收藏的按钮
+          pageNum:1
         }
       },
       components:{
-        'v-article':article
+        'v-article':article,
+        PullTo
       },
       created(){
         this.information();
@@ -76,20 +85,33 @@
                 this.listenToF3(index);
               });
           },
-          information(target){
+          information(){
             var _this = this;
             this.$http.post('/api/article/collection_list', qs.stringify({
               uid: uid,
-              pageNum: 1,
-              pageSize: 10,
+              pageNum: this.pageNum,
+              pageSize: 5,
               status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
             })).then((response) => {
-              //_this.info = response.data.search;
-              this.msg = response.data.list
-              //console.log(response.data)
+                var temp = response.data.list;
+                this.msg = this.msg.concat(temp);
+               //console.log(this.msg)
             });
-            // this.$root.eventHub.$emit('information', target);
           },
+          //下拉加载
+          loadMore(loaded) {
+            setTimeout(() => {
+              if(this.flage1){
+                this.pageNum = this.pageNum+1;
+              }
+              if(this.flage2){
+                this.pageNum = this.pageNum+1;
+              }
+              this.information();
+              loaded('done');
+            }, 500);
+          },
+          //返回
           goback() {
             this.$router.push({
               path: '/my',
@@ -101,6 +123,8 @@
             this.flage1 = true;
             this.flage2 = false;
             this.status = 0;
+            this.pageNum = 1;
+            this.msg = [];
             this.information();
           },
           //视频
@@ -108,6 +132,8 @@
             this.flage1 = false;
             this.flage2 = true;
             this.status = 1;
+            this.pageNum = 1;
+            this.msg = [];
             this.information();
           },
         }

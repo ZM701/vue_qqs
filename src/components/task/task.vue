@@ -18,12 +18,12 @@
       <div class="dailyTask">
         <div class="daily">日常任务</div>
         <div class="tasks">
-          <div><span>认真阅读文章或视频</span><span>每次奖励10金币，每天10次</span></div>
-          <div><span>领10金币</span></div>
+          <div><span>认真阅读文章或视频</span><span>每次奖励{{rule.num10}}金币，每天{{rule.num9}}次</span></div>
+          <div><span>领{{rule.num10}}金币</span></div>
         </div>
         <div class="tasks">
-          <div><span>认真阅读文章或视频</span><span>每次奖励10金币，每天10次</span></div>
-          <div><span>领10金币</span></div>
+          <div><span>分享文章或视频</span><span>每次分享奖励{{rule.num12}}金币，每天{{rule.num11}}次</span></div>
+          <div><span>领{{rule.num12}}金币</span></div>
         </div>
         <div class="question">
           如有疑问请参考<span @click="profitStrategy">赚钱攻略</span>
@@ -31,18 +31,27 @@
       </div>
       <!--兑换商品-->
       <div class="exchange">
-        <exchange-detail></exchange-detail>
+        <exchange-detail :productList="productList"></exchange-detail>
       </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import qs from 'qs'
   import exchangeDetail from '../exchangeDetail/exchangeDetail'
     export default {
       components:{
         exchangeDetail
       },
+      data(){
+        return{
+          productList:[],   // 商品列表
+          rule:{},   //日常任务
+          sign:{},   //登录签到
+        }
+      },
       methods:{
+        //跳转到赚钱攻略
         profitStrategy(){
           this.$router.push({
             path: '/profitStrategy',
@@ -50,7 +59,26 @@
             params: {
             }
           })
+        },
+        //页面请求
+        taskInt(){
+          var _this = this;
+          this.$http.post('/book/integral/taskCenter', qs.stringify({
+            user_token: user_token,
+            uuid: uuid,
+            unionid:unionid,
+            pageNum: 1,
+            pageSize: 10
+          })).then((response) => {
+            this.productList = response.data.product.productList;
+            this.rule = response.data.rule;
+            this.sign = response.data.sign;
+            console.log(response.data)
+          });
         }
+      },
+      created(){
+        this.taskInt();
       }
     }
 </script>
@@ -90,7 +118,7 @@
   .signIn .days>div span{
     width: auto;
     height: auto;
-    font-size: 0.5rem;
+    /*font-size: 0.5rem;*/
   }
   .signIn .days>div span:last-of-type{
     border:1px solid #ccc;
@@ -143,6 +171,6 @@
     margin-left: 5px;
   }
   .exchange{
-    margin-bottom: 50px;
+    margin-bottom: 100px;
   }
 </style>

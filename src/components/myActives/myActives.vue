@@ -6,23 +6,25 @@
       </div>
       <!--参与活动-------------------------------------------------------------->
        <div class="joinActivities">
+         <pull-to :bottom-load-method="loadMore">
          <div class="myJoin">
            <!--state :1 我参与的      state :2   我投票的活动-->
            <div class="changeTab">
              <span @click="f1" :class="flage1?'active':'unacticve'">我参与的</span>
              <span @click="f2" :class="flage2?'active':'unacticve'">我投票的</span>
            </div>
-           <div class="change" v-show="flage1" v-for="(item,index) in info.myActivity">
+           <div class="change" v-show="flage1" v-for="(item,index) in myActivity">
              <div class="imgs"><img :src="item.goods_banner"/></div>
              <div class="titles">{{item.title}}</div>
              <div class="time">{{item.start_time*1000 | formatDate}} &nbsp;参与人数{{item.activityNum}}</div>
            </div>
-           <div class="change" v-show="flage2" v-for="(item,index) in info.activity">
+           <div class="change" v-show="flage2" v-for="(item,index) in activity">
              <div class="imgs"><img :src="item.goods_banner"/></div>
              <div class="titles">{{item.title}}</div>
              <div class="time">{{item.start_time*1000 | formatDate}} &nbsp;参与人数{{item.activityNum}}</div>
            </div>
          </div>
+         </pull-to>
        </div>
 
     </div>
@@ -30,17 +32,32 @@
 
 <script type="text/ecmascript-6">
   import qs from "qs";
+  import PullTo from 'vue-pull-to';
   import {formatDate} from '../../../static/js/common.js';
     export default {
+      components:{
+        PullTo
+      },
       data(){
         return{
           flage1:true,  //我参与的
           flage2:false,   //我投票的
-          info:{},  //数据渲染
+          myActivity:[],
+          activity:[],
+          pageNum:1,
           status:1,   // 1参与的   2投票的
         }
       },
       methods:{
+        //下拉加载
+        loadMore(loaded) {
+          setTimeout(() => {
+            this.pageNum = this.pageNum+1;
+            this.information();
+            loaded('done');
+          }, 500);
+        },
+        //返回
           goback() {
             this.$router.push({
               path: '/my',
@@ -52,6 +69,9 @@
           this.flage1 = true;
           this.flage2 = false;
           this.status = 1;
+          this.pageNum = 1;
+          this.myActivity = [];
+          this.activity = [];
           this.information();
         },
         //我投票的
@@ -59,18 +79,27 @@
           this.flage1 = false;
           this.flage2 = true;
           this.status = 2;
+          this.pageNum = 1;
+          this.activity = [];
+          this.myActivity = [];
           this.information();
         },
         information(){
           var _this = this;
           this.$http.post('/api/article/mine', qs.stringify({
             uid: uid,
-            pageNum: 1,
-            pageSize: 5,
+            pageNum: this.pageNum,
+            pageSize: 8,
             status:this.status,   // 1活动
           })).then((response) => {
-            _this.info = response.data;
-            //console.log(response.data)
+            var temp1 = response.data.myActivity;
+            var temp2 = response.data.activity;
+            if(temp1!=undefined){
+              _this.myActivity = _this.myActivity.concat(temp1);
+            }
+            if(temp2!=undefined){
+              _this.activity = _this.activity.concat(temp2);
+            }
           });
         },
       },

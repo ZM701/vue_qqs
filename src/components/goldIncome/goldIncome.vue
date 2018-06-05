@@ -88,7 +88,7 @@
           status:this.status   // 0文章  1活动
         })).then((response) => {
           this.info = response.data
-          console.log(this.info)
+          //console.log(this.info)
         });
       },
     }

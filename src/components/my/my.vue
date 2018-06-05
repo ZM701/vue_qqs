@@ -16,7 +16,7 @@
       <div class="contentTitle">
         <ul>
           <li>金币攻略</li>
-          <li><router-link to="/goldIncome"><span>金币收益</span><span>778</span></router-link></li>
+          <li><router-link to="/goldIncome"><span>金币收益</span><span>{{info.integral_now}}</span></router-link></li>
           <li><router-link to="/myArticle"><span>我的文章</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></router-link></li>
           <li><router-link to="/myActives"><span>参与活动</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></router-link></li>
         </ul>
@@ -85,7 +85,7 @@
           })).then((response) => {
             _this.info = response.data;
             this.infoUser = response.data.user;
-            //console.log(_this.info)
+            //console.log(_this.info.integral_now)
           });
         },
       },

@@ -2,13 +2,9 @@
     <div>
       <div class="exchangeDetail">
         <div class="navChange">兑换商品</div>
-        <dl>
-          <dt><img src="../../../static/images/play.png"></dt>
-          <dd><span>商品名称</span><span class="money">5元</span></dd>
-        </dl>
-        <dl>
-          <dt><img src="../../../static/images/play.png"></dt>
-          <dd><span>商品名称</span><span class="money">5元</span></dd>
+        <dl v-for="(item,index) in productList">
+          <dt><img :src="item.goods_img"></dt>
+          <dd><span>{{item.goods_name}}</span><span class="money">{{item.goods_price}}元</span></dd>
         </dl>
       </div>
     </div>
@@ -16,7 +12,7 @@
 
 <script>
     export default {
-        name: "exchange-detail"
+        props:['productList']
     }
 </script>
 
@@ -30,7 +26,7 @@
     font-size: 1.5rem;
   }
   .exchangeDetail dl{
-    padding: 5px 0;
+    padding: 5px;
     overflow: hidden;
     margin-bottom: 5px;
     border-bottom:1px solid #e4e7ed;

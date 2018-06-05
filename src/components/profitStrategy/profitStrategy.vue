@@ -9,27 +9,18 @@
         <div @click="f2" :class="flage2?'active':''">视频教程</div>
       </div>
       <div v-if="flage1" class="box1">
-        <ul>
-          <li>金币</li>
-          <li @click="flage3 = !flage3">金币是什么<i class="	glyphicon glyphicon-chevron-right"></i>
-              <!--<li>金币是一种代币，您可以通过看文章、邀请好友获得。 当天获得的金币会在晚上自动换成现金存入您的账户。 攒到一定额度后就可以申请提现。</li>-->
-              <transition name="fade">
-                <ul class="answer" v-if="flage3">
-                　<li>金币是一种代币，您可以通过看文章、邀请好友获得。 当天获得的金币会在晚上自动换成现金存入您的账户。 攒到一定额度后就可以申请提现。</li>
-                </ul>
-              </transition>
-          </li>
-          <li @click="flage4 = !flage4">金币如何兑换代金券？<i class="	glyphicon glyphicon-chevron-right"></i>
+        <ul v-for="(item,index) in strategy">
+          <li @click="changeContent(index)">{{item.title}}<i class="glyphicon glyphicon-chevron-down glyphicon-chevron-up"></i>
             <transition name="fade">
-              <ul class="answer"  v-if="flage4">
-                <li>嘻嘻嘻</li>
+              <ul class="answer" v-show="false">
+              　<li>{{item.content}}</li>
               </ul>
             </transition>
           </li>
         </ul>
       </div>
       <div v-if="flage2" class="box2">
-        222
+        敬请期待
       </div>
 
     </div>
@@ -41,11 +32,26 @@
         return{
           flage1:true,  //图文教程
           flage2:false,   //视频教程
-          flage3:false,  //金币是什么
-          flage4:false,  //金币如何兑换代金券
+          flageli:false,  //金币是什么
+          strategy:null,  //渲染数据
         }
       },
+      created(){
+        this.strategyInt();
+      },
       methods:{
+        changeContent(index){
+           var display = $("li>ul").eq(index).css("display");
+           if(display=="none"){
+             $("li>ul").eq(index).slideDown();
+             $("li>i").eq(index).removeClass("glyphicon-chevron-down");
+             $("li>i").eq(index).addClass("glyphicon-chevron-up");
+           }else{
+             $("li>ul").eq(index).slideUp();
+             $("li>i").eq(index).removeClass("glyphicon-chevron-up");
+             $("li>i").eq(index).addClass("glyphicon-chevron-down");
+           }
+        },
         // 返回到上一层
         goback() {
           this.$router.push({
@@ -63,6 +69,13 @@
           this.flage1 = false;
           this.flage2 = true;
         },
+        //页面请求
+        strategyInt(){
+          this.$http.post('/book/integral/findStrategy').then((response) => {
+            this.strategy = response.data.strategy;
+            //console.log(response.data)
+          });
+        }
       }
     }
 </script>
@@ -91,6 +104,7 @@
     padding-bottom: 10px;
   }
   .box1>ul>li{
+    width: 100%;
     padding: 10px;
     border-bottom: 1px solid #e4e7ed;
     position: relative;

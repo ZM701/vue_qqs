@@ -8,6 +8,8 @@
     <slot name="my"></slot>
     <slot name="shopCart"></slot>
     <slot name="search"></slot>
+    <slot name="attention"></slot>
+    <slot name="attentionFans"></slot>
   </header>
 </template>
 

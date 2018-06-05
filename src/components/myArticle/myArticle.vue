@@ -5,7 +5,8 @@
       <span>我的文章</span>
     </div>
     <!--全部文章------------------------------------------------>
-     <div class="totalArticle"  v-for="(item,index) in info.article">
+    <pull-to :bottom-load-method="loadMore">
+     <div class="totalArticle"  v-for="(item,index) in info">
        <div class="edit">
          <!--article_status  0=草稿          article_authority  0=公开-->
          <span v-show="item.article_status==0">草稿</span>
@@ -38,24 +39,39 @@
          <!--<span>赏金7869</span>-->
        </div>
      </div>
+    </pull-to>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import qs from 'qs';
+  import PullTo from 'vue-pull-to';
   import {formatDate} from '../../../static/js/common.js';
   export default {
+    components:{
+      PullTo
+    },
     data(){
       return{
         status:0,   // 0文章  1活动
-        info:{},  //数据渲染
+        info:[],  //数据渲染
         flage3:false,   // 删除或再次编辑
+        pageNum:1,
       }
     },
     created(){
       this.information();
     },
     methods:{
+      //下拉加载
+      loadMore(loaded) {
+        setTimeout(() => {
+          this.pageNum = this.pageNum+1;
+          this.information();
+          loaded('done');
+        }, 500);
+      },
+      //返回
       goback() {
         this.$router.push({
           path: '/my',
@@ -66,12 +82,12 @@
         var _this = this;
         this.$http.post('/api/article/mine', qs.stringify({
           uid: uid,
-          pageNum: 1,
+          pageNum: this.pageNum,
           pageSize: 5,
           status:this.status   // 0文章  1活动
         })).then((response) => {
-          _this.info = response.data;
-          //console.log(response.data)
+          var temp = response.data.article;
+          _this.info = _this.info.concat(temp);
         });
       },
       //删除编辑的显示隐藏

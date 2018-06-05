@@ -17,6 +17,13 @@ module.exports = {
         pathRewrite: {
           '^/api':''
         }
+      },
+      '/book': {
+        target: 'http://192.168.1.165:8080/nws_user',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/book':''
+        }
       }
     },
     // Various Dev Server settings

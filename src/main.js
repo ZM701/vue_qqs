@@ -40,12 +40,20 @@ import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 // global.uid=8389;
 global.uid=5190;
 // global.uid=1;
+// global.uid=258683
 // global.uid=429837;
+
+global.unionid='3ae67a6f4f60f08cd2abf669072ece00'
+global.device_sn='A1000055567019'
+global.user_token='X1RcVllOVFhXRGBuWlxDYlZMEnUTblIDSAABAlVLB1IOBUtSC1tSH1NUUQIGDgMOBQFRVjkDWlNfV1l+UVwAQFxr'
+global.uuid='353570ab-66cc-3485-b386-267407397d23'
 
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI);
+/*import PullTo from 'vue-pull-to';
+Vue.use(PullTo)*/
 
 //引入mint-ui
 import 'mint-ui/lib/style.css';
