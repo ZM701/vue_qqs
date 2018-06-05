@@ -1,18 +1,94 @@
 <template>
     <div>
-      <div class="exchangeDetail">
-        <div class="navChange">兑换商品</div>
-        <dl v-for="(item,index) in productList">
+      <div class="exchangeDetail" v-if="productList">
+        <div class="navChange" @click="exchangeGoods"><span>兑换商品</span><span class="arrow"><i class="glyphicon glyphicon glyphicon-chevron-right"></i></span></div>
+        <dl v-for="(item,index) in productList" @click="detail(index)">
           <dt><img :src="item.goods_img"></dt>
           <dd><span>{{item.goods_name}}</span><span class="money">{{item.goods_price}}元</span></dd>
         </dl>
+      </div>
+      <div class="exchangeDetail" v-else>
+        <div class="navChange"><span>兑换商品</span></div>
+        <pull-to :bottom-load-method="loadMore">
+          <div class="loaded">
+            <dl v-for="(item,index) in goods" @click="detail(index)">
+              <dt><img :src="item.goods_img"></dt>
+              <dd><span>{{item.goods_name}}</span><span class="money">{{item.price}}元 <span class="oldPrice" v-if="item.goods_price==0">{{item.price}}元</span><span class="oldPrice" v-else>{{item.wholesale_price}}元</span> </span></dd>
+            </dl>
+          </div>
+        </pull-to>
       </div>
     </div>
 </template>
 
 <script>
+  import qs from 'qs';
+  import PullTo from 'vue-pull-to';
     export default {
-        props:['productList']
+      props:{
+        'productList':{
+          type:Array
+        },
+        'money':{
+          type:Number
+        }
+      },
+      data(){
+        return{
+          goods:[],  //存储获取的商品信息列表
+          pageNum:1,   //当前页数
+        }
+      },
+      components:{
+        PullTo
+      },
+      created(){
+        this.exchangeGoodsInt()
+      },
+      methods:{
+        exchangeGoods(){
+          this.$router.push({
+            path: '/exchangeGoods',
+            name: 'exchangeGoods',
+            params: {
+              money:this.money
+            }
+          })
+        },
+        //页面请求
+        exchangeGoodsInt(){
+          var _this = this;
+          this.$http.post('/book/integral/get_productList.api', qs.stringify({
+            pageNum: this.pageNum,
+            pageSize: 8
+          })).then((response) => {
+            var temp = response.data.productList
+            this.goods = this.goods.concat(temp)
+            //console.log(this.goods)
+          });
+        },
+        //下拉加载
+        loadMore(loaded) {
+          setTimeout(() => {
+            this.pageNum = this.pageNum+1;
+            this.exchangeGoodsInt();
+            loaded('done');
+          }, 500);
+        },
+        //点击兑换，弹出弹层
+        detail(index){
+          this.$confirm('需要访问南泥湾APP才能兑换商品哦！', '提示', {
+            confirmButtonText: '打开APP',
+            cancelButtonText: '再逛逛',
+            type: 'warning'
+          })
+            .then(() => {
+              window.location.href = "http://wechat.nanniwan.com/?c=index&a=download";
+            })
+            .catch(() => {
+            });
+        }
+    }
     }
 </script>
 
@@ -21,9 +97,20 @@
     background: #e0e0e0;
     height: 40px;
     line-height: 40px;
-    padding-left: 10px;
+    padding: 0 10px;
     font-weight: bolder;
     font-size: 1.5rem;
+  }
+  .navChange span{
+    width: auto;
+    float: left;
+    text-align: left;
+  }
+  .navChange span.arrow{
+    float: right;
+  }
+  .exchangeDetail{
+    margin-bottom: 40px;
   }
   .exchangeDetail dl{
     padding: 5px;
@@ -44,6 +131,7 @@
     width: 66%;
     float: left;
     padding: 5px 0;
+    margin-left: 5px;
   }
   .exchangeDetail dl dd span:first-of-type{
     text-align: left;
@@ -54,6 +142,13 @@
     text-align: right;
     color: red;
     font-size: 2rem;
+    height: 30px;
   }
-
+  .exchangeDetail dl dd .money .oldPrice{
+    width: auto;
+    display: inline-block;
+    font-size: 1.5rem;
+    text-decoration: line-through;
+    color: #ccc;
+  }
 </style>

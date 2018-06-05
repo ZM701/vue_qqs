@@ -122,4 +122,5 @@
     width: 100% !important;
     top:50% !important;
   }
+
 </style>

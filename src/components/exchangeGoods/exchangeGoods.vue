@@ -1,19 +1,19 @@
 <template>
 <div>
   <div class="navMy">
-    <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
+    <span @click="goback"><i class="glyphicon glyphicon-chevron-left"></i></span>
     <span>兑换商品</span>
   </div>
   <div class="navCoin">
-    <div><span>总金币（个）</span><span class="coinNum">30</span></div>
+    <div><span>总积分（个）</span><span class="coinNum">{{money}}</span></div>
     <div><span>兑换规则</span></div>
   </div>
   <div>
     <exchange-detail></exchange-detail>
   </div>
   <div class="footerBar">
-    <span>当前余额不足，快去做任务赚钱</span>
-    <span @click="goTask">马上做任务赚钱</span>
+    <span>想要兑换更多的商品，马上做任务赚钱吧</span>
+    <span @click="goTask">做任务赚钱</span>
   </div>
 </div>
 </template>
@@ -23,6 +23,11 @@
     export default {
       components:{
         exchangeDetail
+      },
+      data(){
+        return{
+          money:this.$route.params.money
+        }
       },
       methods: {
         // 返回到上一层

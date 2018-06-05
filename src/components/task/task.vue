@@ -2,28 +2,51 @@
     <div>
       <!--签到-->
       <div class="signIn">
-        <div class="coins"><span>30金币</span><span>签到</span></div>
-        <div>明日签到可得15金币</div>
+        <!--//0未签到  1已签到-->
+        <div class="coins"><span>{{sign.integral_now}}积分</span><span v-if="sign.isSignin==0">签到</span><span span v-if="sign.isSignin==1">已签到</span></div>
+        <div>已连续签到{{sign.daynum}}天</div>
+        <!--<div class="aa">明日签到可得{{sign.num}}积分</div>-->
         <div class="days">
-          <div><span>1天</span><span>30</span></div>
-          <div><span>2天</span><span>15</span></div>
-          <div><span>3天</span><span>15</span></div>
-          <div><span>4天</span><span>15</span></div>
-          <div><span>5天</span><span>15</span></div>
-          <div><span>6天</span><span>15</span></div>
-          <div><span>7天</span><span>15</span></div>
+          <li class="date"><span :class="date[0]==1?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[1]==2?'on':''"></span>
+          <li class="date"><span :class="date[1]==2?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[2]==3?'on':''"></span>
+          <li class="date"><span  :class="date[2]==3?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[3]==4?'on':''"></span>
+          <li class="date"><span :class="date[3]==4?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[4]==5?'on':''"></span>
+          <li class="date"><span :class="date[4]==5?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[5]==6?'on':''"></span>
+          <li class="date"><span :class="date[5]==6?'on':''">{{sign.num}}v</span></li>
+          <span class="line" :class="date[6]==7?'on':''"></span>
+          <li class="date"><span :class="date[6]==7?'on':''">{{sign.num}}v</span></li>
+        </div>
+        <div class="time">
+          <li class="date"><span>1</span></li>
+          <span class="line"></span>
+          <li class="date"><span>2</span></li>
+          <span class="line"></span>
+          <li class="date"><span>3</span></li>
+          <span class="line"></span>
+          <li class="date"><span>4</span></li>
+          <span class="line"></span>
+          <li class="date"><span>5</span></li>
+          <span class="line"></span>
+          <li class="date"><span>6</span></li>
+          <span class="line"></span>
+          <li class="date"><span>7</span></li>
         </div>
       </div>
       <!--日常任务-->
       <div class="dailyTask">
         <div class="daily">日常任务</div>
         <div class="tasks">
-          <div><span>认真阅读文章或视频</span><span>每次奖励{{rule.num10}}金币，每天{{rule.num9}}次</span></div>
-          <div><span>领{{rule.num10}}金币</span></div>
+          <div><span>认真阅读文章或视频</span><span>每次奖励{{rule.num10}}积分，每天{{rule.num9}}次</span></div>
+          <div><span>领{{rule.num10}}积分</span></div>
         </div>
         <div class="tasks">
-          <div><span>分享文章或视频</span><span>每次分享奖励{{rule.num12}}金币，每天{{rule.num11}}次</span></div>
-          <div><span>领{{rule.num12}}金币</span></div>
+          <div><span>分享文章或视频</span><span>每次分享奖励{{rule.num12}}积分，每天{{rule.num11}}次</span></div>
+          <div><span>领{{rule.num12}}积分</span></div>
         </div>
         <div class="question">
           如有疑问请参考<span @click="profitStrategy">赚钱攻略</span>
@@ -31,7 +54,7 @@
       </div>
       <!--兑换商品-->
       <div class="exchange">
-        <exchange-detail :productList="productList"></exchange-detail>
+        <exchange-detail :productList="productList" :money="money"></exchange-detail>
       </div>
     </div>
 </template>
@@ -48,6 +71,8 @@
           productList:[],   // 商品列表
           rule:{},   //日常任务
           sign:{},   //登录签到
+          date: [1, 2, 3, 4],
+          money:null,  //积分收益
         }
       },
       created(){
@@ -76,7 +101,7 @@
             this.productList = response.data.product.productList;
             this.rule = response.data.rule;
             this.sign = response.data.sign;
-            console.log(response.data)
+            this.money = this.sign.integral_now;
           });
         }
       },
@@ -108,26 +133,36 @@
     color: #fff;
     border-radius: 20px;
   }
-  .signIn .days{
+  .signIn .days,.signIn .time{
     display: flex;
     flex-direction: row;
     margin-top: 5px;
   }
-  .signIn .days>div{
+  .signIn .days li,.signIn .days span,.signIn .time li,.signIn .time span{
+    list-style: none;
     width: 100%;
+    font-size: 0.5rem;
   }
-  .signIn .days>div span{
-    width: auto;
-    height: auto;
-    /*font-size: 0.5rem;*/
-  }
-  .signIn .days>div span:last-of-type{
-    border:1px solid #ccc;
+  .signIn .days li span{
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    margin: 0 auto;
+    background: #ccc;
+    color: #666;
+  }
+  .days>span{
+    background: #ccc;
+    height: 1px;
+    margin-top: 10px;
+    padding-right: 8px;
+
+  }
+  /*选中签到的样式*/
+  .signIn .days span.on {
+    background: orangered;
+    color: #fff;
   }
   /*日常任务*/
   .dailyTask{
@@ -173,5 +208,9 @@
   }
   .exchange{
     margin-bottom: 100px;
+    max-height: 970px;
+    overflow: hidden;
   }
+
 </style>
+

@@ -15,8 +15,8 @@
       </div>
       <div class="contentTitle">
         <ul>
-          <li>金币攻略</li>
-          <li><router-link to="/goldIncome"><span>金币收益</span><span>{{info.integral_now}}</span></router-link></li>
+          <li><router-link to="/task">积分攻略宣传图点击跳转到任务页面</router-link></li>
+          <li><router-link to="/goldIncome"><span>积分收益</span><span>{{info.integral_now}}</span></router-link></li>
           <li><router-link to="/myArticle"><span>我的文章</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></router-link></li>
           <li><router-link to="/myActives"><span>参与活动</span><span><i class="	glyphicon glyphicon-chevron-right"></i></span></router-link></li>
         </ul>

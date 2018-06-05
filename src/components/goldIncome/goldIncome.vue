@@ -2,14 +2,14 @@
   <div>
     <div class="navMy">
       <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
-      <span>金币收益</span>
+      <span>积分收益</span>
     </div>
      <div>
-       <!--金币收益，兑换规则-->
+       <!--积分收益，兑换规则-->
        <div class="navBar">
          <div>
-           <span>金币收益（个）</span>
-           <span class="coinNum">30</span>
+           <span>积分收益（个）</span>
+           <span class="coinNum">{{ incomeData.integral_now }}</span>
          </div>
          <div>
            <span>兑换规则</span>
@@ -18,22 +18,15 @@
        </div>
        <!--青青说  商城 -->
        <div class="navTab">
-         <span @click="f1" :class="flage1?'active':''">青青说</span>
-         <span @click="f2" :class="flage2?'active':''">商城</span>
+         <span>积分明细</span>
        </div>
-       <div v-if="flage1" class="content">
-         <dl>
-           <dt><span>签到</span><span>2018.08.09</span></dt>
-           <dd>+10</dd>
-         </dl>
-         <dl>
-           <dt><span>签到</span><span>2018.08.09</span></dt>
-           <dd>+10</dd>
+       <div class="content">
+         <dl v-for="(item,index) in incomeData.integralDetail">
+           <dt><span>{{detail}}</span><span>{{item.detail_time*1000 | formatDate}}</span></dt>
+           <dd v-if="item.amount<0">{{item.amount}}</dd>
+           <dd v-if="item.amount>0">+{{item.amount}}</dd>
          </dl>
          <div class="fotter">系统仅展示最近30天的收益</div>
-       </div>
-       <div v-if="flage2">
-         商城
        </div>
      </div>
   </div>
@@ -41,16 +34,18 @@
 
 <script type="text/ecmascript-6">
   import qs from 'qs';
+  import {formatDate} from '../../../static/js/common.js';
   export default {
     data(){
       return{
-        flage1:true,
-        flage2:false,
-        info:null
+        incomeData:{}, //页面初始化数据
+        detail:null,
+        money:null,  //积分个数
       }
     },
     created(){
-      this.information()
+      this.incomeInt();
+      this.type();
     },
     methods:{
       // 返回到上一层
@@ -60,37 +55,79 @@
           name: 'my',
         })
       },
-      // 点击切换到青青说
-      f1(){
-        this.flage1 = true;
-        this.flage2 = false;
-      },
-      // 点击切换到商城
-      f2(){
-        this.flage1 = false;
-        this.flage2 = true;
-      },
       //点击跳转到兑换商品页面
       exchangeGoods(){
         this.$router.push({
           path: '/exchangeGoods',
           name: 'exchangeGoods',
           params: {
+            money : this.money
           }
         })
       },
-      information(){
-        var _this = this;
-        this.$http.post('https://nwsapi.nanniwan.com/nws_cms/article/mine', qs.stringify({
-          uid: uid,
+      //积分收入数据渲染
+      incomeInt(){
+        this.$http.post('/book/integral/get_detail.api', qs.stringify({
+          user_token: user_token,
+          uuid: uuid,
+          unionid:unionid,
           pageNum: 1,
-          pageSize: 5,
-          status:this.status   // 0文章  1活动
+          pageSize: 30,
         })).then((response) => {
-          this.info = response.data
-          //console.log(this.info)
+          this.incomeData = response.data;
+          this.money = response.data.integral_now;
+          for(var i=0;i<response.data.integralDetail.length;i++){
+            this.type(response.data.integralDetail[i].detail_type)
+          }
         });
       },
+      //1=签到送积分(加),2=购物送积分(加),3=评价送积分(加),4=积分换购订单取消返回(加),5=购物抵现订单取消返回(加),6=积分换购(减),7=购物抵现(减),8=积分抽奖(减),9=积分兑换优惠券(减)),10=阅读完文章视频,11=分享文章视频,12=评论文章视频
+      type(n){
+        if(n == 1){
+          this.detail="签到"
+        }
+        if(n == 2){
+          this.detail="购物"
+        }
+        if(n == 3){
+          this.detail="评价"
+        }
+        if(n == 4){
+          this.detail="积分换购订单取消"
+        }
+        if(n == 5){
+          this.detail="购物抵现订单取消"
+        }
+        if(n == 6){
+          this.detail="积分换购"
+        }
+        if(n == 7){
+          this.detail="购物抵现"
+        }
+        if(n == 8){
+          this.detail="积分抽奖"
+        }
+        if(n == 9){
+          this.detail="积分兑换优惠券"
+        }
+        if(n == 10){
+          this.detail="阅读完文章视频"
+        }
+        if(n == 11){
+          this.detail="分享文章视频"
+        }
+        if(n == 12){
+          this.detail="评论文章视频"
+        }
+      },
+    },
+    filters: {
+      //时间戳的转换
+      formatDate(time) {
+        var date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd');
+        // return formatDate(date, 'yyyy-MM-dd hh:mm');
+      }
     }
   }
 </script>
@@ -140,9 +177,6 @@
   .navTab span:first-of-type{
     border-right: 1px solid #e4e7ed;
   }
-  .active{
-    color: #4cae4c;
-  }
   .content dl{
     overflow: hidden;
     margin-bottom: 10px;
@@ -163,5 +197,6 @@
   }
   .fotter{
     text-align: center;
+    margin-bottom: 10px;
   }
 </style>
