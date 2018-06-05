@@ -50,6 +50,9 @@
           sign:{},   //登录签到
         }
       },
+      created(){
+        this.taskInt();
+      },
       methods:{
         //跳转到赚钱攻略
         profitStrategy(){
@@ -77,9 +80,7 @@
           });
         }
       },
-      created(){
-        this.taskInt();
-      }
+
     }
 </script>
 
