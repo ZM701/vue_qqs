@@ -3,7 +3,7 @@
       <!--签到-->
       <div class="signIn">
         <!--//0未签到  1已签到-->
-        <div class="coins"><span>{{sign.integral_now}}积分</span><span v-if="sign.isSignin==0">签到</span><span span v-if="sign.isSignin==1">已签到</span></div>
+        <div class="coins"><span>{{sign.integral_now}}积分</span><span v-if="sign.isSignin==0" @click="signup">签到</span><span span v-if="sign.isSignin==1">已签到</span></div>
         <div>已连续签到{{sign.daynum}}天</div>
         <!--<div class="aa">明日签到可得{{sign.num}}积分</div>-->
         <div class="days">
@@ -42,11 +42,11 @@
         <div class="daily">日常任务</div>
         <div class="tasks">
           <div><span>认真阅读文章或视频</span><span>每次奖励{{rule.num10}}积分，每天{{rule.num9}}次</span></div>
-          <div><span>领{{rule.num10}}积分</span></div>
+          <div @click="getIntegral"><span>领{{rule.num10}}积分</span></div>
         </div>
         <div class="tasks">
           <div><span>分享文章或视频</span><span>每次分享奖励{{rule.num12}}积分，每天{{rule.num11}}次</span></div>
-          <div><span>领{{rule.num12}}积分</span></div>
+          <div @click="getIntegral"><span>领{{rule.num12}}积分</span></div>
         </div>
         <div class="question">
           如有疑问请参考<span @click="profitStrategy">赚钱攻略</span>
@@ -71,7 +71,7 @@
           productList:[],   // 商品列表
           rule:{},   //日常任务
           sign:{},   //登录签到
-          date: [1, 2, 3, 4],
+          date: [], //连续签到天数存到数组
           money:null,  //积分收益
         }
       },
@@ -90,7 +90,6 @@
         },
         //页面请求
         taskInt(){
-          var _this = this;
           this.$http.post('/book/integral/taskCenter', qs.stringify({
             user_token: user_token,
             uuid: uuid,
@@ -98,11 +97,63 @@
             pageNum: 1,
             pageSize: 10
           })).then((response) => {
-            this.productList = response.data.product.productList;
-            this.rule = response.data.rule;
-            this.sign = response.data.sign;
-            this.money = this.sign.integral_now;
+            this.productList = response.data.product.productList;  //兑换商品信息
+            this.rule = response.data.rule;  // 日常任务信息
+            this.sign = response.data.sign;   //得到签到状态的信息
+            this.money = this.sign.integral_now;   //获取当前积分传到下一个页面
+            this.continuitySign(this.sign.daynum);   //通过连续签到改变高亮的状态
+            //console.log(response.data)
           });
+        },
+        //连续签到天数
+        continuitySign(day){
+          if(day==0){
+            this.date=[]
+          }
+          if(day==1){
+            this.date=[1]
+          }
+          if(day==2){
+            this.date=[1,2]
+          }
+          if(day==3){
+            this.date=[1,2,3]
+          }
+          if(day==4){
+            this.date=[1,2,3,4]
+          }
+          if(day==5){
+            this.date=[1,2,3,4,5]
+          }
+          if(day==6){
+            this.date=[1,2,3,4,5,6]
+          }
+          if(day==7){
+            this.date=[1,2,3,4,5,6,7]
+          }
+        },
+        //点击签到
+        signup(){
+          this.$http.post('/book/integral/add_detail.api', qs.stringify({
+            user_token: user_token,
+            uuid: uuid,
+            unionid:unionid,
+            detailType:1, //变动类型(1=签到送积分(加),2=购物送积分(加),3=评价送积分(加),4=积分换购订单取消返回(加),5=购物抵现订单取消返回(加),6=积分换购(减),7=购物抵现(减),8=积分抽奖(减),9=积分兑换优惠券(减)),10=阅读完文章视频,11=分享文章视频,12=评论文章视频)
+            fromType:0,//来源终端：默认0-web,1-android,2-ios,3-wechat(必填)
+          })).then((response) => {
+            this.sign.isSignin = response.data.isSignin;
+            this.continuitySign(response.data.nowDaynum);   //通过连续签到改变高亮的状态
+            //console.log(response.data)
+          });
+        },
+        //点击领积分跳转到精选
+        getIntegral(){
+          this.$router.push({
+            path: '/index/two',
+            name: 'two',
+            params: {
+            }
+          })
         }
       },
 
