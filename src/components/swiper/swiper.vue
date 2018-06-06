@@ -169,7 +169,7 @@
   .swiper-box{
     position: absolute;
     width: 100%;
-    top: 100px;
+    top: 90px;
     bottom: 50px;
   }
   .swiper-container{

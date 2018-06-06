@@ -134,7 +134,7 @@
         },
         //点击签到
         signup(){
-          this.$http.post('/book/integral/add_detail.api', qs.stringify({
+          this.$http.post('/api/integral/add_detail.api', qs.stringify({
             user_token: user_token,
             uuid: uuid,
             unionid:unionid,

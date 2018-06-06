@@ -13,9 +13,9 @@
       </div>
     </div>
     <div class="nav">
-      <ul class="nav-list" @click="tabKeywords">
+      <nav class="nav-list" @click="tabKeywords">
         <li class="item" v-for="(item,index) in navList" :class="{'active': nowIndex===index}" @click="tabClick(index);">{{item}}</li>
-      </ul>
+      </nav>
     </div>
   </div>
 </template>
@@ -165,19 +165,27 @@
     top:50px;
     width: 100%;
     z-index: 999;
-    margin-bottom: 30px;
+    /*margin-bottom: 10px;*/
   }
+
   .nav-list{
-    width: 100%;
+    padding: 0 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
+    -webkit-box-align: middle;
+    -ms-flex-align: middle;
+    align-items: middle;
+    overflow: auto;
   }
+
   .item{
-    width: 100%;
     text-align: center;
-    height: 40px;
-    line-height: 40px;
-    list-style: none;
+    font-size: 1.5rem;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    padding: 5px 10px;
+    /*margin: 5px;*/
   }
   .active{
     color: #66B672;

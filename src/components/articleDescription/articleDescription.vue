@@ -17,7 +17,7 @@
           <div>{{msgInfo.article_title}}</div>
           <div>{{msgInfo.article_sendtime*1000 | formatDate}} 来自{{msgInfo.phone_type}} 浏览数{{msgInfo.article_readnum }}</div>
           <!--对文章的处理-->
-          <div v-if="sourceType==0">
+          <div v-if="sourceType==0" class="articleHeight">
             <div v-if="msgInfo.article_format==1">
               <div v-for="(item,idex) in article_content" class="content1">
                 <span><img :src="'https://nwsapi.nanniwan.com/nws_cms/article/fileDownload.api?name='+item.img"/></span>
@@ -30,7 +30,7 @@
           </div>
           <!--对视频的处理-->
           <div v-if="sourceType==1">
-            <video :src="msgInfo.video_url" autoplay></video>
+            <video :src="msgInfo.video_url" autoplay id="video"></video>
             <span>{{msgInfo.video_desc}}</span>
           </div>
         </div>
@@ -83,6 +83,31 @@
                       .replace(/&gt;/g, ">");
           this.article_content = strs;
         }
+        //调用滚动事件
+        this.scroll();
+      },
+      mounted(){
+        //文章篇幅过短判断是否读完的处理
+        var _this = this;
+        setTimeout(function(){
+          var articleHeight = $(".articleHeight").height();
+          var video=document.getElementById("video");
+          global.totalTime = video.duration;
+          if(articleHeight<=window.innerHeight){
+            _this.articleEnd()
+          }
+        },1000)
+        //对视频是否看完的处理
+        setTimeout(function () {
+          var video=document.getElementById("video");//video标签对象
+          video.currentTime;//获取视频当前播放时间
+          var durations = video.duration;
+         //当前播放时间大于等于50秒即可获得积分
+          if(video.currentTime >= durations/2){
+            _this.articleEnd()
+          }
+        },totalTime*1000)
+
       },
       methods:{
         goback(){
@@ -90,9 +115,6 @@
             path: '/index',
             name: 'index',
           })
-        },
-        dataInit(){
-
         },
         //点击跳转到关注
         attentionClick(relationUid){
@@ -117,7 +139,6 @@
               // this.relation_status = 0;
             }
           });
-          this.dataInit();
         },
         detail(){
           this.$http.get("/api/article/article_find.api", {
@@ -161,6 +182,30 @@
             })
             .catch(() => {
             });
+        },
+        scroll() {
+          window.onscroll = () => {
+
+           // console.log(article_ids)
+            // 距离底部的距离
+            let bottomOfWindow = document.documentElement.scrollHeight-document.documentElement.scrollTop-document.documentElement.clientHeight
+            if(bottomOfWindow<=200){
+              //调用文章读完的接口
+             this.articleEnd();
+            }
+          }
+        },
+        //文章读完
+        articleEnd(){
+          var _this = this;
+          _this.$http.post('/api/article/mark_info', qs.stringify({
+            uid:uid,
+            article_id:_this.article_id,
+            from_type:0,
+            status:1
+          })).then((response) => {
+           // console.log(response.data)
+          });
         }
       },
       filters: {
