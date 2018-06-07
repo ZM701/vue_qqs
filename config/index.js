@@ -26,19 +26,13 @@ module.exports = {
         }
       },
       '/user': {
+        // target: 'http://192.168.1.165:8080/nws_user',
         target: 'https://nwsapi.nanniwan.com/nws_user',
         changeOrigin: true,
         pathRewrite: {
           '^/user':''
         }
-      },
-      /*'/book': {
-        target: 'http://192.168.1.165:8080/nws_user',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/book':''
-        }
-      },*/
+      }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

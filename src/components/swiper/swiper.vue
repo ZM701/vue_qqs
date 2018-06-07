@@ -28,6 +28,7 @@
   import four from '../../components/four/four.vue';
   import five from '../../components/five/five.vue';
   import qs from 'qs';
+  import store from '../../store.js'
 
   export default {
     components: {
@@ -54,7 +55,8 @@
           {path: '/index/three', component: three},
           {path: '/index/four', component: four},
           {path: '/index/five', component: five}
-        ]
+        ],
+        test:store.fetch2(),
       }
     },
     created(){
@@ -72,6 +74,10 @@
         //监听变化
         this.nowIndex = mySwiper.activeIndex;
         this.keyWords = this.navList[mySwiper.activeIndex];
+        this.test = [this.keyWords];
+        var val = JSON.parse(JSON.stringify(this.test))
+        store.save2(val);
+        console.log(this.test[0])
       });
       // 接收nav组件传过来的导航按钮索引值，跳转到相应内容区
       this.$root.eventHub.$on('changeTab', (index) => { // 点击导航键跳转相应内容区
@@ -81,18 +87,23 @@
       //接受nav组件传过来的keyWords
       this.$root.eventHub.$on('changeKeywords', (keyWords) => { // 点击导航键跳转相应内容区
         this.keyWords = keyWords
-       // console.log(this.keyWords)
+        this.test = [this.keyWords];
+        var val = JSON.parse(JSON.stringify(this.test))
+        store.save2(val);
+        console.log(this.test[0])
       });
     },
     methods:{
       dataInit() {
+        console.log(this.test[0])
         // var that = this;
         // console.log(this.keywords)
         this.$http.post('/api/article/index', qs.stringify({
           uid: uid,
-          keywords: this.keyWords,
+          keywords: this.test[0],
+          // keywords: this.keyWords,
           pageNum: this.pageNum,
-          pageSize: 5
+          pageSize: 10
         })).then((response) => {
           if(this.nowIndex==0){
             var temp = response.data.article;
@@ -143,17 +154,17 @@
         }, 500);
       },
       refresh(loaded){
-        setTimeout(() => {
+        /*setTimeout(() => {
           this.pageNum = 1;
           this.dataInit();
           loaded('done');
-        }, 500);
+        }, 500);*/
       }
     },
     watch:{
       nowIndex(val, oldVal){//普通的watch监听
         this.pageNum = 1;  //每次改变的时候初始化
-        this.dataInit();
+        // this.dataInit();
         this.attentionArticle = [];  //每次点击或滑动的时候清空所有的数据
       },
       keyWords(val, oldVal){//普通的watch监听
@@ -161,6 +172,12 @@
         this.dataInit();
         this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
       },
+      test: {
+        handler: function(val, oldVal) {
+          store.save2(val);
+        },
+        deep: true
+      }
     }
   }
 </script>

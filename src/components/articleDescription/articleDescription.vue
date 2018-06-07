@@ -10,8 +10,8 @@
           <div><span>{{msgInfo.nickname}}</span><span>粉丝{{fansNum}}</span></div>
           <!--<div class="attention">已关注</div>-->
           <!--0=未关注 1=关注-->
-          <div class="attention" v-if="relation_status == 0" @click="attentionClick(msgInfo.uid)" >关注</div>
-          <div class="attention already" v-if="relation_status == 1" @click="attentionClick(msgInfo.uid)" >已关注</div>
+          <div class="attention" v-if="total.relation_status == 0" @click="attentionClick(msgInfo.uid)" >关注</div>
+          <div class="attention already" v-if="total.relation_status == 1" @click="attentionClick(msgInfo.uid)" >已关注</div>
         </div>
         <div class="content">
           <div>{{msgInfo.article_title}}</div>
@@ -53,25 +53,14 @@
           article_content:null, //内容
           article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
           fansNum:null, //粉丝数
-          relation_status:null,   //是否关注
-          /* userImage:this.$route.params.userImage, //用户头像
-          nickName:this.$route.params.nickName, //用户名称
-          article_title:this.$route.params.article_title,  //文章标题
-          imgSrc:this.$route.params.imgSrc,   //有几张图片
-          article_content:null, //内容
-          article_sendtime:this.$route.params.article_sendtime,   //时间
-          article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的*/
+          total:{}, //获取所有信息
           article_id:this.$route.params.article_id,   //文章id
-         /* relation_status:this.$route.params.relation_status,  // 0=未关注 1=关注
-          state:null,  // 0=未关注 1=关注*/
           state:null,   //0=未关注 1=关注
           sourceType:this.$route.params.sourceType,  //0文章  1视频
         }
       },
       created(){
-        //console.log(this.sourceType)
         this.detail();
-        //console.log(this.article_format)
         var str = this.$route.params.article_content;
         if(this.article_format==1){
           this.article_content = "["+str+"]";
@@ -91,14 +80,15 @@
         var _this = this;
         setTimeout(function(){
           var articleHeight = $(".articleHeight").height();
-          var video=document.getElementById("video");
-          global.totalTime = video.duration;
+          /*var video=document.getElementById("video");
+          global.totalTime = video.duration;*/
           if(articleHeight<=window.innerHeight){
             _this.articleEnd()
+            console.log(111)
           }
         },1000)
         //对视频是否看完的处理
-        setTimeout(function () {
+        /*setTimeout(function () {
           var video=document.getElementById("video");//video标签对象
           video.currentTime;//获取视频当前播放时间
           var durations = video.duration;
@@ -106,7 +96,7 @@
           if(video.currentTime >= durations/2){
             _this.articleEnd()
           }
-        },totalTime*1000)
+        },totalTime*1000)*/
 
       },
       methods:{
@@ -149,9 +139,9 @@
               article_format:1  // article_format 小程序=1 ,后台=0
           }
           }).then(response => {
+            this.total = response.data;
             this.msgInfo = response.data.article;
             this.fansNum = response.data.fansNum;
-            this.relation_status = response.data.relation_status;
             //console.log(response.data);
           }, response => {
             console.log("获取信息失败");
@@ -183,9 +173,9 @@
             .catch(() => {
             });
         },
+        //文章过长判断是否读完的处理
         scroll() {
           window.onscroll = () => {
-
            // console.log(article_ids)
             // 距离底部的距离
             let bottomOfWindow = document.documentElement.scrollHeight-document.documentElement.scrollTop-document.documentElement.clientHeight
@@ -204,7 +194,7 @@
             from_type:0,
             status:1
           })).then((response) => {
-           // console.log(response.data)
+            //console.log(response.data)
           });
         }
       },

@@ -53,6 +53,14 @@
       'v-article':article,
       'v-banner':banner
     },
+    watch: {
+      '$route' (to, from) {
+        // console.log(from.path)
+        if(from.path=='/task'){
+          location.reload() //页面刷新
+        }
+      }
+    }
   }
 </script>
 

@@ -3,7 +3,7 @@
       <!--签到-->
       <div class="signIn">
         <!--//0未签到  1已签到-->
-        <div class="coins"><span>{{sign.integral_now}}积分</span><span v-if="sign.isSignin==0" @click="signup">签到</span><span span v-if="sign.isSignin==1">已签到</span></div>
+        <div class="coins"><span class="first">{{sign.integral_now}}积分</span><span v-if="sign.isSignin==0" @click="signup" class="last">签到</span><span span v-if="sign.isSignin==1" class="last">已签到</span></div>
         <div>已连续签到{{sign.daynum}}天</div>
         <!--<div class="aa">明日签到可得{{sign.num}}积分</div>-->
         <div class="days">
@@ -171,6 +171,12 @@
           })*/
         }
       },
+      /*watch: {
+        '$route' (to, from) {
+          console.log(to)
+          console.log(from)
+        }
+      }*/
 
     }
 </script>
@@ -184,13 +190,13 @@
   .signIn .coins{
     overflow: hidden;
   }
-  .signIn .coins span:first-of-type{
+  .signIn .coins span.first{
     font-weight: bolder;
     font-size: 1.6rem;
     width: auto;
     float: left;
   }
-  .signIn .coins span:last-of-type{
+  .signIn .coins span.last{
     float: right;
     background: #3a8ee6;
     width: 80px;

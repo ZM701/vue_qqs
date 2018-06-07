@@ -4,8 +4,11 @@
         <!--关注页面-->
         <ul v-if="type==1">
           <li v-for="(item,index) in info">
-            <span class="box1">
+            <span class="box1" v-if="item.image.indexOf('upload')!=0">
               <img :src="item.image">
+            </span>
+            <span class="box1" v-if="item.image.indexOf('upload')==0">
+              <img :src="'https://imgs.nanniwan.com/'+item.image">
             </span>
             <span class="box2">
               <span>{{item.nickname}}</span>
@@ -19,8 +22,11 @@
         <!--粉丝页面-->
         <ul v-if="type==2">
           <li v-for="(item,index) in fenInfo">
-            <span class="box1">
+            <span class="box1" v-if="item.image.indexOf('upload')!=0">
               <img :src="item.image">
+            </span>
+            <span class="box1" v-if="item.image.indexOf('upload')==0">
+              <img :src="'https://imgs.nanniwan.com/'+item.image">
             </span>
             <span class="box2">
               <span>{{item.nickname}}</span>
@@ -51,6 +57,7 @@
       },
       data(){
         return{
+          // imgUrl:"https://imgs.nanniwan.com/",
         }
       },
       created(){
