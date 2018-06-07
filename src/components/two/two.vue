@@ -29,7 +29,7 @@
       return {
         show: true,
         toggleShow: false,
-        isLoad: false
+        isLoad: false,
       }
     },
     mounted() {

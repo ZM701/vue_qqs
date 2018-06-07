@@ -47,7 +47,7 @@
         userInfo:[],   //关注用户信息
         navList:["关注","精选"],  //初始化的导航栏
         addNav:[],      //添加的导航栏
-        keyWords:"关注",   //请求接口的关键字
+        keyWords:"",   //请求接口的关键字
         pageNum:1,
         list: [
           {path: '/index/one', component: one},
@@ -56,13 +56,44 @@
           {path: '/index/four', component: four},
           {path: '/index/five', component: five}
         ],
-        test:store.fetch2(),
+        // test:store.fetch2(),
       }
     },
     created(){
       this.dataInit();
+      // console.log(this.test[0])
+      //console.log(this.$route.path)
+      if(this.$route.path == '/index/one' || this.$route.path == '/index'){
+        this.keyWords='关注'
+      }else if(this.$route.path == '/index/two'){
+        this.keyWords='精选'
+      }else if(this.$route.path == '/index/three'){
+        this.keyWords='三农'
+      }else if(this.$route.path == '/index/four'){
+        this.keyWords='音乐'
+      }else if(this.$route.path == '/index/five'){
+        this.keyWords='旅游'
+      }
+      // else if(this.$route.path == '/index/one'){
+      //   this.keyWords='宠物'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='搞笑'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='育儿'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='精选'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='历史'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='游戏'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='情感'
+      // }else if(this.$route.path == '/index/one'){
+      //   this.keyWords='星座'
+      // }
     },
     mounted() {
+
       //this.attentionArticle = this.attentionArticle;
       var mySwiper = new Swiper('.swiper-container', {
         // 设定初始化时slide的索引
@@ -73,11 +104,10 @@
         this.$root.eventHub.$emit('slideTab', mySwiper.activeIndex);
         //监听变化
         this.nowIndex = mySwiper.activeIndex;
-        this.keyWords = this.navList[mySwiper.activeIndex];
-        this.test = [this.keyWords];
+        /*this.test = [this.keyWords];
         var val = JSON.parse(JSON.stringify(this.test))
-        store.save2(val);
-        console.log(this.test[0])
+        store.save(val);*/
+        this.keyWords = this.navList[mySwiper.activeIndex];
       });
       // 接收nav组件传过来的导航按钮索引值，跳转到相应内容区
       this.$root.eventHub.$on('changeTab', (index) => { // 点击导航键跳转相应内容区
@@ -87,21 +117,21 @@
       //接受nav组件传过来的keyWords
       this.$root.eventHub.$on('changeKeywords', (keyWords) => { // 点击导航键跳转相应内容区
         this.keyWords = keyWords
-        this.test = [this.keyWords];
-        var val = JSON.parse(JSON.stringify(this.test))
-        store.save2(val);
-        console.log(this.test[0])
+        // this.test = [this.keyWords];
+        // var val = JSON.parse(JSON.stringify(this.test))
+        // store.save2(val);
+        // console.log(this.test[0])
       });
     },
     methods:{
       dataInit() {
-        console.log(this.test[0])
-        // var that = this;
-        // console.log(this.keywords)
+        //console.log(this.keyWords)
+        var that = this;
+
         this.$http.post('/api/article/index', qs.stringify({
           uid: uid,
-          keywords: this.test[0],
-          // keywords: this.keyWords,
+          // keywords: this.test[0],
+          keywords: this.keyWords,
           pageNum: this.pageNum,
           pageSize: 10
         })).then((response) => {
@@ -137,7 +167,7 @@
             this.list[i].banner = this.banner;
           }
           this.$root.eventHub.$emit('navList', this.navList);
-         //console.log(this.list)
+          //console.log(this.list)
         })
       },
       loadMore(loaded) {
@@ -171,12 +201,6 @@
         this.pageNum = 1;  //每次改变的时候初始化
         this.dataInit();
         this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
-      },
-      test: {
-        handler: function(val, oldVal) {
-          store.save2(val);
-        },
-        deep: true
       }
     }
   }
