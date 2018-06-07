@@ -58,7 +58,7 @@
         //页面请求
         exchangeGoodsInt(){
           var _this = this;
-          this.$http.post('/book/integral/get_productList.api', qs.stringify({
+          this.$http.post('/user/integral/get_productList.api', qs.stringify({
             pageNum: this.pageNum,
             pageSize: 8
           })).then((response) => {

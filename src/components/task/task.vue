@@ -90,7 +90,7 @@
         },
         //页面请求
         taskInt(){
-          this.$http.post('/book/integral/taskCenter', qs.stringify({
+          this.$http.post('/user/integral/taskCenter', qs.stringify({
             user_token: user_token,
             uuid: uuid,
             unionid:unionid,
@@ -134,7 +134,7 @@
         },
         //点击签到
         signup(){
-          this.$http.post('/api/integral/add_detail.api', qs.stringify({
+          this.$http.post('/user/integral/add_detail.api', qs.stringify({
             user_token: user_token,
             uuid: uuid,
             unionid:unionid,
@@ -143,17 +143,32 @@
           })).then((response) => {
             this.sign.isSignin = response.data.isSignin;
             this.continuitySign(response.data.nowDaynum);   //通过连续签到改变高亮的状态
-            //console.log(response.data)
+            console.log(response.data)
           });
         },
         //点击领积分跳转到精选
         getIntegral(){
-          this.$router.push({
+          this.$confirm('去精选页面赚取更多积分', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              this.$router.push({
+                path: '/index/two',
+                name: 'two',
+                params: {
+                }
+              })
+            })
+            .catch(() => {
+            });
+          /*this.$router.push({
             path: '/index/two',
             name: 'two',
             params: {
             }
-          })
+          })*/
         }
       },
 

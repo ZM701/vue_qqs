@@ -71,7 +71,7 @@
         },
         //页面请求
         strategyInt(){
-          this.$http.post('/book/integral/findStrategy').then((response) => {
+          this.$http.post('/user/integral/findStrategy').then((response) => {
             this.strategy = response.data.strategy;
             //console.log(response.data)
           });

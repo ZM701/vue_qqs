@@ -67,7 +67,7 @@
       },
       //积分收入数据渲染
       incomeInt(){
-        this.$http.post('/book/integral/get_detail.api', qs.stringify({
+        this.$http.post('/user/integral/get_detail.api', qs.stringify({
           user_token: user_token,
           uuid: uuid,
           unionid:unionid,
