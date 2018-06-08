@@ -28,7 +28,6 @@
   import four from '../../components/four/four.vue';
   import five from '../../components/five/five.vue';
   import qs from 'qs';
-  import store from '../../store.js'
 
   export default {
     components: {
@@ -56,13 +55,9 @@
           {path: '/index/four', component: four},
           {path: '/index/five', component: five}
         ],
-        // test:store.fetch2(),
       }
     },
     created(){
-
-      // console.log(this.test[0])
-      //console.log(this.$route.path)
       this.judge();
       this.dataInit();
     },
@@ -78,9 +73,6 @@
         this.$root.eventHub.$emit('slideTab', mySwiper.activeIndex);
         //监听变化
         this.nowIndex = mySwiper.activeIndex;
-        /*this.test = [this.keyWords];
-        var val = JSON.parse(JSON.stringify(this.test))
-        store.save(val);*/
         this.keyWords = this.navList[mySwiper.activeIndex];
       });
       // 接收nav组件传过来的导航按钮索引值，跳转到相应内容区
@@ -91,10 +83,6 @@
       //接受nav组件传过来的keyWords
       this.$root.eventHub.$on('changeKeywords', (keyWords) => { // 点击导航键跳转相应内容区
         this.keyWords = keyWords
-        // this.test = [this.keyWords];
-        // var val = JSON.parse(JSON.stringify(this.test))
-        // store.save2(val);
-        // console.log(this.test[0])
       });
     },
     methods:{
