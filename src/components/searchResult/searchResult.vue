@@ -267,7 +267,7 @@
     position: absolute;
     width: 100%;
     top:90px;
-    bottom: 40px;
+    bottom: 50px;
   }
   /*搜索功能 开始*/
   .box1{
@@ -312,6 +312,7 @@
     margin-top: 60px;
     margin-bottom: 10px;
     display: flex;
+    background: #fff;
     flex-direction: row;
   }
   .atricle>div{
