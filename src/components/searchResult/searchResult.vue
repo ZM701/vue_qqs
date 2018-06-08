@@ -21,41 +21,59 @@
       <div @click="f2" :class="flage2?'active':'unacticve'">相关文章</div>
       <div @click="f3" :class="flage3?'active':'unacticve'">相关活动</div>
     </div>
+
+    <div class="relatives">
     <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
-    <div class="users" v-show="flage1">
-      <div v-for="(item,index) in info.user">
-        <img :src="item.image"/>
-        <span>{{item.nickname}}</span>
-      </div>
+    <div class="users relative" v-if="flage1">
+      <pull-to :bottom-load-method="loadMore">
+        <div v-for="(item,index) in user" class="userIn">
+          <img :src="item.image"/>
+          <span>{{item.nickname}}</span>
+        </div>
+      </pull-to>
     </div>
     <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
-    <div class="mainAtricle" v-show="flage2" v-for="(item,index) in info.article">
-      <div class="user"><img :src="item.image">{{item.nickname}}</div>
-      <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
-      <div class="articleContant">
-        <img :src="item.article_cover">
-        <div class="description">
-          <span>{{item.article_title}}</span>
-          <span>{{item.article_type}}</span>
-          <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item. article_agreenum}}</span>
-        </div>
+
+      <div v-if="flage2">
+        <pull-to :bottom-load-method="loadMore">
+          <div class="mainAtricle" v-for="(item,index) in article">
+            <div class="user"><img :src="item.image">{{item.nickname}}</div>
+            <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
+            <div class="articleContant">
+              <img :src="item.article_cover">
+              <div class="description">
+                <span>{{item.article_title}}</span>
+                <span>{{item.article_type}}</span>
+                <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item. article_agreenum}}</span>
+              </div>
+            </div>
+          </div>
+        </pull-to>
       </div>
-    </div>
+
     <!--相关活动----------------------------------------------------------------------------------------------------------------------------->
-    <div class="actives" v-show="flage3" v-for="(item,index) in info.activity">
-      <div class="articleContant">
-        <img :src="item.goods_banner">
-        <div class="description">
-          <span>{{item.title}}</span>
-          <span>参与人数:{{item.count}}</span>
+    <div v-if="flage3" >
+      <pull-to :bottom-load-method="loadMore">
+        <div class="actives" v-for="(item,index) in activity">
+          <div class="articleContant">
+            <img :src="item.goods_banner">
+            <div class="description">
+              <span>{{item.title}}</span>
+              <span>参与人数:{{item.count}}</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </pull-to>
     </div>
+
+    </div>
+
   </div>
 </template>
 
 <script>
   import qs from "qs";
+  import PullTo from 'vue-pull-to';
   import search from "../Search/Search";
   import store from '../../store.js'
   import {formatDate} from '../../../static/js/common.js';
@@ -66,10 +84,14 @@
         flage2:false,
         flage3:false,
         info:[],
+        user:[],
+        article:[],
+        activity:[],
         status:1, // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
         loading:false,
         flag:true,
         con:[],
+        pageNum:1,
         test:store.fetch(),
         searchCon:'',
         input:$("el-input").val() || this.$route.params.keyWords,
@@ -84,7 +106,8 @@
       }
     },
     components:{
-      'v-search':search
+      'v-search':search,
+        PullTo
     },
     created(){
    // console.log(this.$route.params.keyWords)
@@ -98,33 +121,48 @@
         this.flage2 = false;
         this.flage3 = false;
         this.status = 1;
-        this.information();
+        //this.information();
       },
       f2(){
         this.flage1 = false;
         this.flage2 = true;
         this.flage3 = false;
         this.status = 2;
-        this.information();
+       // this.information();
       },
       f3(){
         this.flage1 = false;
         this.flage2 = false;
         this.flage3 = true;
         this.status = 3;
-        this.information();
+        //this.information();
       },
       information(){
+       // console.log(this.pageNum)
         var _this = this;
         this.$http.post('/api/article/search', qs.stringify({
           uid: uid,
           keywords: this.input,
-          pageNum: 1,
+          pageNum: this.pageNum,
           pageSize: 5,
           status:this.status   // 3:activity相关活动   2:article 相关文章  1:user相关用户  0:所有
         })).then((response) => {
-          _this.info = response.data.search;
-         // console.log(_this.info)
+          if(this.status==1){
+            var temp = response.data.search.user;
+            _this.user = _this.user.concat(temp);
+          }
+          else if(this.status==2){
+            var temp = response.data.search.article;
+          //  console.log(response.data)
+            _this.article = _this.article.concat(temp);
+          }
+          else if(this.status==3){
+            var temp = response.data.search.activity;
+            _this.activity = _this.activity.concat(temp);
+          }
+         // _this.info = response.data.search;
+          //console.log(_this.article)
+         // console.log(response.data.search.article)
         });
       },
       //回车搜索
@@ -160,6 +198,44 @@
         this.information();
         //console.log(_this.con)
       },
+      //下拉加载
+      loadMore(loaded) {
+        // console.log(this.status)
+        setTimeout(() => {
+          if(this.status==1){
+            this.pageNum = this.pageNum+1;
+          }
+          if(this.status==2){
+            this.pageNum = this.pageNum+1;
+          }
+          if(this.status==3){
+            this.pageNum = this.pageNum+1;
+          }
+          this.information();
+          loaded('done');
+        }, 500);
+      },
+      /*loadMore1(loaded) {
+        setTimeout(() => {
+          this.pageNum = this.pageNum+1;
+          this.information();
+          loaded('done');
+        }, 500);
+      },
+      loadMore2(loaded) {
+        setTimeout(() => {
+          this.pageNum = this.pageNum+1;
+          this.information();
+          loaded('done');
+        }, 500);
+      },
+      loadMore3(loaded) {
+        setTimeout(() => {
+          this.pageNum = this.pageNum+1;
+          this.information();
+          loaded('done');
+        }, 500);
+      },*/
   },
     filters: {
       //时间戳的转换
@@ -168,11 +244,31 @@
         return formatDate(date, 'yyyy-MM-dd');
         // return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
+    },
+    watch:{
+      status(val, oldVal){//普通的watch监听
+        this.pageNum = 1;  //每次改变的时候初始化
+        this.user = [];
+        this.article = [];
+        this.activity = [];
+        this.information()
+        // console.log(this.pageNum)
+        /*this.user = [];
+        this.article = [];
+        this.activity = [];*/
+      },
     }
   }
 </script>
 
 <style scoped>
+  .relatives{
+    background: #fff;
+    position: absolute;
+    width: 100%;
+    top:90px;
+    bottom: 40px;
+  }
   /*搜索功能 开始*/
   .box1{
     width: 30px;
@@ -241,11 +337,10 @@
     overflow: hidden;
     margin-bottom: -15px;
   }
-  .users>div{
+  .users .userIn{
     float: left;
     width: 60px;
     height: 60px;
-    border-radius: 50%;
     margin-left: 3%;
     margin-bottom: 20px;
     text-align: center;
@@ -255,8 +350,8 @@
   }
   .users div img{
     border-radius: 50%;
-    width: 100%;
-    height: 100%;
+    width: 60px;
+    height: 60px;
   }
   .users span{
     display: block;

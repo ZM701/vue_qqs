@@ -10,12 +10,12 @@
       </div>
       <!--投票活动-->
       <div class="vote">
-        <div class="title">投票活动</div>
+        <div class="titles">投票活动</div>
         <!--<div class="voteBox">-->
           <!--<pull-to :bottom-load-method="loadMore">-->
             <div>
               <dl v-for="(item,index) in activeList">
-                <dd class="title">{{item.title}}</dd>
+                <dd class="titles">{{item.title}}</dd>
                 <dd class="time"><i class="glyphicon glyphicon-time"></i>{{ item.start_time }}~{{ item.end_time }}</dd>
                 <dt @click="loopVote"><img :src="item.goods_banner"/></dt>
               </dl>
@@ -106,14 +106,14 @@
     bottom: 50px;
     /*z-index: -99;*/
   }
-  .vote div.title{
-    background: #e4e7ed;
+  .vote div.titles{
+    background: rgba(228,231,237,0.5);
+    /*background: #e4e7ed;*/
     height: 40px;
     line-height: 40px;
     padding-left: 10px;
-    margin-bottom: 5px;
   }
-  .vote dl dd.title{
+  .vote dl dd.titles{
     width: 100%;
     white-space: nowrap;
     overflow: hidden;

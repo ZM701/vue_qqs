@@ -2,7 +2,7 @@
   <div>
     <!--滑块区域-->
     <div class="swiper-box">
-      <pull-to :top-load-method="refresh" :bottom-load-method="loadMore">
+      <pull-to :bottom-load-method="loadMore">
         <div class="swiper-container">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(item, index) in list">
@@ -60,37 +60,11 @@
       }
     },
     created(){
-      this.dataInit();
+
       // console.log(this.test[0])
       //console.log(this.$route.path)
-      if(this.$route.path == '/index/one' || this.$route.path == '/index'){
-        this.keyWords='关注'
-      }else if(this.$route.path == '/index/two'){
-        this.keyWords='精选'
-      }else if(this.$route.path == '/index/three'){
-        this.keyWords='三农'
-      }else if(this.$route.path == '/index/four'){
-        this.keyWords='音乐'
-      }else if(this.$route.path == '/index/five'){
-        this.keyWords='旅游'
-      }
-      // else if(this.$route.path == '/index/one'){
-      //   this.keyWords='宠物'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='搞笑'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='育儿'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='精选'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='历史'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='游戏'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='情感'
-      // }else if(this.$route.path == '/index/one'){
-      //   this.keyWords='星座'
-      // }
+      this.judge();
+      this.dataInit();
     },
     mounted() {
 
@@ -124,6 +98,37 @@
       });
     },
     methods:{
+      judge(){
+        if(this.$route.path == '/index/one' || this.$route.path == '/index'){
+          this.keyWords='关注'
+        }else if(this.$route.path == '/index/two'){
+          this.keyWords='精选'
+        }else if(this.$route.path == '/index/three'){
+          this.keyWords='三农'
+        }else if(this.$route.path == '/index/four'){
+          this.keyWords='音乐'
+        }else if(this.$route.path == '/index/five'){
+          this.keyWords='旅游'
+        }
+        // else if(this.$route.path == '/index/one'){
+        //   this.keyWords='宠物'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='搞笑'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='育儿'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='精选'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='历史'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='游戏'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='情感'
+        // }else if(this.$route.path == '/index/one'){
+        //   this.keyWords='星座'
+        // }
+      },
+      //页面初始化
       dataInit() {
         //console.log(this.keyWords)
         var that = this;
@@ -183,13 +188,6 @@
           loaded('done');
         }, 500);
       },
-      refresh(loaded){
-        /*setTimeout(() => {
-          this.pageNum = 1;
-          this.dataInit();
-          loaded('done');
-        }, 500);*/
-      }
     },
     watch:{
       nowIndex(val, oldVal){//普通的watch监听
@@ -201,7 +199,11 @@
         this.pageNum = 1;  //每次改变的时候初始化
         this.dataInit();
         this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
-      }
+      },
+      '$route' (to,from) {
+        this.judge();
+        this.dataInit();
+      },
     }
   }
 </script>

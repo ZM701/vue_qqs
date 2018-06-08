@@ -151,7 +151,8 @@
   .navMy{
     width: 100%;
     overflow: hidden;
-    margin: 10px;
+    padding: 10px;
+    background: #fff;
   }
   .navMy span{
     text-align: left;

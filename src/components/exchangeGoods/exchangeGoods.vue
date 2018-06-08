@@ -64,9 +64,11 @@
 
 <style scoped>
   .exchange_box{
+    width: 100%;
     position: absolute;
     top:0;
     left: 0;
+    bottom: 40px;
   }
   .navMy{
     width: 100%;
