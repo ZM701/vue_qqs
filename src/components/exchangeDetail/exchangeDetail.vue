@@ -9,21 +9,18 @@
       </div>
       <div class="exchangeDetail" v-else>
         <div class="navChange"><span>兑换商品</span></div>
-        <pull-to :bottom-load-method="loadMore">
           <div class="loaded">
             <dl v-for="(item,index) in goods" @click="detail(index)">
               <dt><img :src="'https://imgs.nanniwan.com/'+item.goods_img"></dt>
               <dd><span>{{item.goods_name}}</span><span class="money">{{item.price}}元 <span class="oldPrice" v-if="item.goods_price==0">{{item.price}}元</span><span class="oldPrice" v-else>{{item.wholesale_price}}元</span> </span></dd>
             </dl>
           </div>
-        </pull-to>
       </div>
     </div>
 </template>
 
 <script>
   import qs from 'qs';
-  import PullTo from 'vue-pull-to';
     export default {
       props:{
         'productList':{
@@ -38,9 +35,6 @@
           goods:[],  //存储获取的商品信息列表
           pageNum:1,   //当前页数
         }
-      },
-      components:{
-        PullTo
       },
       created(){
         this.exchangeGoodsInt()
@@ -67,12 +61,12 @@
             //console.log(this.goods)
           });
         },
-        //下拉加载
-        loadMore(loaded) {
+        //下拉加载(接收父组件传过来的事件 exchangeGoods)
+        loadMore() {
           setTimeout(() => {
             this.pageNum = this.pageNum+1;
             this.exchangeGoodsInt();
-            loaded('done');
+           // loaded('done');
           }, 500);
         },
         //点击兑换，弹出弹层
@@ -111,6 +105,7 @@
   }
   .exchangeDetail{
     margin-bottom: 40px;
+    height: auto;
   }
   .exchangeDetail dl{
     padding: 5px;

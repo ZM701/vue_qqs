@@ -5,41 +5,43 @@
       <span>我的文章</span>
     </div>
     <!--全部文章------------------------------------------------>
-    <pull-to :bottom-load-method="loadMore">
-     <div class="totalArticle"  v-for="(item,index) in info">
-       <div class="edit">
-         <!--article_status  0=草稿          article_authority  0=公开-->
-         <span v-show="item.article_status==0">草稿</span>
-         <span v-show="item.article_status==1">公开</span>
-         <span>{{item.article_sendtime*1000 | formatDate}}&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
-         <span class="glyphicon glyphicon-tasks" @click="f3(index)"></span>
-         <div style="clear:both;"></div>
-         <div class="reEdit" v-show="flage3">
-           <ul>
-             <li @click="deleted(index,item.article_id)">删除</li>
-             <!--<li>再次编辑</li>-->
-           </ul>
-         </div>
-       </div>
-       <div class="articleContent">
-         <div class="articleTitle">
-           {{item.article_title}}
-         </div>
-         <div class="articleImages" v-show="item.imgSrc.length==0">
-           <div><img :src="item.article_cover"/></div>
-         </div>
-         <div class="articleImages" v-for="(imgs,index) in item.imgSrc">
-           <div><img :src="imgs"/></div>
-         </div>
-       </div>
-       <div class="articleDescription">
-         <span><img :src="item.image"/>{{item.nickname}}</span>
-         <span>评论{{item.article_agreenum}}</span>
-         <span>转发{{item.article_agreenum}}</span>
-         <!--<span>赏金7869</span>-->
-       </div>
-     </div>
-    </pull-to>
+    <div class="total">
+      <pull-to :bottom-load-method="loadMore">
+        <div class="totalArticle"  v-for="(item,index) in info">
+          <div class="edit">
+            <!--article_status  0=草稿          article_authority  0=公开-->
+            <span v-show="item.article_status==0">草稿</span>
+            <span v-show="item.article_status==1">公开</span>
+            <span>{{item.article_sendtime*1000 | formatDate}}&nbsp;&nbsp;阅读量{{item.article_readnum}}</span>
+            <span class="glyphicon glyphicon-tasks" @click="f3(index)"></span>
+            <div style="clear:both;"></div>
+            <div class="reEdit" v-show="flage3">
+              <ul>
+                <li @click="deleted(index,item.article_id)">删除</li>
+                <!--<li>再次编辑</li>-->
+              </ul>
+            </div>
+          </div>
+          <div class="articleContent">
+            <div class="articleTitle">
+              {{item.article_title}}
+            </div>
+            <div class="articleImages" v-show="item.imgSrc.length==0">
+              <div><img :src="item.article_cover"/></div>
+            </div>
+            <div class="articleImages" v-for="(imgs,index) in item.imgSrc">
+              <div><img :src="imgs"/></div>
+            </div>
+          </div>
+          <div class="articleDescription">
+            <span><img :src="item.image"/>{{item.nickname}}</span>
+            <span>评论{{item.article_agreenum}}</span>
+            <span>转发{{item.article_agreenum}}</span>
+            <!--<span>赏金7869</span>-->
+          </div>
+        </div>
+      </pull-to>
+    </div>
   </div>
 </template>
 
@@ -143,6 +145,12 @@
 </script>
 
 <style scoped>
+  .total{
+    position: absolute;
+    bottom: 10px;
+    top:35px;
+    width: 100%;
+  }
   .navMy{
     width: 100%;
     overflow: hidden;

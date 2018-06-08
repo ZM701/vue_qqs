@@ -1,28 +1,35 @@
 <template>
 <div>
-  <div class="navMy">
-    <span @click="goback"><i class="glyphicon glyphicon-chevron-left"></i></span>
-    <span>兑换商品</span>
-  </div>
-  <div class="navCoin">
-    <div><span>总积分（个）</span><span class="coinNum">{{money}}</span></div>
-    <div><span>兑换规则</span></div>
-  </div>
-  <div>
-    <exchange-detail></exchange-detail>
-  </div>
-  <div class="footerBar">
-    <span>想要兑换更多的商品，马上做任务赚钱吧</span>
-    <span @click="goTask">做任务赚钱</span>
+  <div class="exchange_box">
+    <pull-to :bottom-load-method="loadMores">
+    <div class="navMy">
+      <span @click="goback"><i class="glyphicon glyphicon-chevron-left"></i></span>
+      <span>兑换商品</span>
+    </div>
+    <div class="navCoin">
+      <div><span>总积分（个）</span><span class="coinNum">{{money}}</span></div>
+      <div><span>兑换规则</span></div>
+    </div>
+    <div>
+      <exchange-detail ref="child"></exchange-detail>
+    </div>
+
+    <div class="footerBar">
+      <span>想要兑换更多的商品，马上做任务赚钱吧</span>
+      <span @click="goTask">做任务赚钱</span>
+    </div>
+    </pull-to>
   </div>
 </div>
 </template>
 
 <script>
   import exchangeDetail from '../exchangeDetail/exchangeDetail'
+  import PullTo from 'vue-pull-to';
     export default {
       components:{
-        exchangeDetail
+        exchangeDetail,
+        PullTo
       },
       data(){
         return{
@@ -30,6 +37,11 @@
         }
       },
       methods: {
+        //向子组件excahngeDetail发送事件
+        loadMores(loaded){
+          this.$refs.child.loadMore(loaded);
+          loaded('done');
+        },
         // 返回到上一层
         goback() {
           this.$router.push({
@@ -51,6 +63,11 @@
 </script>
 
 <style scoped>
+  .exchange_box{
+    position: absolute;
+    top:0;
+    left: 0;
+  }
   .navMy{
     width: 100%;
     overflow: hidden;
@@ -80,7 +97,11 @@
     font-weight: bold;
   }
   .footerBar{
-    margin-top: 10px;
+    padding-top: 10px;
+    background: #fff;
+    /*position: fixed;
+    bottom: 0px;*/
+    width: 100%;
   }
   .footerBar span:last-of-type{
     width: 200px;

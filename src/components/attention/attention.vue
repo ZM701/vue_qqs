@@ -116,7 +116,10 @@
     margin-right: 4px;
   }
   .pull{
-    /*border:1px solid red;*/
+    position: absolute;
+    top:10px;
+    bottom: 20px;
+    width: 100%;
     margin-top: 30px;
     z-index: -111;
   }

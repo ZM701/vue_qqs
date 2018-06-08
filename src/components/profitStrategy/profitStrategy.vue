@@ -8,7 +8,7 @@
         <div @click="f1" :class="flage1?'active':''">图文教程</div>
         <div @click="f2" :class="flage2?'active':''">视频教程</div>
       </div>
-      <div v-if="flage1" class="box1">
+      <div v-if="flage1" class="box1_strategy">
         <ul v-for="(item,index) in strategy">
           <li @click="changeContent(index)">{{item.title}}<i class="glyphicon glyphicon-chevron-down glyphicon-chevron-up"></i>
             <transition name="fade">
@@ -19,7 +19,7 @@
           </li>
         </ul>
       </div>
-      <div v-if="flage2" class="box2">
+      <div v-if="flage2" class="box2_strategy">
         敬请期待
       </div>
 
@@ -103,13 +103,16 @@
     text-align: center;
     padding-bottom: 10px;
   }
-  .box1>ul>li{
+  .box1_strategy{
+    width: 100%;
+  }
+  .box1_strategy>ul>li{
     width: 100%;
     padding: 10px;
     border-bottom: 1px solid #e4e7ed;
     position: relative;
   }
-  .box1>ul>li i{
+  .box1_strategy>ul>li i{
     position: absolute;
     right: 5px;
     top:10px;

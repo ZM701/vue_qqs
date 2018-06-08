@@ -74,7 +74,7 @@
   }
   .display{
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
   }
   .add{
     display: block;

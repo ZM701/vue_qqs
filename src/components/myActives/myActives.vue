@@ -119,8 +119,10 @@
 <style scoped>
   .navMy{
     width: 100%;
+    height: auto;
     overflow: hidden;
-    margin: 10px;
+    padding: 10px;
+    background: #fff;
   }
   .navMy span{
     text-align: left;
@@ -148,8 +150,12 @@
     line-height: 30px;
   }
   .joinActivities{
-    margin-bottom: 50px;
+    width: 100%;
+    position: absolute;
+    top:35px;
+    bottom: 20px;
     padding: 5px;
+    z-index: -99;
   }
   .joinActivities .myJoin{
     overflow: hidden;

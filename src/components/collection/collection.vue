@@ -9,12 +9,12 @@
         <div @click="f2" :class="flage2?'active':''">视频</div>
       </div>
 
-      <div v-if="flage1" >
+      <div v-if="flage1" class="box1_collection">
         <pull-to :bottom-load-method="loadMore">
           <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
         </pull-to>
       </div>
-      <div v-if="flage2" >
+      <div v-if="flage2" class="box2_collection">
         <pull-to :bottom-load-method="loadMore">
           <v-article :msg="msg" :icon="icon" @childSay="listenToF3" @childCollectionSay="listenToCollection"></v-article>
         </pull-to>
@@ -141,6 +141,13 @@
 </script>
 
 <style scoped>
+  .box1_collection,.box2_collection{
+    width: 100%;
+    bottom: 20px;
+    top:80px;
+    position: absolute;
+    z-index: -99;
+  }
   .navMy{
     width: 100%;
     overflow: hidden;
@@ -153,6 +160,7 @@
     margin-right: 4px;
   }
   .collentionNav{
+    background: #fff;
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;

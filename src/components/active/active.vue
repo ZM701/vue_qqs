@@ -1,5 +1,7 @@
 <template>
     <div>
+      <div class="voteBox">
+      <pull-to :bottom-load-method="loadMore">
       <div class="swipe-wrapper">
         <mt-swipe :auto="3000" ref="swipeWrapper">
           <mt-swipe-item class="swip-item-1 item"><img src="../../../static/images/p1.jpg"/></mt-swipe-item>
@@ -9,15 +11,19 @@
       <!--投票活动-->
       <div class="vote">
         <div class="title">投票活动</div>
-        <pull-to :bottom-load-method="loadMore">
-          <div>
-            <dl v-for="(item,index) in activeList">
-              <dd class="title">{{item.title}}</dd>
-              <dd class="time"><i class="glyphicon glyphicon-time"></i>{{ item.start_time }}~{{ item.end_time }}</dd>
-              <dt @click="loopVote"><img :src="item.goods_banner"/></dt>
-            </dl>
-          </div>
-        </pull-to>
+        <!--<div class="voteBox">-->
+          <!--<pull-to :bottom-load-method="loadMore">-->
+            <div>
+              <dl v-for="(item,index) in activeList">
+                <dd class="title">{{item.title}}</dd>
+                <dd class="time"><i class="glyphicon glyphicon-time"></i>{{ item.start_time }}~{{ item.end_time }}</dd>
+                <dt @click="loopVote"><img :src="item.goods_banner"/></dt>
+              </dl>
+            </div>
+          <!--</pull-to>-->
+        <!--</div>-->
+      </div>
+      </pull-to>
       </div>
     </div>
 </template>
@@ -87,6 +93,18 @@
   /*投票活动*/
   .vote{
     margin-bottom: 50px;
+    /*position: relative;*/
+    height: 100%;
+  }
+  .voteBox{
+    /*background: #fff;*/
+    width: 100%;
+    position: absolute;
+    top:0;
+    /*height: 500px;*/
+    /*top:185px;*/
+    bottom: 50px;
+    /*z-index: -99;*/
   }
   .vote div.title{
     background: #e4e7ed;

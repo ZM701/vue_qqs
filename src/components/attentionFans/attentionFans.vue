@@ -103,8 +103,8 @@
     height: 50px;
   }
   .userinfo .box1 img{
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
   }
   .userinfo .box2{
     width: 58%;
