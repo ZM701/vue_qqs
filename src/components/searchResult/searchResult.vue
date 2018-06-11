@@ -22,7 +22,7 @@
       <div @click="f3" :class="flage3?'active':'unacticve'">相关活动</div>
     </div>
 
-    <div class="relatives">
+    <div class="relatived">
     <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
     <div class="users relative" v-if="flage1">
       <pull-to :bottom-load-method="loadMore">
@@ -33,18 +33,19 @@
       </pull-to>
     </div>
     <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
-
       <div v-if="flage2">
         <pull-to :bottom-load-method="loadMore">
-          <div class="mainAtricle" v-for="(item,index) in article">
-            <div class="user"><img :src="item.image">{{item.nickname}}</div>
-            <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
-            <div class="articleContant">
-              <img :src="item.article_cover">
-              <div class="description">
-                <span>{{item.article_title}}</span>
-                <span>{{item.article_type}}</span>
-                <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item. article_agreenum}}</span>
+          <div class="bb">
+            <div class="mainAtricle" v-for="(item,index) in article">
+              <div class="user"><img :src="item.image">{{item.nickname}}</div>
+              <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
+              <div class="articleContant">
+                <img :src="item.article_cover">
+                <div class="description">
+                  <span>{{item.article_title}}</span>
+                  <span>{{item.article_type}}</span>
+                  <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item. article_agreenum}}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -262,12 +263,15 @@
 </script>
 
 <style scoped>
-  .relatives{
+  .relatived{
     background: #fff;
     position: absolute;
     width: 100%;
-    top:90px;
-    bottom: 50px;
+    height: auto;
+    z-index: -99;
+    overflow:scroll;
+    top:92px;
+    bottom: 0px;
   }
   /*搜索功能 开始*/
   .box1{
@@ -302,6 +306,7 @@
     padding-top: 10px;
     padding-left: 10px;
     background: #fff;
+    /*border:1px solid red;*/
   }
   .sousuo{
     line-height: 40px;
@@ -309,8 +314,13 @@
   /*搜索功能 结束*/
 
   .atricle{
-    margin-top: 60px;
-    margin-bottom: 10px;
+    position: fixed;
+    width: 100%;
+    top:16px;
+    left: 0;
+    padding-top: 10px;
+    margin-top:34px;
+    padding-bottom: 10px;
     display: flex;
     background: #fff;
     flex-direction: row;
