@@ -173,6 +173,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    /*flex-direction: row;*/
     -webkit-box-align: middle;
     -ms-flex-align: middle;
     align-items: middle;

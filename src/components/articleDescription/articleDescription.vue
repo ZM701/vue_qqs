@@ -4,7 +4,7 @@
         <span @click="goback"><i class="	glyphicon glyphicon-chevron-left"></i></span>
         <span>关注</span>
       </div>-->
-      <div style="padding-bottom: 50px;" v-if="msgInfo!=null">
+      <div style="padding-bottom: 10px;" v-if="msgInfo!=null">
         <div class="user">
           <div><img :src="msgInfo.image"/></div>
           <div><span>{{msgInfo.nickname}}</span><span>粉丝{{fansNum}}</span></div>
@@ -35,16 +35,27 @@
           </div>
         </div>
       </div>
+
+      <!--显示相关的评论-->
+      <div class="newComment">
+        <div class="commentTitle">最新评论</div>
+        <div v-for="(item,index) in newComment" class="commentList">
+          <div class="imgs"><img :src="'https://imgs.nanniwan.com/'+item.image"></div>
+          <div class="commentInfo"><span>{{item.nickname}}</span> <span>{{item.comments_info}}</span> <span>{{ item.comments_time*1000 | formatDate1 }}</span></div>
+        </div>
+      </div>
+      <!--底部信息-->
       <div class="footBanner"  v-if="msgInfo!=null">
-        <div>评论{{msgInfo.article_commentnum}}</div>
+        <div @click="recomment"><i class="glyphicon glyphicon-edit"></i><input placeholder="写评论" readonly/>评论{{msgInfo.article_commentnum}}</div>
         <div @click="collectionPage(msgInfo.article_id)">收藏</div>
-        <div>分享{{msgInfo.article_transpondnum}}</div>
+        <div @click="share">分享{{msgInfo.article_transpondnum}}</div>
       </div>
     </div>
 </template>
 
 <script>
   import qs from 'qs';
+  import wx from 'weixin-js-sdk';
   import {formatDate} from '../../../static/js/common.js';
     export default {
       data(){
@@ -57,6 +68,7 @@
           article_id:this.$route.params.article_id,   //文章id
           state:null,   //0=未关注 1=关注
           sourceType:this.$route.params.sourceType,  //0文章  1视频
+          newComment:[],   //最新评论的相关信息列表
         }
       },
       created(){
@@ -74,6 +86,8 @@
         }
         //调用滚动事件
         this.scroll();
+        //评论事件
+        this.comment();
       },
       mounted(){
         //文章篇幅过短判断是否读完的处理
@@ -142,10 +156,10 @@
             this.total = response.data;
             this.msgInfo = response.data.article;
             this.fansNum = response.data.fansNum;
-            //console.log(response.data);
+           // console.log(response.data);
           }, response => {
             console.log("获取信息失败");
-            console.log(response);
+            //console.log(response);
           })
         },
         //点击收藏
@@ -179,9 +193,21 @@
            // console.log(article_ids)
             // 距离底部的距离
             let bottomOfWindow = document.documentElement.scrollHeight-document.documentElement.scrollTop-document.documentElement.clientHeight
-            if(bottomOfWindow<=200){
-              //调用文章读完的接口
-             this.articleEnd();
+            /*if(bottomOfWindow<=200){
+              this.articleEnd();
+            }*/
+            if(bottomOfWindow==0){
+              this.$confirm('阅读完成', '提示', {
+                confirmButtonText: '确定',
+                type: 'success'
+              })
+                .then(() => {
+                  //调用文章读完的接口
+                  this.articleEnd();
+                })
+                .catch(() => {
+
+                });
             }
           }
         },
@@ -192,10 +218,143 @@
             uid:uid,
             article_id:_this.article_id,
             from_type:0,
-            status:1
+            status:1 // status 0=文章未读完 1=文章读完 2=文章分享转发
           })).then((response) => {
             //console.log(response.data)
           });
+        },
+        //评论接口
+        comment(){
+          this.$http.get("/api/article/article_comments.api", {
+            params: {
+              article_id:this.article_id,
+              pageNum:1,
+              pageSize:5
+            }
+          }).then(response => {
+            this.newComment = response.data.pageBean.list;
+             //console.log(response.data);
+          }, response => {
+            console.log("获取信息失败");
+            console.log(response);
+          })
+        },
+        //点击评论
+        recomment(){
+          this.$prompt('', '评论', {
+            confirmButtonText: '确定',
+            type: 'success'
+          })
+            .then(() => {
+              this.$http.get('/api/article/comments_save.api', {
+                params: {
+                  article_id:this.article_id,
+                  uid:uid,
+                  comments_info:$(".el-input input").val()
+                }
+              }).then((response) => {
+                this.comment()
+              });
+               //console.log($(".el-input input").val())
+            })
+            .catch(() => {
+
+            });
+        },
+        //点击分享
+        share(){
+          /*this.$http.post('/api/article/mark_info', qs.stringify({
+            uid:uid,
+            article_id:this.article_id,
+            from_type:0,
+            status:2 // status 0=文章未读完 1=文章读完 2=文章分享转发
+          })).then((response) => {
+            this.detail();
+          });*/
+          wx.config({
+            debug: false,
+            appId: "wxe615a9a25d9f626e", // 和获取Ticke的必须一样------必填，公众号的唯一标识
+            timestamp:1528706022, // 必填，生成签名的时间戳
+            nonceStr: "qcrkpqEGgQKY04XS", // 必填，生成签名的随机串
+            signature: signature,// 必填，签名，见附录1
+            //需要分享的列表项:发送给朋友，分享到朋友圈，分享到QQ，分享到QQ空间
+            jsApiList: [
+              'onMenuShareAppMessage','onMenuShareTimeline',
+              'onMenuShareQQ','onMenuShareQZone'
+            ]
+          });
+          //处理验证失败的信息
+          wx.error(function (res) {
+            logUtil.printLog('验证失败返回的信息:',res);
+          });
+//处理验证成功的信息
+          wx.ready(function () {
+//       alert(window.location.href.split('#')[0]);
+            //分享到朋友圈
+            wx.onMenuShareTimeline({
+              title: _this.newDetailObj.title, // 分享标题
+              link: window.location.href.split('#')[0], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              success: function (res) {
+                // 用户确认分享后执行的回调函数
+                logUtil.printLog("分享到朋友圈成功返回的信息为:",res);
+                _this.showMsg("分享成功!")
+              },
+              cancel: function (res) {
+                // 用户取消分享后执行的回调函数
+                logUtil.printLog("取消分享到朋友圈返回的信息为:",res);
+              }
+            });
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+              title: _this.newDetailObj.title, // 分享标题
+              desc: _this.desc, // 分享描述
+              link: window.location.href.split('#')[0], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              type: '', // 分享类型,music、video或link，不填默认为link
+              dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+              success: function (res) {
+                // 用户确认分享后执行的回调函数
+                logUtil.printLog("分享给朋友成功返回的信息为:",res);
+              },
+              cancel: function (res) {
+                // 用户取消分享后执行的回调函数
+                logUtil.printLog("取消分享给朋友返回的信息为:",res);
+              }
+            });
+            //分享到QQ
+            wx.onMenuShareQQ({
+              title: _this.newDetailObj.title, // 分享标题
+              desc: _this.desc, // 分享描述
+              link: window.location.href.split('#')[0], // 分享链接
+              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              success: function (res) {
+                // 用户确认分享后执行的回调函数
+                logUtil.printLog("分享到QQ好友成功返回的信息为:",res);
+              },
+              cancel: function (res) {
+                // 用户取消分享后执行的回调函数
+                logUtil.printLog("取消分享给QQ好友返回的信息为:",res);
+              }
+            });
+
+            //分享到QQ空间
+            wx.onMenuShareQZone({
+              title: _this.newDetailObj.title, // 分享标题
+              desc: _this.desc, // 分享描述
+              link: window.location.href.split('#')[0], // 分享链接
+              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              success: function (res) {
+                // 用户确认分享后执行的回调函数
+                logUtil.printLog("分享到QQ空间成功返回的信息为:",res);
+              },
+              cancel: function (res) {
+                // 用户取消分享后执行的回调函数
+                logUtil.printLog("取消分享到QQ空间返回的信息为:",res);
+              }
+            });
+          });
+
         }
       },
       filters: {
@@ -204,12 +363,19 @@
           var date = new Date(time);
           return formatDate(date, 'yyyy-MM-dd');
           // return formatDate(date, 'yyyy-MM-dd hh:mm');
+        },
+        formatDate1(time) {
+          var date = new Date(time);
+          return formatDate(date, 'yyyy-MM-dd hh:mm');
         }
       }
     }
 </script>
 
 <style scoped>
+  .el-input{
+    width: 100% !important;
+  }
   .navMy{
     width: 100%;
     overflow: hidden;
@@ -287,17 +453,73 @@
     left: 0;
     bottom: 0;
     background: #fff;
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
     display: flex;
     flex-direction: row;
   }
-  .footBanner div{
-    width: 100%;
+  .footBanner div:nth-of-type(2),.footBanner div:nth-of-type(3){
+    width: 150px;
+  }
+  /*写评论*/
+  .footBanner div:first-of-type{
+    text-align: left;
+    padding-left: 10px;
+  }
+  .footBanner div:first-of-type i{
+    position: absolute;
+    left: 5%;
+    top:18px;
+    z-index: 99;
+  }
+  .footBanner div:first-of-type input{
+    position: relative;
+    width: 50%;
+    margin-right: 2px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    height: 30px;
+    padding-left: 24px;
   }
   video{
     width: 100%;
     object-fit: fill;
   }
+  /*最新评论*/
+  .newComment{
+    margin-bottom: 100px;
+  }
+  .newComment .commentTitle{
+    font-size: 1.5rem;
+    padding: 5px;
+  }
+  .commentList{
+    width: 100%;
+    overflow: hidden;
+    margin: 5px 5px 10px 5px;
+  }
+  .commentList .imgs{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-right: 5px;
+  }
+  .commentList .commentInfo{
+    float: left;
+    width: 80%;
+  }
+  .commentList .commentInfo span{
+    color: #666;
+  }
+  .commentList .imgs img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  .share{
+    margin-bottom: 60px;
+  }
+
 </style>

@@ -13,6 +13,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'https://nwsapi.nanniwan.com/nws_cms',
+        // target: 'http://192.168.1.165:8080/nws_cms',
         changeOrigin: true,
         pathRewrite: {
           '^/api':''
@@ -20,6 +21,7 @@ module.exports = {
       },
       '/vote':{
         target: 'https://api.nanniwan.com/vote',
+        // target: ' http://192.168.1.160:1020/vote',
         changeOrigin: true,
         pathRewrite: {
           '^/vote':''

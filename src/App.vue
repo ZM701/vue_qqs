@@ -122,5 +122,8 @@
     width: 100% !important;
     top:50% !important;
   }
+  .el-input{
+    width: 100% !important;
+  }
 
 </style>

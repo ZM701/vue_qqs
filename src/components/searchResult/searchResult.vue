@@ -216,27 +216,6 @@
           loaded('done');
         }, 500);
       },
-      /*loadMore1(loaded) {
-        setTimeout(() => {
-          this.pageNum = this.pageNum+1;
-          this.information();
-          loaded('done');
-        }, 500);
-      },
-      loadMore2(loaded) {
-        setTimeout(() => {
-          this.pageNum = this.pageNum+1;
-          this.information();
-          loaded('done');
-        }, 500);
-      },
-      loadMore3(loaded) {
-        setTimeout(() => {
-          this.pageNum = this.pageNum+1;
-          this.information();
-          loaded('done');
-        }, 500);
-      },*/
   },
     filters: {
       //时间戳的转换
@@ -271,7 +250,7 @@
     z-index: -99;
     overflow:scroll;
     top:92px;
-    bottom: 0px;
+    bottom: 20px;
   }
   /*搜索功能 开始*/
   .box1{

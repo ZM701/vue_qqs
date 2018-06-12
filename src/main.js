@@ -81,6 +81,10 @@ Vue.use(VueRouter);
 import axios from 'axios'
 Vue.prototype.$http= axios
 
+// 利用分享插件
+import Share from 'vue-social-share'
+import 'vue-social-share/dist/client.css';
+Vue.use(Share)
 
 //引入vuex
 // import Vuex from 'vuex'
