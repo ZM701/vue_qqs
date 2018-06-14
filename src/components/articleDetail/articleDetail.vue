@@ -1,24 +1,9 @@
 <template>
 <div>
   <div v-for="(item,index) in msg">
-    <!--item.type == 0代表的是文章  1代表的是视频-->
-    <!--<router-link class="panel" v-if="item.type == 0 && item.imgSrc.length>1" :to="{
-      name:'articleDescription',
-      params:{
-      imgSrc:item.imgSrc,
-      userImage:item.image,
-      nickName:item.nickname,
-      article_title:item.article_title,
-      article_content:item.article_content,
-      article_sendtime:item.article_sendtime,
-      article_format:item.article_format,
-      uid:item.uid,
-      relation_status:item.relation_status,
-      article_commentnum:article_commentnum,
-      article_transpondnum:article_transpondnum
-    }}">-->
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
-    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
+      <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
+    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
     <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -45,7 +30,7 @@
     </div>
 
     <div  v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2' >
-    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
+    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
@@ -71,12 +56,10 @@
     </div>
 
     <div class="pane3"  v-if="item.type == 1">
-      <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,sourceType:item.type}}">
+      <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,sourceType:item.type}}">
       <div class="panelTitle">{{item.article_title}}</div>
       <div class="img_con">
-        <!--<router-link :to="{name:'videoDetail',params:{video_url:item.video_url}}"><video :src="item.video_url" class='videos'></video></router-link>-->
-        <!--<router-link :to="{name:'videoDetail',params:{video_url:item.video_url}}" class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></router-link>-->
-        <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
+       <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
       </div>
       </router-link>
       <div class="user_info">

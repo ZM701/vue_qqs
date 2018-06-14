@@ -19,7 +19,7 @@
       data(){
         return{
           msg:[],
-          articleType:11,   //
+          articleType:11,   // 传递给子组件让其判断是否显示热门推荐
         }
       },
       components:{

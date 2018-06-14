@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>{{items.name}}</div>
     <div style="padding-bottom: 10px;" v-if="msgInfo!=null">
       <div class="user">
         <div><img :src="msgInfo.image"/></div>
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+//  需要保存的数据    article_id
   import qs from 'qs';
   import wx from 'weixin-js-sdk';
   import article from "../articleDetail/articleDetail"
@@ -63,22 +65,33 @@
   export default {
     data(){
       return{
-        msgInfo:null,  //获取信息
+        msgInfo:{},  //获取信息
         msg:[],
         article_content:null, //内容
         article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
         fansNum:null, //粉丝数
         total:{}, //获取所有信息
         article_id:this.$route.params.article_id,   //文章id
+        article_ids:this.$route.params.article_ids,   //文章id
         state:null,   //0=未关注 1=关注
         sourceType:this.$route.params.sourceType,  //0文章  1视频
         newComment:[],   //最新评论的相关信息列表
+        items:{name:null}
       }
     },
     components:{
       'v-article':article
     },
     created(){
+        console.log(this.article_ids)
+      sessionStorage.setItem("name", this.article_ids); //HTML 5 Web 存储在客户端临时存储数据
+
+      //存储数据
+      /*this.test.unshift(this.article_id);
+      var val = JSON.parse(JSON.stringify(this.test))
+      store.save2(val);*/
+     // console.log(this.test);
+
       this.detail();
       var str = this.$route.params.article_content;
       if(this.article_format==1){
@@ -97,6 +110,7 @@
       this.comment();
     },
     mounted(){
+      this.items.name=sessionStorage.getItem("name");
       //文章篇幅过短判断是否读完的处理
       var _this = this;
       setTimeout(function(){
@@ -105,7 +119,6 @@
          global.totalTime = video.duration;*/
         if(articleHeight<=window.innerHeight){
           _this.articleEnd()
-          console.log(111)
         }
       },1000)
       //对视频是否看完的处理
@@ -158,7 +171,8 @@
         this.$http.get("/api/article/article_find.api", {
           params: {
             uid:uid,
-            article_id:this.article_id,
+            article_id:this.article_id || this.article_ids,
+//            article_id:this.test[2],
             tran:0,  //tran 是否为转发 0不是,1是
             article_format:1  // article_format 小程序=1 ,后台=0
           }
