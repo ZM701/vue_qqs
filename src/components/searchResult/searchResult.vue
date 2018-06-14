@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="search">
-      <div class="searchBar">
+    <!--<div id="search" style="border:1px solid red;">-->
+      <!--<div class="searchBar" style="border:1px solid #000;">-->
         <div class="top">
           <div @click="$router.go(-1)" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
           <el-input
@@ -13,8 +13,8 @@
           </el-input>
           <span class="sousuo" @click="search(input)">搜索</span>
         </div>
-      </div>
-    </div>
+      <!--</div>-->
+    <!--</div>-->
 
     <div class="atricle">
       <div @click="f1" :class="flage1?'active':'unacticve'">相关用户</div>
@@ -22,7 +22,10 @@
       <div @click="f3" :class="flage3?'active':'unacticve'">相关活动</div>
     </div>
 
-    <div class="relatived">
+
+
+    <!--<div>-->
+    <div class="distance">
     <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
     <div class="users relative" v-if="flage1">
       <pull-to :bottom-load-method="loadMore">
@@ -33,14 +36,14 @@
       </pull-to>
     </div>
     <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
-      <div v-if="flage2">
+      <div v-if="flage2" class="distanceArticle">
         <pull-to :bottom-load-method="loadMore">
           <div class="bb">
             <div class="mainAtricle" v-for="(item,index) in article">
               <div class="user"><img :src="item.image">{{item.nickname}}</div>
               <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
               <div class="articleContant">
-                <img :src="item.article_cover">
+                <div class="imgs"><img :src="item.article_cover"></div>
                 <div class="description">
                   <span>{{item.article_title}}</span>
                   <span>{{item.article_type}}</span>
@@ -53,11 +56,11 @@
       </div>
 
     <!--相关活动----------------------------------------------------------------------------------------------------------------------------->
-    <div v-if="flage3" >
+    <div v-if="flage3" class="distanceArticle">
       <pull-to :bottom-load-method="loadMore">
         <div class="actives" v-for="(item,index) in activity">
           <div class="articleContant">
-            <img :src="item.goods_banner">
+            <div class="imgs"><img :src="item.goods_banner"></div>
             <div class="description">
               <span>{{item.title}}</span>
               <span>参与人数:{{item.count}}</span>
@@ -66,8 +69,8 @@
         </div>
       </pull-to>
     </div>
-
     </div>
+    <!--<div style="border:10px solid red;">hah</div>-->
 
   </div>
 </template>
@@ -242,15 +245,11 @@
 </script>
 
 <style scoped>
-  .relatived{
-    background: #fff;
-    position: absolute;
+  .distanceArticle{
     width: 100%;
-    height: auto;
-    z-index: -99;
-    overflow:scroll;
-    top:92px;
-    bottom: 20px;
+    position: absolute;
+    top:90px;
+    bottom: 40px;
   }
   /*搜索功能 开始*/
   .box1{
@@ -266,23 +265,14 @@
   .box1,.box2{
     float: left;
   }
-  .red{
-    color: red;
-  }
-  .box3{
-    margin-top: 50px;
-  }
-  .searchBar {
-    margin-top: 1.3rem;
-    width: 100%;
-  }
   .top{
+    /*margin-top: 1.3rem;*/
     width: 100%;
     height: 50px;
     position: fixed;
     z-index: 99999999;
     top:0px;
-    padding-top: 10px;
+    /*padding-top: 10px;*/
     padding-left: 10px;
     background: #fff;
     /*border:1px solid red;*/
@@ -303,6 +293,7 @@
     display: flex;
     background: #fff;
     flex-direction: row;
+    z-index: 9999;
   }
   .atricle>div{
     width: 100%;
@@ -380,10 +371,14 @@
     overflow: hidden;
     border-bottom: 1px solid #F5F5F5;
   }
-  .articleContant img{
+  .articleContant .imgs{
     float: left;
     margin-right: 5px;
     width: 40%;
+    height: 100%;
+  }
+  .articleContant img{
+    width: 100%;
     height: 100%;
   }
   .articleContant .description{

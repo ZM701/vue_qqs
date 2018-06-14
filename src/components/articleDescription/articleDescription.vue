@@ -151,7 +151,7 @@
               article_id:this.article_id,
               tran:0,  //tran 是否为转发 0不是,1是
               article_format:1  // article_format 小程序=1 ,后台=0
-          }
+            }
           }).then(response => {
             this.total = response.data;
             this.msgInfo = response.data.article;
@@ -263,42 +263,45 @@
         },
         //点击分享
         share(){
-          /*this.$http.post('/api/article/mark_info', qs.stringify({
+          this.$http.post('/api/article/mark_info', qs.stringify({
             uid:uid,
             article_id:this.article_id,
             from_type:0,
             status:2 // status 0=文章未读完 1=文章读完 2=文章分享转发
           })).then((response) => {
-            this.detail();
-          });*/
-          wx.config({
+            //this.detail();
+          });
+         /* wx.config({
             debug: false,
             appId: "wxe615a9a25d9f626e", // 和获取Ticke的必须一样------必填，公众号的唯一标识
-            timestamp:1528706022, // 必填，生成签名的时间戳
-            nonceStr: "qcrkpqEGgQKY04XS", // 必填，生成签名的随机串
-            signature: signature,// 必填，签名，见附录1
+            timestamp:1528770763, // 必填，生成签名的时间戳
+            nonceStr: "ZBVcWpj3npo0FZId", // 必填，生成签名的随机串
+            signature: "7c225b2044a2c3ec40d0a830b3a7580426d5423b",// 必填，签名，见附录1
             //需要分享的列表项:发送给朋友，分享到朋友圈，分享到QQ，分享到QQ空间
             jsApiList: [
               'onMenuShareAppMessage','onMenuShareTimeline',
               'onMenuShareQQ','onMenuShareQZone'
             ]
-          });
+          });*/
           //处理验证失败的信息
-          wx.error(function (res) {
+         /* wx.error(function (res) {
             logUtil.printLog('验证失败返回的信息:',res);
-          });
+          });*/
 //处理验证成功的信息
-          wx.ready(function () {
+          /*wx.ready(function () {
+
 //       alert(window.location.href.split('#')[0]);
+
             //分享到朋友圈
             wx.onMenuShareTimeline({
-              title: _this.newDetailObj.title, // 分享标题
-              link: window.location.href.split('#')[0], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              title: "hhh", // 分享标题
+              link: "http://test.traineexp.com/#/index", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+             // imgUrl: _this.newDetailObj.thu_image, // 分享图标
               success: function (res) {
                 // 用户确认分享后执行的回调函数
-                logUtil.printLog("分享到朋友圈成功返回的信息为:",res);
-                _this.showMsg("分享成功!")
+                //logUtil.printLog("分享到朋友圈成功返回的信息为:",res);
+                //_this.showMsg("分享成功!")
+                _this.beforeShare()
               },
               cancel: function (res) {
                 // 用户取消分享后执行的回调函数
@@ -307,15 +310,16 @@
             });
             //分享给朋友
             wx.onMenuShareAppMessage({
-              title: _this.newDetailObj.title, // 分享标题
-              desc: _this.desc, // 分享描述
-              link: window.location.href.split('#')[0], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: _this.newDetailObj.thu_image, // 分享图标
+              title: "hhh", // 分享标题
+              desc: "啦啦啦", // 分享描述
+              link: "http://test.traineexp.com/#/index", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+             // imgUrl: _this.newDetailObj.thu_image, // 分享图标
               type: '', // 分享类型,music、video或link，不填默认为link
               dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
               success: function (res) {
+                _this.beforeShare();
                 // 用户确认分享后执行的回调函数
-                logUtil.printLog("分享给朋友成功返回的信息为:",res);
+                //logUtil.printLog("分享给朋友成功返回的信息为:",res);
               },
               cancel: function (res) {
                 // 用户取消分享后执行的回调函数
@@ -323,7 +327,7 @@
               }
             });
             //分享到QQ
-            wx.onMenuShareQQ({
+           wx.onMenuShareQQ({
               title: _this.newDetailObj.title, // 分享标题
               desc: _this.desc, // 分享描述
               link: window.location.href.split('#')[0], // 分享链接
@@ -339,7 +343,7 @@
             });
 
             //分享到QQ空间
-            wx.onMenuShareQZone({
+           wx.onMenuShareQZone({
               title: _this.newDetailObj.title, // 分享标题
               desc: _this.desc, // 分享描述
               link: window.location.href.split('#')[0], // 分享链接
@@ -353,7 +357,7 @@
                 logUtil.printLog("取消分享到QQ空间返回的信息为:",res);
               }
             });
-          });
+          });*/
 
         }
       },
@@ -466,14 +470,21 @@
   .footBanner div:first-of-type{
     text-align: left;
     padding-left: 10px;
+    overflow: hidden;
+    line-height: 50px;
   }
   .footBanner div:first-of-type i{
     position: absolute;
     left: 5%;
     top:18px;
     z-index: 99;
+    float: left;
+    vertical-align: middle;
   }
   .footBanner div:first-of-type input{
+    display: block;
+    float: left;
+    background: #fff;
     position: relative;
     width: 50%;
     margin-right: 2px;
@@ -481,7 +492,9 @@
     border-radius: 5px;
     outline: none;
     height: 30px;
+    line-height: 30px;
     padding-left: 24px;
+    margin-top: 10px;
   }
   video{
     width: 100%;

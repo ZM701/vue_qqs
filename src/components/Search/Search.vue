@@ -76,6 +76,8 @@
         })).then((response) => {
           this.hot = response.data.hot;
         });
+      //数组去重
+      this.test = [...new Set(this.test)];
     },
     beforeRouteLeave (to, from, next){
       if(to.name == 'home'){
