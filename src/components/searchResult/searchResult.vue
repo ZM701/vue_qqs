@@ -27,7 +27,7 @@
     <!--<div>-->
     <div class="distance">
     <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
-    <div class="users relative" v-if="flage1">
+    <div class="users relative distanceArticle" v-if="flage1">
       <pull-to :bottom-load-method="loadMore">
         <div v-for="(item,index) in user" class="userIn">
           <img :src="item.image"/>

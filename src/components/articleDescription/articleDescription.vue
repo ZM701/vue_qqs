@@ -10,12 +10,12 @@
           <div><span>{{msgInfo.nickname}}</span><span>粉丝{{fansNum}}</span></div>
           <!--<div class="attention">已关注</div>-->
           <!--0=未关注 1=关注-->
-          <div class="attention" v-if="total.relation_status == 0" @click="attentionClick(msgInfo.uid)" >关注</div>
-          <div class="attention already" v-if="total.relation_status == 1" @click="attentionClick(msgInfo.uid)" >已关注</div>
+          <div class="attentions attention" v-if="total.relation_status == 0" @click="attentionClick(msgInfo.uid)" >关注</div>
+          <div class="attentions already" v-if="total.relation_status == 1" @click="attentionClick(msgInfo.uid)" >已关注</div>
         </div>
         <div class="content">
-          <div>{{msgInfo.article_title}}</div>
-          <div>{{msgInfo.article_sendtime*1000 | formatDate}} 来自{{msgInfo.phone_type}} 浏览数{{msgInfo.article_readnum }}</div>
+          <div class="content_nav">{{msgInfo.article_title}}</div>
+          <div class="content_nav">{{msgInfo.article_sendtime*1000 | formatDate}} 来自{{msgInfo.phone_type}} 浏览数{{msgInfo.article_readnum }}</div>
           <!--对文章的处理-->
           <div v-if="sourceType==0" class="articleHeight">
             <div v-if="msgInfo.article_format==1">
@@ -44,10 +44,16 @@
           <div class="commentInfo"><span>{{item.nickname}}</span> <span>{{item.comments_info}}</span> <span>{{ item.comments_time*1000 | formatDate1 }}</span></div>
         </div>
       </div>
+      <!--热门推荐-->
+      <div class="hotRecommend">
+        <div>热门推荐</div>
+        <v-article :msg="msg"></v-article>
+
+      </div>
       <!--底部信息-->
       <div class="footBanner"  v-if="msgInfo!=null">
         <div @click="recomment"><i class="glyphicon glyphicon-edit"></i><input placeholder="写评论" readonly/>评论{{msgInfo.article_commentnum}}</div>
-        <div @click="collectionPage(msgInfo.article_id)">收藏</div>
+        <div @click="collectionPage(msgInfo.article_id)">收藏{{msgInfo.collectionNum}}</div>
         <div @click="share">分享{{msgInfo.article_transpondnum}}</div>
       </div>
     </div>
@@ -56,11 +62,13 @@
 <script>
   import qs from 'qs';
   import wx from 'weixin-js-sdk';
+  import article from "../articleDetail/articleDetail"
   import {formatDate} from '../../../static/js/common.js';
     export default {
       data(){
         return{
           msgInfo:null,  //获取信息
+          msg:[],
           article_content:null, //内容
           article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
           fansNum:null, //粉丝数
@@ -70,6 +78,9 @@
           sourceType:this.$route.params.sourceType,  //0文章  1视频
           newComment:[],   //最新评论的相关信息列表
         }
+      },
+      components:{
+        'v-article':article
       },
       created(){
         this.detail();
@@ -131,15 +142,15 @@
             this.state=response.data.relation_state;
             if(this.state==1){
               // 1  已关注
-              $(".attention").html("已关注")
-              $(".attention").removeClass("cancle")
-              $(".attention").addClass("already");
+              $(".attentions").html("已关注")
+              $(".attentions").removeClass("attention")
+              $(".attentions").addClass("already");
               // this.relation_status = 1;
             }
             if(this.state==0){
-              $(".attention").html("关注")
-              $(".attention").removeClass("already")
-              $(".attention").addClass("cancle")
+              $(".attentions").html("关注")
+              $(".attentions").removeClass("already")
+              $(".attentions").addClass("attention")
               // this.relation_status = 0;
             }
           });
@@ -156,7 +167,8 @@
             this.total = response.data;
             this.msgInfo = response.data.article;
             this.fansNum = response.data.fansNum;
-           // console.log(response.data);
+            this.msg = response.data.sameArticle;
+            console.log(response.data);
           }, response => {
             console.log("获取信息失败");
             //console.log(response);
@@ -182,6 +194,7 @@
                   type: 'success',
                   message: '收藏成功!'
                 });
+                this.detail();
               })
             })
             .catch(() => {
@@ -417,7 +430,7 @@
   .user>div:nth-of-type(2) span{
     text-align: left;
   }
-  .user>div:nth-of-type(3){
+  .user>div.attention{
     margin-top: 5px;
     float: right;
     border: 1px solid red;
@@ -427,6 +440,18 @@
     text-align: center;
     background: red;
     color: #fff;
+    border-radius: 5px;
+  }
+  .user>div.already{
+    margin-top: 5px;
+    float: right;
+    border: 1px solid #ccc;
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #fff;
+    color: #ccc;
     border-radius: 5px;
   }
   .content1{
@@ -439,18 +464,13 @@
   .content1>div:nth-of-type(2){
     margin-bottom: 10px;
   }
+  .content_nav{
+    padding: 0 5px;
+  }
   p,span{
     text-align: left !important;
   }
-    .already{
-      /*background: #e0e0e0;*/
-      color: #D4D4D4;
-      border: 1px solid #D4D4D4;
-    }
-  .cancle{
-      color: #000;
-      border:1px solid red;
-    }
+
   .footBanner{
     width: 100%;
     position: fixed;
@@ -502,7 +522,7 @@
   }
   /*最新评论*/
   .newComment{
-    margin-bottom: 100px;
+    margin-bottom: 10px;
   }
   .newComment .commentTitle{
     font-size: 1.5rem;
@@ -534,5 +554,8 @@
   .share{
     margin-bottom: 60px;
   }
-
+  /*热门推荐*/
+  .hotRecommend{
+    margin-bottom: 60px;
+  }
 </style>

@@ -59,7 +59,7 @@
     },
     created(){
       this.judge();
-      this.dataInit();
+      //this.dataInit();   //在监听关键词的时候调用
     },
     mounted() {
 
@@ -185,7 +185,7 @@
       },
       keyWords(val, oldVal){//普通的watch监听
         this.pageNum = 1;  //每次改变的时候初始化
-        this.dataInit();
+        this.dataInit();  //初始化数据，并在关键词改变的时候调用
         this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
       },
       '$route' (to,from) {
@@ -202,8 +202,5 @@
     width: 100%;
     top: 90px;
     bottom: 50px;
-  }
-  .swiper-container{
-    /*padding-top: 100px;*/
   }
 </style>
