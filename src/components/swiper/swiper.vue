@@ -178,6 +178,10 @@
       },
     },
     watch:{
+      '$route' (to,from) {
+        this.judge();
+        //this.dataInit();
+      },
       nowIndex(val, oldVal){//普通的watch监听
         this.pageNum = 1;  //每次改变的时候初始化
         // this.dataInit();
@@ -188,10 +192,7 @@
         this.dataInit();  //初始化数据，并在关键词改变的时候调用
         this.attentionArticle = []; //每次点击或滑动的时候清空所有的数据
       },
-      '$route' (to,from) {
-        this.judge();
-        this.dataInit();
-      },
+
     }
   }
 </script>

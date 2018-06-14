@@ -23,6 +23,8 @@ import attentionFans from '@/components/attentionFans/attentionFans'
 import collection from '@/components/collection/collection'
 import exchangeGoods from '@/components/exchangeGoods/exchangeGoods'
 import profitStrategy from '@/components/profitStrategy/profitStrategy'
+import beforeDescription from '@/components/beforeDescription/beforeDescription'
+
 
 
 
@@ -191,7 +193,13 @@ let router = new VueRouter({
       path: '/profitStrategy',
       name:'profitStrategy',
       component: profitStrategy
-    }
+    },
+    {
+      path: '/beforeDescription',
+      name:'beforeDescription',
+      component: beforeDescription
+    },
+
 
 
 

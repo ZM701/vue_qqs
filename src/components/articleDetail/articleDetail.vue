@@ -18,7 +18,7 @@
       article_transpondnum:article_transpondnum
     }}">-->
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
-    <router-link :to="{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
+    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
     <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -45,7 +45,7 @@
     </div>
 
     <div  v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2' >
-    <router-link :to="{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
+    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
@@ -71,7 +71,7 @@
     </div>
 
     <div class="pane3"  v-if="item.type == 1">
-      <router-link :to="{name:'articleDescription',params:{article_id:item.article_id,sourceType:item.type}}">
+      <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_id:item.article_id,sourceType:item.type}}">
       <div class="panelTitle">{{item.article_title}}</div>
       <div class="img_con">
         <!--<router-link :to="{name:'videoDetail',params:{video_url:item.video_url}}"><video :src="item.video_url" class='videos'></video></router-link>-->
@@ -108,6 +108,9 @@
         },
         "icon":{
           type:Boolean
+        },
+        "articleType":{
+            type:Number
         }
       },
       data(){
