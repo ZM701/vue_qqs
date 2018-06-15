@@ -155,7 +155,7 @@ let router = new VueRouter({
       component: attention
     },
     {
-      path: '/articleDescription',
+      path: '/articleDescription/:article_id/:article_format/:sourceType',
       name:'articleDescription',
       component: articleDescription
     },
@@ -195,7 +195,7 @@ let router = new VueRouter({
       component: profitStrategy
     },
     {
-      path: '/beforeDescription',
+      path: '/beforeDescription/:article_id/:article_format/:sourceType',
       name:'beforeDescription',
       component: beforeDescription
     },

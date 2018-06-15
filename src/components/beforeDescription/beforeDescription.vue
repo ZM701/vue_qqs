@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>{{items.name}}</div>
     <div style="padding-bottom: 10px;" v-if="msgInfo!=null">
       <div class="user">
         <div><img :src="msgInfo.image"/></div>
@@ -72,7 +71,7 @@
       return{
         msgInfo:{},  //获取信息
         msg:[],
-        article_content:null, //内容
+        article_content:{}, //内容
         article_format:this.$route.params.article_format,   //0是富文本格式的   1是json格式的
         fansNum:null, //粉丝数
         total:{}, //获取所有信息
@@ -81,54 +80,19 @@
         state:null,   //0=未关注 1=关注
         sourceType:this.$route.params.sourceType,  //0文章  1视频
         newComment:[],   //最新评论的相关信息列表
-        items:{name:null},
-        aaa:null,
       }
     },
     components:{
       'v-article':article
     },
     created(){
-      console.log(this.$route.path)
-      if(this.$route.path=='/articleDescription'){
-        sessionStorage.setItem("name", this.article_ids); //HTML 5 Web 存储在客户端临时存储数据
-      }
-
-       // console.log(this.articleType)
-      /*if(this.articleType==11){
-            this.aaa = this.article_ids;
-        sessionStorage.setItem("name", this.aaa); //HTML 5 Web 存储在客户端临时存储数据
-      }else{
-        this.aaa = this.article_id
-      }
-
-      console.log(this.aaa);*/
-
-      //存储数据
-      /*this.test.unshift(this.article_id);
-      var val = JSON.parse(JSON.stringify(this.test))
-      store.save2(val);*/
-     // console.log(this.test);
-
       this.detail();
-      var str = this.$route.params.article_content;
-      if(this.article_format==1){
-        this.article_content = "["+str+"]";
-        this.article_content = JSON.parse(this.article_content);
-      }
-      if(this.article_format==0){
-        //转义&lt;&gt;
-        var strs = str.replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">");
-        this.article_content = strs;
-      }
       //调用滚动事件
       this.scroll();
       //评论事件
       this.comment();
     },
     mounted(){
-      this.items.name=sessionStorage.getItem("name");
       //文章篇幅过短判断是否读完的处理
       var _this = this;
       setTimeout(function(){
@@ -190,7 +154,6 @@
           params: {
             uid:uid,
             article_id:this.article_id || this.article_ids,
-//            article_id:this.test[2],
             tran:0,  //tran 是否为转发 0不是,1是
             article_format:1  // article_format 小程序=1 ,后台=0
           }
@@ -199,7 +162,21 @@
           this.msgInfo = response.data.article;
           this.fansNum = response.data.fansNum;
           this.msg = response.data.sameArticle;
-          //console.log(response.data);
+
+          //对富文本内容的处理   解析html
+          var str = response.data.article.article_content;
+          if(this.article_format==1){
+            this.article_content = "["+str+"]";
+            this.article_content = JSON.parse(this.article_content);
+          }
+          if(this.article_format==0){
+            //转义&lt;&gt;
+            var strs = str.replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">");
+            this.article_content = strs;
+          }
+
+         // console.log(response.data.article.article_content);
         }, response => {
           console.log("获取信息失败");
           //console.log(response);

@@ -3,15 +3,17 @@
   <div v-for="(item,index) in msg">
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
       <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
-    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
-      <div class="panelTitle">{{item.article_title}}</div>
-      <div class="sp1">
-        <div class="img_con" v-for="(imgs,index) in item.imgSrc">
-          <img :src="imgs" class="small"/>
+    <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">-->
+      <div @click="articlClick(item.article_id,item.article_format,item.type)">
+        <div class="panelTitle">{{item.article_title}}</div>
+        <div class="sp1">
+          <div class="img_con" v-for="(imgs,index) in item.imgSrc">
+            <img :src="imgs" class="small"/>
+          </div>
         </div>
+        <div style="clear: both;"></div>
       </div>
-      <div style="clear: both;"></div>
-    </router-link>
+    <!--</router-link>-->
         <div class="user_info">
           <div class='nick_img'>
             <img class="user_img" :src='item.image'/>
@@ -30,14 +32,16 @@
     </div>
 
     <div v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2'>
-    <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
-      <div class='pane2_box'>
-        <div class="panelTitle">{{item.article_title}}</div>
-        <div class="img_con">
-          <img :src="item.image" class="big"/>
+    <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">-->
+      <div @click="articlClick(item.article_id,item.article_format,item.type)">
+        <div class='pane2_box'>
+          <div class="panelTitle">{{item.article_title}}</div>
+          <div class="img_con">
+            <img :src="item.image" class="big"/>
+          </div>
         </div>
       </div>
-    </router-link>
+    <!--</router-link>-->
       <div class="user_info">
         <div class='nick_img'>
           <img class="user_img" :src='item.image'/>
@@ -56,12 +60,14 @@
     </div>
 
     <div class="pane3"  v-if="item.type == 1">
-      <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,sourceType:item.type}}">
-      <div class="panelTitle">{{item.article_title}}</div>
-      <div class="img_con">
-       <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
+      <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,sourceType:item.type}}">-->
+      <div @click="articlClick(item.article_id,null,item.type)">
+        <div class="panelTitle">{{item.article_title}}</div>
+        <div class="img_con">
+         <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
+        </div>
       </div>
-      </router-link>
+      <!--</router-link>-->
       <div class="user_info">
         <div class='nick_img'>
           <img class="user_img" :src='item.image'/>
@@ -108,6 +114,28 @@
         //点击取消收藏    向collection发送事件
         cancleCollection(index,article_id){
           this.$emit('childCollectionSay',index,article_id);
+        },
+        //点击跳转到详情页传递相关的参数
+        articlClick(article_id,article_format,sourceType){
+            if(this.articleType==11){
+              this.$router.push({
+                name: 'beforeDescription',
+                params: {
+                  article_id: article_id,
+                  article_format:article_format,
+                  sourceType:sourceType
+                }
+              })
+            }else{
+              this.$router.push({
+                name: 'articleDescription',
+                params: {
+                  article_id: article_id,
+                  article_format:article_format,
+                  sourceType:sourceType
+                }
+              })
+            }
         }
       }
     }
