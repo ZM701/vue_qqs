@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-description @childSay="listenTo"></v-description>
+      <v-description @childSay="listenTo" :articleType="articleType"></v-description>
 
 
       <!--热门推荐-->

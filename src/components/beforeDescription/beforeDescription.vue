@@ -63,6 +63,11 @@
   import article from "../articleDetail/articleDetail"
   import {formatDate} from '../../../static/js/common.js';
   export default {
+    props: {
+      "articleType":{
+        type:Number
+      }
+    },
     data(){
       return{
         msgInfo:{},  //获取信息
@@ -76,15 +81,28 @@
         state:null,   //0=未关注 1=关注
         sourceType:this.$route.params.sourceType,  //0文章  1视频
         newComment:[],   //最新评论的相关信息列表
-        items:{name:null}
+        items:{name:null},
+        aaa:null,
       }
     },
     components:{
       'v-article':article
     },
     created(){
-        console.log(this.article_ids)
-      sessionStorage.setItem("name", this.article_ids); //HTML 5 Web 存储在客户端临时存储数据
+      console.log(this.$route.path)
+      if(this.$route.path=='/articleDescription'){
+        sessionStorage.setItem("name", this.article_ids); //HTML 5 Web 存储在客户端临时存储数据
+      }
+
+       // console.log(this.articleType)
+      /*if(this.articleType==11){
+            this.aaa = this.article_ids;
+        sessionStorage.setItem("name", this.aaa); //HTML 5 Web 存储在客户端临时存储数据
+      }else{
+        this.aaa = this.article_id
+      }
+
+      console.log(this.aaa);*/
 
       //存储数据
       /*this.test.unshift(this.article_id);
@@ -399,6 +417,14 @@
         var date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
+    },
+    watch: {
+      // 监听路由的变化 如果路由有变化，会再次执行该方法
+      '$route' (to,from) {
+        console.log("当前路由路径",this.$route.path);
+        console.log("to",to);
+        console.log("from",from);
+      },
     }
   }
 </script>

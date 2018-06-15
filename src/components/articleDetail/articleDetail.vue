@@ -4,12 +4,12 @@
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
       <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
     <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
-    <div class="panelTitle">{{item.article_title}}</div>
-        <div class="sp1">
-          <div class="img_con" v-for="(imgs,index) in item.imgSrc">
-            <img :src="imgs" class="small"/>
-          </div>
+      <div class="panelTitle">{{item.article_title}}</div>
+      <div class="sp1">
+        <div class="img_con" v-for="(imgs,index) in item.imgSrc">
+          <img :src="imgs" class="small"/>
         </div>
+      </div>
       <div style="clear: both;"></div>
     </router-link>
         <div class="user_info">
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div  v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2' >
+    <div v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2'>
     <router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">
       <div class='pane2_box'>
         <div class="panelTitle">{{item.article_title}}</div>
@@ -44,8 +44,8 @@
           <div class="nickname">{{item.nickname}}</div>
         </div>
         <div class='related'>
-          <div> <span class='iconfont icon-conment lightGrey '></span>评论 {{item.article_commentnum}}</div>
-          <div> <span class='iconfont icon-turn lightGrey '></span>转发 {{item.article_transpondnum}}</div>
+          <div> <span class='iconfont icon-conment lightGrey'></span>评论 {{item.article_commentnum}}</div>
+          <div> <span class='iconfont icon-turn lightGrey'></span>转发 {{item.article_transpondnum}}</div>
         </div>
         <!--收藏按钮-->
         <div v-if="icon" class="collection" @click.stop="f3(index)">
