@@ -47,7 +47,7 @@
                 <div class="description">
                   <span>{{item.article_title}}</span>
                   <span>{{item.article_type}}</span>
-                  <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item. article_agreenum}}</span>
+                  <span>阅读量：{{item.article_readnum}} &nbsp; &nbsp; &nbsp;点赞：{{item.article_agreenum}}</span>
                 </div>
               </div>
             </div>
