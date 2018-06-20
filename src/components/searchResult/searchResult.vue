@@ -2,7 +2,7 @@
   <div>
     <!--<div id="search" style="border:1px solid red;">-->
       <!--<div class="searchBar" style="border:1px solid #000;">-->
-        <div class="top">
+        <div class="tops">
           <div @click="$router.go(-1)" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
           <el-input
             v-model="input"
@@ -186,7 +186,7 @@
       search(input){
         //搜索跳转
         this.$router.push({
-          path: '/searchResult',
+//          path: '/searchResult',
           name: 'searchResult',
           params: {
             keyWords: this.input,
@@ -278,8 +278,9 @@
   .box1,.box2{
     float: left;
   }
-  .top{
-    /*margin-top: 1.3rem;*/
+  .tops{
+    margin-top: 0.8rem;
+    margin-bottom: 10px;
     width: 100%;
     height: 50px;
     position: fixed;

@@ -145,7 +145,7 @@ let router = new VueRouter({
       component: headerBar
     },
      {
-      path: '/searchResult',
+      path: '/searchResult/:keyWords',
       name:'searchResult',
       component: searchResult
     },
