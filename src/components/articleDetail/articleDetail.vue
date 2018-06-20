@@ -2,7 +2,7 @@
 <div>
   <div v-for="(item,index) in msg">
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
-      <div @click.stop="articlClick(item.article_id,item.article_format,item.type)">
+      <div @click.stop="articlClick(item.article_id,item.article_format,item.type,item.uid)">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -29,7 +29,7 @@
     </div>
 
     <div v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2'>
-      <div @click.stop="articlClick(item.article_id,item.article_format,item.type)">
+      <div @click.stop="articlClick(item.article_id,item.article_format,item.type,item.uid)">
         <div class='pane2_box'>
           <div class="panelTitle">{{item.article_title}}</div>
           <div class="img_con">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="pane3"  v-if="item.type == 1">
-      <div @click.stop="articlClick(item.article_id,null,item.type)">
+      <div @click.stop="articlClick(item.article_id,null,item.type,item.uid)">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
          <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
@@ -112,14 +112,15 @@
           this.$emit('childCollectionSay',index,article_id);
         },
         //点击跳转到详情页传递相关的参数  <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
-        articlClick(article_id,article_format,sourceType){
+        articlClick(article_id,article_format,sourceType,uid){
             if(this.articleType==11){
               this.$router.push({
                 name: 'beforeDescription',
                 params: {
                   article_id: article_id,
                   article_format:article_format,
-                  sourceType:sourceType
+                  sourceType:sourceType,
+                  uid:uid
                 }
               })
             }else{
@@ -128,7 +129,8 @@
                 params: {
                   article_id: article_id,
                   article_format:article_format,
-                  sourceType:sourceType
+                  sourceType:sourceType,
+                  uid:uid
                 }
               })
             }

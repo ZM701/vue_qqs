@@ -3,7 +3,7 @@
     <!--<div id="search" style="border:1px solid red;">-->
       <!--<div class="searchBar" style="border:1px solid #000;">-->
         <div class="tops">
-          <div @click="$router.go(-1)" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
+          <div @click="goback" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
           <el-input
             v-model="input"
             placeholder="请输入内容"
@@ -39,7 +39,7 @@
       <div v-if="flage2" class="distanceArticle">
         <pull-to :bottom-load-method="loadMore">
           <div>
-            <div class="mainAtricle" v-for="(item,index) in article" @click.stop="articleClick(item.article_id,item.article_format,item.type)">
+            <div class="mainAtricle" v-for="(item,index) in article" @click.stop="articleClick(item.article_id,item.article_format,item.type,item.uid)">
               <div class="user"><img :src="item.image">{{item.nickname}}</div>
               <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
               <div class="articleContant">
@@ -141,21 +141,27 @@
         this.status = 3;
         //this.information();
       },
+      //返回上一级
+      goback(){
+        this.$router.push({
+          name: 'search',
+        })
+      },
       //点击文章进入详情页
-      articleClick(article_id,article_format,type){
+      articleClick(article_id,article_format,type,uid){
           //console.log(index)
         this.$router.push({
           name: 'beforeDescription',
           params: {
             article_id: article_id,
             article_format:article_format,
-            sourceType:type
+            sourceType:type,
+            uid:uid
           }
         })
       },
 
       information(){
-        console.log(this.input)
         var _this = this;
         this.$http.post('/api/article/search', qs.stringify({
           uid: uid,
@@ -186,12 +192,17 @@
       search(input){
         //搜索跳转
         this.$router.push({
-//          path: '/searchResult',
           name: 'searchResult',
           params: {
             keyWords: this.input,
           }
         })
+        //清空原有数据
+        this.user=[];
+        this.article=[];
+        this.activity=[];
+
+        //location.reload();  //刷新页面
         const _this = this;
         input = input.trim();
         if(input){
@@ -211,9 +222,17 @@
           this.searchCon = '';
           this.con = [];
         }
-       // console.log(this.input)
+
         this.information();
         //console.log(_this.con)
+        //调用搜索文章埋点
+        this.burialPoint({
+            session_id:session_id,
+            action:'search',
+            end:'wx',
+            target:'article',
+            keyword:input
+        });
       },
       //下拉加载
       loadMore(loaded) {

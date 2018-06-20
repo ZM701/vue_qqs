@@ -35,6 +35,7 @@
         listenTo(msg){
             this.msg = msg;
         },
+
       }
     }
 </script>

@@ -187,7 +187,14 @@
           this.searchCon = '';
           this.con = [];
         }
-        //console.log(_this.con)
+        //调用搜索文章埋点
+        this.burialPoint({
+          session_id:session_id,
+          action:'search',
+          end:'wx',
+          target:'article',
+          keyword:input
+        });
       }
     },
   }

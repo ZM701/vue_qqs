@@ -34,6 +34,13 @@ module.exports = {
         pathRewrite: {
           '^/user':''
         }
+      },
+      '/point':{
+        target: 'http://analytics.nanniwan.com/collect',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/point':''
+        }
       }
     },
     // Various Dev Server settings

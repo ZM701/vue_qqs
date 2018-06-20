@@ -47,11 +47,11 @@
     </div>
 
     <!--底部信息-->
-   <!-- <div class="footBanner"  v-if="msgInfo!=null">
+    <div class="footBanner"  v-if="msgInfo!=null">
       <div @click="recomment"><i class="glyphicon glyphicon-edit"></i><input placeholder="写评论" readonly/>评论{{msgInfo.article_commentnum}}</div>
       <div @click="collectionPage(msgInfo.article_id)">收藏{{msgInfo.collectionNum}}</div>
       <div @click="share">分享{{msgInfo.article_transpondnum}}</div>
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -80,6 +80,48 @@
         state:null,   //0=未关注 1=关注
         sourceType:this.$route.params.sourceType,  //0文章  1视频
         newComment:[],   //最新评论的相关信息列表
+        //查看文章详情埋点参数
+        params1:{
+          session_id:session_id,
+          action:'view',
+          end:'wx',
+          target:'article',
+          content_id:this.$route.params.article_id,
+          provider_id:this.$route.params.uid,  //文章作者id
+          from:'home'
+        },
+        //文章详情停留埋点的参数
+        params2:{
+          session_id:session_id,
+          action:'stay',
+          end:'wx',
+          target:'article',
+          content_id:this.$route.params.article_id
+        },
+        //文章评论埋点参数
+        params3:{
+          session_id:session_id,
+          action:'comment',
+          end:'wx',
+          target:'article',
+          content_id:this.$route.params.article_id
+        },
+        //已关注埋点参数
+        params4:{
+          session_id:session_id,
+          action:'follow',
+          end:'wx',
+          target:'publisher',
+          content_id:this.$route.params.article_id
+        },
+        //取消关注埋点参数
+        params5:{
+          session_id:session_id,
+          action:'unfollow',
+          end:'wx',
+          target:'publisher',
+          content_id:this.$route.params.article_id
+        },
       }
     },
     components:{
@@ -118,6 +160,13 @@
         _this.transmit();
       },500)
 
+      //查看文章详情埋点调用
+      this.burialPoint(this.params1);
+      //文章详情停留
+      setTimeout(function () {
+        _this.burialPoint(_this.params2);
+      },5000)
+
     },
     methods:{
       //像父组件传递信息
@@ -138,13 +187,17 @@
             $(".attentions").html("已关注")
             $(".attentions").removeClass("attention")
             $(".attentions").addClass("already");
-            // this.relation_status = 1;
+            // 调用已关注埋点
+            this.burialPoint(this.params4);
+            //console.log($(".attentions").html());
           }
           if(this.state==0){
             $(".attentions").html("关注")
             $(".attentions").removeClass("already")
             $(".attentions").addClass("attention")
-            // this.relation_status = 0;
+            // 调用取消关注埋点
+            this.burialPoint(this.params5);
+           // console.log($(".attentions").html());
           }
         });
       },
@@ -161,6 +214,7 @@
           this.msgInfo = response.data.article;
           this.fansNum = response.data.fansNum;
           this.msg = response.data.sameArticle;
+         // console.log(this.msgInfo)
 
           //对富文本内容的处理   解析html
           var str = response.data.article.article_content;
@@ -240,6 +294,7 @@
               this.comment();
               this.detail();
             });
+            this.burialPoint(this.params3);  //评论埋点调用
           })
           .catch(() => {
 
@@ -343,7 +398,7 @@
          });
          });*/
 
-      }
+      },
     },
     filters: {
       //时间戳的转换

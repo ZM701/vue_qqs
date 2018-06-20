@@ -55,6 +55,7 @@ global.unionid='a865f156019cde6fa941a9f649377ed7'
 global.device_sn='868403031722678'
 global.user_token='X1RcVlpEV1tTQ2BuW19BYgMbFnJFO1IPGwACUw0bAwBcBkldVVYHFFICWFhRV1JYAlEDU20EWlNfV1l+A15ZSVxt'
 global.uuid='fb72ae37-5db8-31ee-8c0f-f39a7afa1f46'
+global.session_id='47698c15fb83a1e5bb1400accbb17f82'
 
 
 
@@ -155,7 +156,7 @@ let router = new VueRouter({
       component: attention
     },
     {
-      path: '/articleDescription/:article_id/:article_format/:sourceType',
+      path: '/articleDescription/:article_id/:article_format/:sourceType/:uid',
       name:'articleDescription',
       component: articleDescription
     },
@@ -195,7 +196,7 @@ let router = new VueRouter({
       component: profitStrategy
     },
     {
-      path: '/beforeDescription/:article_id/:article_format/:sourceType',
+      path: '/beforeDescription/:article_id/:article_format/:sourceType/:uid',
       name:'beforeDescription',
       component: beforeDescription
     },
@@ -213,3 +214,14 @@ new Vue({
     eventHub: new Vue() // 使用集中的事件处理器,一劳永逸的在任何组件调用事件发射、接受的方法
   }
 });
+//全局函数
+Vue.prototype.burialPoint = function (params){//changeData是函数名
+  this.$http.get("/point", {
+    params: params
+  }).then(response => {
+    console.log(response.status)
+  }, response => {
+    console.log("获取信息失败");
+    console.log(response);
+  })
+}
