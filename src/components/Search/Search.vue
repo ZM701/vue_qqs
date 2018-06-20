@@ -161,10 +161,11 @@
       search(input){
         //搜索跳转
         this.$router.push({
-          path: '/searchResult',
+//          path: '/searchResult',
           name: 'searchResult',
           params: {
             keyWords: this.input,
+//            keyWords: input,
           }
         })
         const _this = this;

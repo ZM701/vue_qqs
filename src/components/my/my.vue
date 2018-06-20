@@ -1,9 +1,9 @@
 <template>
     <div>
-      <div class="navMy">
+      <!--<div class="navMy">
         <span @click="goback"><i class="glyphicon glyphicon-chevron-left"></i></span>
         <span>我的</span>
-      </div>
+      </div>-->
       <div class="userInfo">
         <div class="userImage"><img :src="infoUser.image"></div>
         <div class="userName">{{infoUser.nickname}}</div>

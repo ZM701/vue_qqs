@@ -35,7 +35,7 @@
     created(){
      // this.dataInit("关注");
       this.$root.eventHub.$on('navList', (navList) => { // 点击导航键跳转相应内容区
-        this.navList = navList
+        this.navList = navList;
         // console.log(this.keyWords)
       });
     },
@@ -125,7 +125,6 @@
     font-size: 16px;
     color: #fff;
   }
-
   .search .my{
     height: 50px;
     width: 40px;
@@ -186,7 +185,6 @@
     -ms-flex-negative: 0;
     flex-shrink: 0;
     padding: 5px 10px;
-    /*margin: 5px;*/
   }
   .active{
     color: #66B672;

@@ -47,11 +47,11 @@
     </div>
 
     <!--底部信息-->
-    <div class="footBanner"  v-if="msgInfo!=null">
+   <!-- <div class="footBanner"  v-if="msgInfo!=null">
       <div @click="recomment"><i class="glyphicon glyphicon-edit"></i><input placeholder="写评论" readonly/>评论{{msgInfo.article_commentnum}}</div>
       <div @click="collectionPage(msgInfo.article_id)">收藏{{msgInfo.collectionNum}}</div>
       <div @click="share">分享{{msgInfo.article_transpondnum}}</div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -87,22 +87,21 @@
     },
     created(){
       this.detail();
-      //调用滚动事件
-      this.scroll();
+
       //评论事件
       this.comment();
     },
     mounted(){
       //文章篇幅过短判断是否读完的处理
       var _this = this;
-      setTimeout(function(){
+      /*setTimeout(function(){
         var articleHeight = $(".articleHeight").height();
-        /*var video=document.getElementById("video");
-         global.totalTime = video.duration;*/
+        /!*var video=document.getElementById("video");
+         global.totalTime = video.duration;*!/
         if(articleHeight<=window.innerHeight){
           _this.articleEnd()
         }
-      },1000)
+      },1000)*/
       //对视频是否看完的处理
       /*setTimeout(function () {
        var video=document.getElementById("video");//video标签对象
@@ -207,43 +206,6 @@
           })
           .catch(() => {
           });
-      },
-      //文章过长判断是否读完的处理
-      scroll() {
-        window.onscroll = () => {
-          // console.log(article_ids)
-          // 距离底部的距离
-          let bottomOfWindow = document.documentElement.scrollHeight-document.documentElement.scrollTop-document.documentElement.clientHeight
-          /*if(bottomOfWindow<=200){
-           this.articleEnd();
-           }*/
-//            阅读完成
-          /*if(bottomOfWindow==0){
-           this.$confirm('阅读完成', '提示', {
-           confirmButtonText: '确定',
-           type: 'success'
-           })
-           .then(() => {
-           //调用文章读完的接口
-           this.articleEnd();
-           })
-           .catch(() => {
-
-           });
-           }*/
-        }
-      },
-      //文章读完
-      articleEnd(){
-        var _this = this;
-        _this.$http.post('/api/article/mark_info', qs.stringify({
-          uid:uid,
-          article_id:_this.article_id,
-          from_type:0,
-          status:1 // status 0=文章未读完 1=文章读完 2=文章分享转发
-        })).then((response) => {
-          //console.log(response.data)
-        });
       },
       //评论接口
       comment(){
@@ -395,14 +357,6 @@
         return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
     },
-    watch: {
-      // 监听路由的变化 如果路由有变化，会再次执行该方法
-      '$route' (to,from) {
-        console.log("当前路由路径",this.$route.path);
-        console.log("to",to);
-        console.log("from",from);
-      },
-    }
   }
 </script>
 

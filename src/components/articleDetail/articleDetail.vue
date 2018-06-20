@@ -2,9 +2,7 @@
 <div>
   <div v-for="(item,index) in msg">
     <div v-if="item.type == 0 && item.imgSrc.length>1" class="panel" >
-      <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
-    <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">-->
-      <div @click="articlClick(item.article_id,item.article_format,item.type)">
+      <div @click.stop="articlClick(item.article_id,item.article_format,item.type)">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="sp1">
           <div class="img_con" v-for="(imgs,index) in item.imgSrc">
@@ -13,7 +11,6 @@
         </div>
         <div style="clear: both;"></div>
       </div>
-    <!--</router-link>-->
         <div class="user_info">
           <div class='nick_img'>
             <img class="user_img" :src='item.image'/>
@@ -32,8 +29,7 @@
     </div>
 
     <div v-if="item.type == 0 && item.imgSrc.length<=1" class='pane2'>
-    <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,article_content:item.article_content,article_format:item.article_format,sourceType:item.type}}">-->
-      <div @click="articlClick(item.article_id,item.article_format,item.type)">
+      <div @click.stop="articlClick(item.article_id,item.article_format,item.type)">
         <div class='pane2_box'>
           <div class="panelTitle">{{item.article_title}}</div>
           <div class="img_con">
@@ -41,7 +37,6 @@
           </div>
         </div>
       </div>
-    <!--</router-link>-->
       <div class="user_info">
         <div class='nick_img'>
           <img class="user_img" :src='item.image'/>
@@ -60,14 +55,12 @@
     </div>
 
     <div class="pane3"  v-if="item.type == 1">
-      <!--<router-link :to="articleType==11?{name:'beforeDescription',params:{article_id:item.article_id,sourceType:item.type}}:{name:'articleDescription',params:{article_ids:item.article_id,sourceType:item.type}}">-->
-      <div @click="articlClick(item.article_id,null,item.type)">
+      <div @click.stop="articlClick(item.article_id,null,item.type)">
         <div class="panelTitle">{{item.article_title}}</div>
         <div class="img_con">
          <div class="cover"><img :src="item.article_cover" class="video_cover"/><img class="playBtn" src='../../../static/images/play.png'/></div>
         </div>
       </div>
-      <!--</router-link>-->
       <div class="user_info">
         <div class='nick_img'>
           <img class="user_img" :src='item.image'/>
@@ -99,12 +92,15 @@
           type:Boolean
         },
         "articleType":{
-            type:Number
+          type:Number
         }
       },
       data(){
         return{
         }
+      },
+      mounted(){
+        //this.shortArticle()
       },
       methods:{
         //取消收藏的显示隐藏   向collection发送事件
@@ -115,7 +111,7 @@
         cancleCollection(index,article_id){
           this.$emit('childCollectionSay',index,article_id);
         },
-        //点击跳转到详情页传递相关的参数
+        //点击跳转到详情页传递相关的参数  <!--articleType==11   不显示热门推荐，值不同的时候，跳转的路由不同-->
         articlClick(article_id,article_format,sourceType){
             if(this.articleType==11){
               this.$router.push({
@@ -136,12 +132,77 @@
                 }
               })
             }
-        }
+        },
+        //文章过长判断是否读完的处理
+        scroll() {
+          window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+
+//            console.log("scrollTop:"+scrollTop)
+//            console.log("windowHeight:"+windowHeight)
+//            console.log("scrollHeight:"+scrollHeight)
+
+            //滚动条到底部的条件
+            if(scrollTop!=0){
+//              if(scrollTop+windowHeight==scrollHeight){
+                if(scrollHeight-scrollTop-windowHeight<=20){
+                  //调用文章读完的接口
+                  this.articleEnd();
+                //写后台加载数据的函数
+                /*this.$confirm('阅读完成', '提示', {
+                  confirmButtonText: '确定',
+                  type: 'success'
+                }).then(() => {
+                    //调用文章读完的接口
+                    this.articleEnd();
+                  })*/
+              }
+            }
+          }
+
+        },
+        //文章读完
+        articleEnd(){
+//            console.log(this.$route.params.article_id)
+          var _this = this;
+          _this.$http.post('/api/article/mark_info', qs.stringify({
+            uid:uid,
+            article_id:this.$route.params.article_id,
+            from_type:0,
+            status:1 // status 0=文章未读完 1=文章读完 2=文章分享转发
+          })).then((response) => {
+            console.log(response.data)
+          });
+        },
+      },
+      watch: {
+        // 监听路由的变化 如果路由有变化，会再次执行该方法
+        '$route' (to,from) {
+            //console.log(this.$route.path)
+          //调用滚动事件
+          if(this.$route.path.indexOf("articleDescription")!=-1){
+            this.scroll();
+           // this.shortArticle();
+          }
+          if(this.$route.path.indexOf("beforeDescription")!=-1){
+            this.scroll();
+           // this.shortArticle();
+          }
+        },
       }
     }
 </script>
 
 <style scoped>
+  *{
+    margin: 0;
+    padding: 0;
+  }
   .panel,.pane2,.pane3{
     padding: 5px;
     margin-bottom: 20px;

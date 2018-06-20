@@ -199,10 +199,6 @@ let router = new VueRouter({
       name:'beforeDescription',
       component: beforeDescription
     },
-
-
-
-
   ]
 });
 

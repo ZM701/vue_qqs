@@ -38,8 +38,8 @@
     <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
       <div v-if="flage2" class="distanceArticle">
         <pull-to :bottom-load-method="loadMore">
-          <div class="bb">
-            <div class="mainAtricle" v-for="(item,index) in article">
+          <div>
+            <div class="mainAtricle" v-for="(item,index) in article" @click.stop="articleClick(item.article_id,item.article_format,item.type)">
               <div class="user"><img :src="item.image">{{item.nickname}}</div>
               <div class="time">{{item.article_sendtime*1000 | formatDate}}</div>
               <div class="articleContant">
@@ -141,8 +141,21 @@
         this.status = 3;
         //this.information();
       },
+      //点击文章进入详情页
+      articleClick(article_id,article_format,type){
+          //console.log(index)
+        this.$router.push({
+          name: 'beforeDescription',
+          params: {
+            article_id: article_id,
+            article_format:article_format,
+            sourceType:type
+          }
+        })
+      },
+
       information(){
-       // console.log(this.pageNum)
+        console.log(this.input)
         var _this = this;
         this.$http.post('/api/article/search', qs.stringify({
           uid: uid,
@@ -157,11 +170,11 @@
           }
           else if(this.status==2){
             var temp = response.data.search.article;
-          //  console.log(response.data)
             _this.article = _this.article.concat(temp);
           }
           else if(this.status==3){
             var temp = response.data.search.activity;
+            //console.log(response.data)
             _this.activity = _this.activity.concat(temp);
           }
          // _this.info = response.data.search;

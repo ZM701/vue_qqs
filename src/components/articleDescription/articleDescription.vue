@@ -1,8 +1,6 @@
 <template>
     <div>
       <v-description @childSay="listenTo" :articleType="articleType"></v-description>
-
-
       <!--热门推荐-->
       <div class="hotRecommend">
         <div class="hot">热门推荐</div>
