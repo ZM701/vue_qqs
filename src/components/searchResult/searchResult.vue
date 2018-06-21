@@ -1,19 +1,19 @@
 <template>
   <div>
     <!--<div id="search" style="border:1px solid red;">-->
-      <!--<div class="searchBar" style="border:1px solid #000;">-->
-        <div class="tops">
-          <div @click="goback" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
-          <el-input
-            v-model="input"
-            placeholder="请输入内容"
-            value="input"
-            @keyup.native.enter="search(input)"
-            class="searchInput fl box2">
-          </el-input>
-          <span class="sousuo" @click="search(input)">搜索</span>
-        </div>
-      <!--</div>-->
+    <!--<div class="searchBar" style="border:1px solid #000;">-->
+    <div class="tops">
+      <div @click="goback" class="box1"><i class="glyphicon 	glyphicon-chevron-left"></i></div>
+      <el-input
+        v-model="input"
+        placeholder="请输入内容"
+        value="input"
+        @keyup.native.enter="search(input)"
+        class="searchInput fl box2">
+      </el-input>
+      <span class="sousuo" @click="search(input)">搜索</span>
+    </div>
+    <!--</div>-->
     <!--</div>-->
 
     <div class="atricle">
@@ -26,16 +26,16 @@
 
     <!--<div>-->
     <div class="distance">
-    <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
-    <div class="users relative distanceArticle" v-if="flage1">
-      <pull-to :bottom-load-method="loadMore">
-        <div v-for="(item,index) in user" class="userIn">
-          <img :src="item.image"/>
-          <span>{{item.nickname}}</span>
-        </div>
-      </pull-to>
-    </div>
-    <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
+      <!--相关用户----------------------------------------------------------------------------------------------------------------------------->
+      <div class="users relative distanceArticle" v-if="flage1">
+        <pull-to :bottom-load-method="loadMore">
+          <div v-for="(item,index) in user" class="userIn">
+            <img :src="item.image"/>
+            <span>{{item.nickname}}</span>
+          </div>
+        </pull-to>
+      </div>
+      <!--相关文章----------------------------------------------------------------------------------------------------------------------------->
       <div v-if="flage2" class="distanceArticle">
         <pull-to :bottom-load-method="loadMore">
           <div>
@@ -55,20 +55,20 @@
         </pull-to>
       </div>
 
-    <!--相关活动----------------------------------------------------------------------------------------------------------------------------->
-    <div v-if="flage3" class="distanceArticle">
-      <pull-to :bottom-load-method="loadMore">
-        <div class="actives" v-for="(item,index) in activity">
-          <div class="articleContant">
-            <div class="imgs"><img :src="item.goods_banner"></div>
-            <div class="description">
-              <span>{{item.title}}</span>
-              <span>参与人数:{{item.count}}</span>
+      <!--相关活动----------------------------------------------------------------------------------------------------------------------------->
+      <div v-if="flage3" class="distanceArticle">
+        <pull-to :bottom-load-method="loadMore">
+          <div class="actives" v-for="(item,index) in activity">
+            <div class="articleContant">
+              <div class="imgs"><img :src="item.goods_banner"></div>
+              <div class="description">
+                <span>{{item.title}}</span>
+                <span>参与人数:{{item.count}}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </pull-to>
-    </div>
+        </pull-to>
+      </div>
     </div>
     <!--<div style="border:10px solid red;">hah</div>-->
 
@@ -111,10 +111,10 @@
     },
     components:{
       'v-search':search,
-        PullTo
+      PullTo
     },
     created(){
-   // console.log(this.$route.params.keyWords)
+      // console.log(this.$route.params.keyWords)
       this.information();
       //console.log(this.input)
 
@@ -132,7 +132,7 @@
         this.flage2 = true;
         this.flage3 = false;
         this.status = 2;
-       // this.information();
+        // this.information();
       },
       f3(){
         this.flage1 = false;
@@ -149,7 +149,7 @@
       },
       //点击文章进入详情页
       articleClick(article_id,article_format,type,uid){
-          //console.log(index)
+        //console.log(index)
         this.$router.push({
           name: 'beforeDescription',
           params: {
@@ -183,9 +183,9 @@
             //console.log(response.data)
             _this.activity = _this.activity.concat(temp);
           }
-         // _this.info = response.data.search;
+          // _this.info = response.data.search;
           //console.log(_this.article)
-         // console.log(response.data.search.article)
+          // console.log(response.data.search.article)
         });
       },
       //回车搜索
@@ -227,11 +227,11 @@
         //console.log(_this.con)
         //调用搜索文章埋点
         this.burialPoint({
-            session_id:session_id,
-            action:'search',
-            end:'wx',
-            target:'article',
-            keyword:input
+          session_id:session_id,
+          action:'search',
+          end:'wx',
+          target:'article',
+          keyword:input
         });
       },
       //下拉加载
@@ -251,7 +251,7 @@
           loaded('done');
         }, 500);
       },
-  },
+    },
     filters: {
       //时间戳的转换
       formatDate(time) {
@@ -269,8 +269,8 @@
         this.information()
         // console.log(this.pageNum)
         /*this.user = [];
-        this.article = [];
-        this.activity = [];*/
+         this.article = [];
+         this.activity = [];*/
       },
     }
   }

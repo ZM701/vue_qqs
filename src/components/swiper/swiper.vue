@@ -160,7 +160,7 @@
             this.list[i].banner = this.banner;
           }
           this.$root.eventHub.$emit('navList', this.navList);
-          //console.log(this.list)
+          console.log(this.list)
         })
       },
       loadMore(loaded) {
