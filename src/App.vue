@@ -11,7 +11,7 @@
     </div>
 
     <div class="footer" v-show="this.$route.path=='/index'||this.$route.path=='/active'||this.$route.path=='/task'||this.$route.path=='/index/one'||this.$route.path=='/index/two'||this.$route.path=='/index/three'||this.$route.path=='/index/four'||this.$route.path=='/index/five'">
-      <div><router-link to="/index"><span><i class="	glyphicon glyphicon-search"></i></span><span>发现</span></router-link></div>
+      <div><router-link to="/index"><span><i class="glyphicon glyphicon-search"></i></span><span>发现</span></router-link></div>
       <div><router-link to="/active"><span><i class="glyphicon glyphicon-fullscreen"></i></span><span>活动</span></router-link></div>
       <div><router-link to="/task"><span><i class="glyphicon glyphicon-folder-open"></i></span><span>任务</span></router-link></div>
     </div>
