@@ -78,7 +78,8 @@
                     message: '取消成功!'
                   });
                   //刷新页面
-                  _this.information();
+                  _this.msg=[]; //清空存储的信息
+                  _this.information();  //重新刷新页面
                 })
               })
               .catch(() => {

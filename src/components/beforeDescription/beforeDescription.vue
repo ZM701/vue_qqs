@@ -416,9 +416,9 @@
 </script>
 
 <style scoped>
-  .el-input{
+ /* .el-input{
     width: 100% !important;
-  }
+  }*/
   .navMy{
     width: 100%;
     overflow: hidden;

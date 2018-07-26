@@ -126,6 +126,7 @@
                 message: '删除成功!'
               });
               //刷新页面
+              _this.info=[];  //清空数据
               _this.information();
             })
           })
